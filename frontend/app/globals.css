@@ -1,0 +1,81 @@
+@import url("https://use.typekit.net/vka6dit.css");
+@import url("https://use.typekit.net/bvx7sxn.css");
+@import 'tailwindcss';
+
+@plugin "@tailwindcss/typography";
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-medium tracking-tight;
+  }
+}
+
+@utility container {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+@utility content-padding {
+  padding-inline: var(--container-padding);
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Custom utility: Clip-path corner */
+@utility clip-corner {
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+}
+
+/* Custom utility: Section padding */
+@utility section-padding {
+  padding-block: var(--spacing-section);
+}
+
+@theme {
+  --shadow-layer: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
+
+  /* Design System Colors */
+  --color-navy: #1B3A52;
+  --color-forest: #3A5A40;
+  --color-gold: #C8A96E;
+  --color-cream: #F5F2EC;
+  --color-mist: #E8EDE9;
+  --color-sage: #8BA888;
+  --color-white: #FFFFFF;
+  --color-black: #0d0e12;
+
+  /* Legacy grays for compatibility */
+  --color-gray-50: #f6f6f8;
+  --color-gray-100: #eeeef1;
+  --color-gray-200: #e3e4e8;
+  --color-gray-300: #bbbdc9;
+  --color-gray-400: #9499ad;
+  --color-gray-500: #727892;
+  --color-gray-600: #515870;
+  --color-gray-700: #383d51;
+  --color-gray-800: #252837;
+  --color-gray-900: #1b1d27;
+  --color-gray-950: #13141b;
+
+  /* Typography */
+  --font-display: "ff-meta-web-pro", sans-serif;
+  --font-body: "ff-meta-correspondence-web-p", sans-serif;
+
+  /* Spacing (section rhythm) */
+  --spacing-section: clamp(4rem, 8vw, 8rem);
+
+  /* Container padding - responsive */
+  --container-padding-min: 24px;
+  --container-padding-max: 144px;
+  --container-padding: clamp(24px, 10vw, 144px);
+
+  /* Transitions */
+  --default-transition-duration: 250ms;
+}
