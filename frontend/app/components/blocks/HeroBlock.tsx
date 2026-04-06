@@ -4,6 +4,7 @@ import Image from 'next/image'
 import {stegaClean} from 'next-sanity'
 import {urlForImage} from '@/sanity/lib/utils'
 import {ButtonGroup} from '@/app/components/Button'
+import CustomPortableText from '@/app/components/PortableText'
 
 type HeroBlockProps = {
   block: {
@@ -13,7 +14,8 @@ type HeroBlockProps = {
     backgroundImage?: any
     eyebrow?: string
     title?: string
-    body?: string
+    body?: string // Legacy plain text
+    bodyContent?: any[] // New Portable Text
     buttons?: any[]
     overlayStrength?: 'light' | 'medium' | 'strong'
   }
@@ -36,7 +38,7 @@ function getOverlayClass(strength?: string): string {
 }
 
 export default function HeroBlock({block}: HeroBlockProps) {
-  const {sectionId, backgroundImage, eyebrow, title, body, buttons, overlayStrength} = block
+  const {sectionId, backgroundImage, eyebrow, title, body, bodyContent, buttons, overlayStrength} = block
   const imageUrl = backgroundImage ? urlForImage(backgroundImage)?.width(1920).height(1080).quality(80).auto('format').fit('crop').url() : null
   const overlayClass = getOverlayClass(overlayStrength)
 
@@ -73,9 +75,14 @@ export default function HeroBlock({block}: HeroBlockProps) {
               {title}
             </h1>
           )}
-          {body && (
+          {/* Prefer new Portable Text field, fallback to legacy plain text */}
+          {bodyContent && bodyContent.length > 0 ? (
+            <div className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed">
+              <CustomPortableText value={bodyContent} isDark={true} />
+            </div>
+          ) : body ? (
             <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed">{body}</p>
-          )}
+          ) : null}
           {buttons && buttons.length > 0 && <ButtonGroup buttons={buttons} />}
         </div>
       </div>

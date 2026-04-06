@@ -22,6 +22,52 @@ export type SanityImageAssetReference = {
   [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
 }
 
+export type Intro = {
+  sectionId?: string
+  sectionLabel?: string
+  title?: string
+  showDivider?: boolean
+  body?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?:
+          | 'normal'
+          | 'h2'
+          | 'h3'
+          | 'h4'
+          | 'blockquote'
+          | 'largeStatement'
+          | 'calloutBox'
+          | 'sectionLabel'
+        listItem?: 'bullet' | 'number' | 'arrowList' | 'dashList'
+        markDefs?: Array<{
+          href?: string
+          openInNewTab?: boolean
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown // Unable to locate the referenced type "image.media" in schema
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt: string
+        caption?: string
+        _type: 'image'
+        _key: string
+      }
+  >
+}
+
 export type DidYouKnowCard = {
   icon?:
     | 'home'
@@ -80,7 +126,7 @@ export type DidYouKnowCard = {
       }
     | {
         asset?: SanityImageAssetReference
-        media?: unknown // Unable to locate the referenced type "body.image.media" in schema
+        media?: unknown // Unable to locate the referenced type "image.media" in schema
         hotspot?: SanityImageHotspot
         crop?: SanityImageCrop
         alt: string
@@ -145,6 +191,54 @@ export type ContactCtaBlock = {
     crop?: SanityImageCrop
     _type: 'image'
   }
+}
+
+export type FullWidthTextBlock = {
+  _type: 'fullWidthTextBlock'
+  sectionId?: string
+  background?: 'white' | 'cream' | 'navy'
+  sectionLabel?: string
+  title?: string
+  showDivider?: boolean
+  body?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?:
+          | 'normal'
+          | 'h2'
+          | 'h3'
+          | 'h4'
+          | 'blockquote'
+          | 'largeStatement'
+          | 'calloutBox'
+          | 'sectionLabel'
+        listItem?: 'bullet' | 'number' | 'arrowList' | 'dashList'
+        markDefs?: Array<{
+          href?: string
+          openInNewTab?: boolean
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt: string
+        caption?: string
+        _type: 'image'
+        _key: string
+      }
+  >
 }
 
 export type FullWidthImageBlock = {
@@ -418,6 +512,45 @@ export type AlternatingContentBlock = {
   sectionLabel?: string
   title?: string
   intro?: string
+  introContent?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?:
+          | 'normal'
+          | 'h2'
+          | 'h3'
+          | 'h4'
+          | 'blockquote'
+          | 'largeStatement'
+          | 'calloutBox'
+          | 'sectionLabel'
+        listItem?: 'bullet' | 'number' | 'arrowList' | 'dashList'
+        markDefs?: Array<{
+          href?: string
+          openInNewTab?: boolean
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt: string
+        caption?: string
+        _type: 'image'
+        _key: string
+      }
+  >
   rows?: Array<{
     imagePosition?: 'left' | 'right'
     textBackground?: 'white' | 'cream' | 'mist'
@@ -1033,6 +1166,7 @@ export type ImageTextBlock = {
   sectionId?: string
   imagePosition?: 'left' | 'right'
   background?: 'white' | 'cream' | 'mist' | 'navy' | 'forest'
+  intro?: Intro
   image?: {
     asset?: SanityImageAssetReference
     media?: unknown
@@ -1103,6 +1237,45 @@ export type HeroBlock = {
   eyebrow?: string
   title: string
   body?: string
+  bodyContent?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?:
+          | 'normal'
+          | 'h2'
+          | 'h3'
+          | 'h4'
+          | 'blockquote'
+          | 'largeStatement'
+          | 'calloutBox'
+          | 'sectionLabel'
+        listItem?: 'bullet' | 'number' | 'arrowList' | 'dashList'
+        markDefs?: Array<{
+          href?: string
+          openInNewTab?: boolean
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt: string
+        caption?: string
+        _type: 'image'
+        _key: string
+      }
+  >
   buttons?: Array<
     {
       _key: string
@@ -1198,6 +1371,9 @@ export type Page = {
     | ({
         _key: string
       } & FullWidthImageBlock)
+    | ({
+        _key: string
+      } & FullWidthTextBlock)
     | ({
         _key: string
       } & ContactCtaBlock)
@@ -1499,11 +1675,13 @@ export type Geopoint = {
 
 export type AllSanitySchemaTypes =
   | SanityImageAssetReference
+  | Intro
   | DidYouKnowCard
   | ContentRowImage
   | ColumnImage
   | InteractiveSitePlanBlock
   | ContactCtaBlock
+  | FullWidthTextBlock
   | FullWidthImageBlock
   | FaqBlock
   | AboutThreeColumnBlock
@@ -2395,6 +2573,10 @@ export type GetPageQueryResult = {
       }
     | {
         _key: string
+        _type: 'fullWidthTextBlock'
+      }
+    | {
+        _key: string
         _type: 'heroBlock'
         sectionId: string | null
         backgroundImage: {
@@ -2580,7 +2762,7 @@ export type GetPageQueryResult = {
               }
             | {
                 asset?: SanityImageAssetReference
-                media?: unknown // Unable to locate the referenced type "body.image.media" in schema
+                media?: unknown // Unable to locate the referenced type "image.media" in schema
                 hotspot?: SanityImageHotspot
                 crop?: SanityImageCrop
                 alt: string

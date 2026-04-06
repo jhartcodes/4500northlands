@@ -1,5 +1,6 @@
 import {defineField, defineType, defineArrayMember} from 'sanity'
 import {HomeIcon} from '@sanity/icons'
+import {portableTextEditor} from './portableText'
 
 /**
  * Full Bleed Hero — section id="hero"
@@ -41,10 +42,21 @@ export const heroBlock = defineType({
     }),
     defineField({
       name: 'body',
-      title: 'Body',
+      title: 'Body (Legacy)',
       type: 'text',
-      description: 'Plain paragraph body text',
+      description: 'Deprecated: Use Body Content below instead',
       rows: 3,
+      deprecated: {
+        reason: 'Use the new "Body Content" field below for rich text formatting.',
+      },
+      hidden: ({value}) => !value,
+    }),
+    defineField({
+      name: 'bodyContent',
+      title: 'Body Content',
+      type: 'array',
+      of: portableTextEditor,
+      description: 'Rich text body content with formatting options',
     }),
     defineField({
       name: 'buttons',

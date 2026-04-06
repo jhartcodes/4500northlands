@@ -14,6 +14,7 @@ export const imageTextBlock = defineType({
   icon: SplitHorizontalIcon,
   groups: [
     {name: 'layout', title: 'Layout'},
+    {name: 'intro', title: 'Intro (Optional)'},
     {name: 'content', title: 'Content'},
     {name: 'didYouKnow', title: 'Did You Know Card'},
   ],
@@ -58,6 +59,49 @@ export const imageTextBlock = defineType({
       },
       initialValue: 'white',
       group: 'layout',
+    }),
+
+    // Optional Intro Section
+    defineField({
+      name: 'intro',
+      title: 'Intro Section',
+      type: 'object',
+      description: 'Optional intro text displayed above the image/text grid',
+      group: 'intro',
+      fields: [
+        defineField({
+          name: 'sectionId',
+          title: 'Section ID',
+          type: 'string',
+          description: 'Used for anchor navigation to the intro',
+        }),
+        defineField({
+          name: 'sectionLabel',
+          title: 'Section Label',
+          type: 'string',
+          description: 'Gold uppercase label',
+        }),
+        defineField({
+          name: 'title',
+          title: 'Title',
+          type: 'string',
+          description: 'Intro heading',
+        }),
+        defineField({
+          name: 'showDivider',
+          title: 'Show Divider',
+          type: 'boolean',
+          description: 'Gold line under title',
+          initialValue: true,
+        }),
+        defineField({
+          name: 'body',
+          title: 'Body',
+          type: 'array',
+          of: portableTextEditor,
+          description: 'Intro text content',
+        }),
+      ],
     }),
 
     // Image

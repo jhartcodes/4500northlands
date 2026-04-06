@@ -55,9 +55,21 @@ export const alternatingContentBlock = defineType({
     }),
     defineField({
       name: 'intro',
-      title: 'Intro',
+      title: 'Intro (Legacy)',
       type: 'text',
       rows: 3,
+      group: 'section',
+      deprecated: {
+        reason: 'Use the new "Intro Content" field below for rich text formatting.',
+      },
+      hidden: ({value}) => !value,
+    }),
+    defineField({
+      name: 'introContent',
+      title: 'Intro Content',
+      type: 'array',
+      of: portableTextEditor,
+      description: 'Rich text intro with formatting options',
       group: 'section',
     }),
 

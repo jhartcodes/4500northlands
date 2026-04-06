@@ -74,6 +74,7 @@ export const getPageQuery = defineQuery(`
         eyebrow,
         title,
         body,
+        bodyContent[] ${portableTextFields},
         "buttons": buttons[] ${buttonFields},
         overlayStrength
       },
@@ -92,6 +93,13 @@ export const getPageQuery = defineQuery(`
         showDivider,
         body[] ${portableTextFields},
         "buttons": buttons[] ${buttonFields},
+        intro {
+          sectionId,
+          sectionLabel,
+          title,
+          showDivider,
+          body[] ${portableTextFields}
+        },
         didYouKnowCard {
           icon,
           eyebrow,
@@ -223,6 +231,7 @@ export const getPageQuery = defineQuery(`
         sectionLabel,
         title,
         intro,
+        introContent[] ${portableTextFields},
         rows[] {
           _key,
           imagePosition,
@@ -347,6 +356,16 @@ export const getPageQuery = defineQuery(`
           ...,
           asset->
         }
+      },
+
+      // Full Width Text Block
+      _type == "fullWidthTextBlock" => {
+        sectionId,
+        background,
+        sectionLabel,
+        title,
+        showDivider,
+        body[] ${portableTextFields}
       }
     }
   }

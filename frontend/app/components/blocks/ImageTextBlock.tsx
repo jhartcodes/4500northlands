@@ -22,6 +22,13 @@ type ImageTextBlockProps = {
     showDivider?: boolean
     body?: any[]
     buttons?: any[]
+    intro?: {
+      sectionId?: string
+      sectionLabel?: string
+      title?: string
+      showDivider?: boolean
+      body?: any[]
+    }
     didYouKnowCard?: {
       icon?: string
       eyebrow?: string
@@ -45,6 +52,7 @@ export default function ImageTextBlock({block}: ImageTextBlockProps) {
     showDivider,
     body,
     buttons,
+    intro,
     didYouKnowCard,
   } = block
 
@@ -56,6 +64,26 @@ export default function ImageTextBlock({block}: ImageTextBlockProps) {
   return (
     <SectionWrapper background={background} sectionId={sectionId}>
       <div className="container">
+        {/* Optional Intro Section */}
+        {intro && (intro.title || intro.body) && (
+          <div id={stegaClean(intro.sectionId) || undefined} className="max-w-3xl mb-12">
+            {intro.sectionLabel && (
+              <p className="text-sm uppercase tracking-widest text-gold font-semibold mb-3">
+                {intro.sectionLabel}
+              </p>
+            )}
+            {intro.title && (
+              <h2 className={`font-display text-3xl md:text-4xl font-bold mb-4 ${textColor}`}>
+                {intro.title}
+              </h2>
+            )}
+            {intro.showDivider && <Divider className="mb-6" />}
+            {intro.body && intro.body.length > 0 && (
+              <CustomPortableText value={intro.body} isDark={isDark} />
+            )}
+          </div>
+        )}
+
         <div
           className={`grid lg:grid-cols-2 gap-8 lg:gap-16 items-center ${
             isImageLeft ? '' : 'lg:[&>*:first-child]:order-2'

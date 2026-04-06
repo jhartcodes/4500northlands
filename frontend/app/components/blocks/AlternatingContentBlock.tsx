@@ -27,7 +27,8 @@ type AlternatingContentBlockProps = {
     background?: 'white' | 'cream' | 'mist' | 'navy' | 'forest'
     sectionLabel?: string
     title?: string
-    intro?: string
+    intro?: string // Legacy plain text
+    introContent?: any[] // New Portable Text
     rows?: ContentRow[]
   }
   index: number
@@ -42,7 +43,7 @@ const textBgClasses: Record<string, string> = {
 }
 
 export default function AlternatingContentBlock({block}: AlternatingContentBlockProps) {
-  const {sectionId, background, sectionLabel, title, intro, rows} = block
+  const {sectionId, background, sectionLabel, title, intro, introContent, rows} = block
 
   const isDark = isDarkBackground(background)
   const textColor = isDark ? 'text-white' : 'text-navy'
@@ -51,7 +52,7 @@ export default function AlternatingContentBlock({block}: AlternatingContentBlock
     <SectionWrapper background={background} sectionId={sectionId}>
       <div className="container">
         {/* Section Header */}
-        {(sectionLabel || title || intro) && (
+        {(sectionLabel || title || intro || introContent) && (
           <div className="max-w-3xl mb-12">
             {sectionLabel && (
               <p className="text-sm uppercase tracking-widest text-gold font-semibold mb-3">
@@ -63,11 +64,16 @@ export default function AlternatingContentBlock({block}: AlternatingContentBlock
                 {title}
               </h2>
             )}
-            {intro && (
+            {/* Prefer new Portable Text field, fallback to legacy plain text */}
+            {introContent && introContent.length > 0 ? (
+              <div className={`text-lg leading-relaxed ${isDark ? 'text-white/80' : 'text-navy/70'}`}>
+                <CustomPortableText value={introContent} isDark={isDark} />
+              </div>
+            ) : intro ? (
               <p className={`text-lg leading-relaxed ${isDark ? 'text-white/80' : 'text-navy/70'}`}>
                 {intro}
               </p>
-            )}
+            ) : null}
           </div>
         )}
 

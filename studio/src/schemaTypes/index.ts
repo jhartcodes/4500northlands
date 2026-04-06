@@ -19,6 +19,7 @@ import {rezoningBlock} from './objects/rezoningBlock'
 import {aboutThreeColumnBlock} from './objects/aboutThreeColumnBlock'
 import {faqBlock} from './objects/faqBlock'
 import {fullWidthImageBlock} from './objects/fullWidthImageBlock'
+import {fullWidthTextBlock} from './objects/fullWidthTextBlock'
 import {contactCtaBlock} from './objects/contactCtaBlock'
 import {interactiveSitePlanBlock} from './objects/interactiveSitePlanBlock'
 
@@ -50,6 +51,7 @@ export const schemaTypes = [
   aboutThreeColumnBlock,
   faqBlock,
   fullWidthImageBlock,
+  fullWidthTextBlock,
   contactCtaBlock,
   interactiveSitePlanBlock,
 ]
