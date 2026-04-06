@@ -9,6 +9,12 @@ import {token} from '@/sanity/lib/token'
  * Learn more: https://github.com/sanity-io/next-sanity?tab=readme-ov-file#5-integrating-with-sanity-presentation-tool--visual-editing
  */
 
-export const {GET} = defineEnableDraftMode({
-  client: client.withConfig({token}),
-})
+const draftMode = token
+  ? defineEnableDraftMode({
+      client: client.withConfig({token}),
+    })
+  : null
+
+export const GET =
+  draftMode?.GET ||
+  (() => new Response('Draft mode is not enabled for this deployment.', {status: 404}))

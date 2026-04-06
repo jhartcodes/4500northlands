@@ -1,7 +1,7 @@
 import 'server-only'
 
-export const token = process.env.SANITY_API_READ_TOKEN
-
-if (!token) {
-  throw new Error('Missing SANITY_API_READ_TOKEN')
-}
+/**
+ * Keep the preview token optional so production can run without Draft Mode access.
+ * Preview environments can opt in by setting SANITY_API_READ_TOKEN.
+ */
+export const token = process.env.SANITY_API_READ_TOKEN || false

@@ -92,6 +92,8 @@ You have the freedom to deploy your Next.js app to your hosting provider of choi
 3. Set the `Root Directory` to your Next.js app.
 4. Configure your Environment Variables.
 
+For the exact Vercel CLI commands used by this repo, plus separate instructions for Sanity webhook revalidation and a Vercel deploy hook, see [Vercel deployment instructions](vercel-installation-instructions.md).
+
 #### 3. Invite a collaborator
 
 Now that you’ve deployed your Next.js application and Sanity Studio, you can optionally invite a collaborator to your Studio. Open up [Manage](https://www.sanity.io/manage), select your project and click "Invite project members"

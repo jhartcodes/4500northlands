@@ -1,81 +1,235 @@
-# Vercel Deployment Instructions
+# Vercel + Sanity Deployment Guide
 
-This guide is for users who deployed this template using the **Sanity + Vercel Integration** or **one-click Vercel deploy button**. It walks you through setting up your local development environment and deploying Sanity Studio.
+This repo is a monorepo with:
 
-## Step 1. Deploy to Vercel
+- `frontend/`: Next.js site deployed to Vercel
+- `studio/`: Sanity Studio
 
-If you haven't already, click the button below to deploy:
+## Audit Summary
 
-[![Deploy with Vercel](https://vercel.com/button)][vercel-deploy]
+Current setup in this repo:
 
-Follow the instructions on Vercel to complete the deployment. This will clone the repo to your GitHub account, deploy the Next.js frontend, and create a Sanity project via the Vercel integration.
+- The Vercel project is linked from `frontend/.vercel/project.json`
+- `frontend/vercel.json` is minimal and expects Vercel to treat `frontend/` as the project root
+- The frontend already has a Sanity webhook endpoint at `frontend/app/api/revalidate/route.ts`
+- The frontend expects `SANITY_REVALIDATE_SECRET` for webhook-triggered revalidation
+- Sanity Presentation / preview is configured through `studio/sanity.config.ts`
 
-## Step 2. Clone and install locally
+Practical implication:
 
-Clone the repository that was created in your GitHub account and install dependencies:
+- Run raw Vercel CLI commands from `frontend/`
+- Or run the helper scripts from the repo root
 
-```shell
-git clone <your-new-repo-url>
-cd <your-repo-name>
-npm install
-```
+## Everyday Vercel Commands
 
-## Step 3. Pull environment variables
+### From the repo root
 
-Link your local project to your Vercel project and pull the environment variables:
-
-```shell
-cd frontend && npx vercel link && npx vercel env pull .env.local && cd ..
-```
-
-The Vercel integration provisions environment variables for both the Next.js frontend (`NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `SANITY_API_READ_TOKEN`, etc.) and Sanity Studio (`SANITY_STUDIO_PROJECT_ID`, `SANITY_STUDIO_DATASET`, etc.). Since each app only reads the variables it needs, you can use the same `.env.local` file for both:
+These helper scripts are defined in the root `package.json`:
 
 ```shell
-cp frontend/.env.local studio/.env.local
+npm run vercel:link
+npm run vercel:env:pull
+npm run vercel:deploy:preview
+npm run vercel:deploy:prod
 ```
 
-## Step 4. Run locally
+What they do:
 
-From the project root, start both the Next.js app and Sanity Studio:
+- `npm run vercel:link`: links `frontend/` to the Vercel project
+- `npm run vercel:env:pull`: pulls Vercel env vars into `frontend/.env.local`
+- `npm run vercel:deploy:preview`: creates a preview deployment
+- `npm run vercel:deploy:prod`: creates a production deployment
+
+### Direct CLI equivalents
+
+If you want the raw commands instead:
 
 ```shell
-npm run dev
+cd frontend
+npx vercel link
+npx vercel env pull .env.local
+npx vercel
+npx vercel --prod
 ```
 
-- Next.js runs on [http://localhost:3000](http://localhost:3000)
-- Sanity Studio runs on [http://localhost:3333](http://localhost:3333)
+## Recommended First-Time Setup
 
-Sign in to the Studio with the same account you used during the Vercel/Sanity setup.
+### 1. Confirm Vercel project settings
 
-## Step 5. Import sample data (optional)
+In Vercel, the project should use:
 
-To get started quickly with pre-built content, run:
+- Root Directory: `frontend`
+- Framework Preset: `Next.js`
+- Build Command: `npm run build`
+
+The repo already contains `frontend/vercel.json` with:
+
+```json
+{
+  "framework": "nextjs"
+}
+```
+
+### 2. Pull frontend env vars locally
 
 ```shell
-npm run import-sample-data
+npm run vercel:env:pull
 ```
 
-## Step 6. Deploy Sanity Studio
+### 3. Copy the matching values to Studio
 
-Deploy the Studio so your team can access it online:
+The frontend and studio use different variable names for the same Sanity project, so after pulling Vercel env vars you will usually want to mirror the needed values into `studio/.env.local`.
+
+Minimum variables expected by this repo:
+
+Frontend:
+
+```env
+NEXT_PUBLIC_SANITY_PROJECT_ID=
+NEXT_PUBLIC_SANITY_DATASET=
+NEXT_PUBLIC_SANITY_API_VERSION=
+NEXT_PUBLIC_SANITY_STUDIO_URL=
+SANITY_API_READ_TOKEN=
+SANITY_REVALIDATE_SECRET=
+```
+
+Studio:
+
+```env
+SANITY_STUDIO_PROJECT_ID=
+SANITY_STUDIO_DATASET=
+SANITY_STUDIO_PREVIEW_URL=
+SANITY_STUDIO_STUDIO_HOST=
+```
+
+### 4. Deploy the frontend
+
+Preview deploy:
 
 ```shell
-cd studio && npx sanity deploy
+npm run vercel:deploy:preview
 ```
 
-You will be prompted to choose a hostname (e.g., `your-project.sanity.studio`).
+Production deploy:
 
-After deploying, update the `NEXT_PUBLIC_SANITY_STUDIO_URL` environment variable in your Vercel project settings to point to your deployed Studio URL (e.g., `https://your-project.sanity.studio`).
+```shell
+npm run vercel:deploy:prod
+```
 
-## Step 7. Invite collaborators (optional)
+### 5. Deploy the Studio
 
-Visit [sanity.io/manage](https://www.sanity.io/manage), select your project, and click **"Invite project members"** to collaborate with your team.
+```shell
+cd studio
+npx sanity deploy
+```
 
-## Resources
+After deploying Studio, set the frontend env var:
 
-- [Sanity documentation](https://www.sanity.io/docs)
-- [Next.js documentation](https://nextjs.org/docs)
-- [Join the Sanity Community](https://slack.sanity.io)
-- [Learn Sanity](https://www.sanity.io/learn)
+```env
+NEXT_PUBLIC_SANITY_STUDIO_URL=https://your-studio-hostname.sanity.studio
+```
 
-[vercel-deploy]: https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fsanity-io%2Fsanity-template-nextjs-clean&project-name=nextjs-clean-website-sanity-template&repository-name=nextjs-clean-website-sanity-template&demo-title=Clean%20Next.js%20%2B%20Sanity%20app&demo-description=A%20clean%20Next.js%20plus%20Sanity%20starter%20with%20real-time%20visual%20editing%2C%20drag-and-drop%20page%20builder%2C%20AI%20media%20support%2C%20and%20live%20content%20updates.&demo-url=https%3A%2F%2Ftemplate-nextjs-clean.sanity.build%2F&demo-image=https%3A%2F%2Fraw.githubusercontent.com%2Fsanity-io%2Fsanity-template-nextjs-clean%2Frefs%2Fheads%2Fmain%2Fsanity-next-preview.png&products=%5B%7B%22type%22%3A%22integration%22%2C%22integrationSlug%22%3A%22sanity%22%2C%22productSlug%22%3A%22project%22%2C%22protocol%22%3A%22other%22%7D%5D&root-directory=frontend
+And set the Studio preview URL:
+
+```env
+SANITY_STUDIO_PREVIEW_URL=https://your-frontend-domain.vercel.app
+```
+
+If you use a custom production domain, use that instead of the `vercel.app` domain.
+
+## Recommended Option: Revalidate On Publish
+
+This repo already supports a better workflow than full rebuilds for normal content edits.
+
+When content is published in Sanity, you can call the existing frontend endpoint:
+
+```text
+https://your-domain.com/api/revalidate
+```
+
+This uses `SANITY_REVALIDATE_SECRET` and avoids rebuilding the whole site for ordinary page/settings content changes.
+
+Use this when:
+
+- editors change page content
+- editors change global settings
+- you want updates to go live quickly without a full Vercel build
+
+Suggested Sanity webhook settings:
+
+- Name: `Revalidate Next.js`
+- URL: `https://your-domain.com/api/revalidate`
+- Trigger on: Create, Update, Delete
+- Filter: `_type in ["page", "settings"]`
+- Projection: `{_type, slug}`
+- Secret: same value as `SANITY_REVALIDATE_SECRET`
+- HTTP method: `POST`
+
+## Separate Option: Full Vercel Rebuild Via Deploy Hook
+
+If you specifically want a new Vercel deployment every time content is published, use a Vercel Deploy Hook and point a Sanity webhook at it.
+
+Use this when:
+
+- you rely on full static rebuilds
+- content changes affect build-time behavior outside the existing revalidation flow
+- you explicitly want a new deployment recorded in Vercel for each publish
+
+### Step 1. Create the Deploy Hook in Vercel
+
+In Vercel:
+
+1. Open the project.
+2. Go to `Settings -> Git`.
+3. Find `Deploy Hooks`.
+4. Create a hook for the branch you deploy from, usually `main`.
+5. Copy the generated hook URL.
+
+The hook URL will look similar to:
+
+```text
+https://api.vercel.com/v1/integrations/deploy/...
+```
+
+### Step 2. Create a Sanity webhook that calls the Deploy Hook
+
+In Sanity Manage:
+
+1. Open your project.
+2. Go to `API -> Webhooks`.
+3. Create a new webhook.
+
+Suggested settings:
+
+- Name: `Vercel Build Hook`
+- URL: paste the Vercel Deploy Hook URL
+- Trigger on: Publish-related changes you care about
+- Filter: `_type in ["page", "settings"]`
+- Projection: optional, not required by Vercel
+- HTTP method: `POST`
+
+### Step 3. Test it
+
+1. Publish a page or settings change in Sanity.
+2. Check the webhook attempts log in Sanity.
+3. Check the new deployment in Vercel.
+
+## Which Option To Use
+
+Default recommendation for this repo:
+
+- Use `api/revalidate` for routine content publishing
+- Use a Vercel Deploy Hook only if you truly need a full rebuild
+
+Why:
+
+- revalidation is faster
+- revalidation avoids unnecessary full site builds
+- the code for revalidation is already present in this repo
+
+## Useful References
+
+- Vercel CLI docs: https://vercel.com/docs/cli
+- Vercel deploy hook guide: https://vercel.com/guides/set-up-and-use-deploy-hooks-with-vercel-and-headless-cms
+- Vercel Git settings: https://vercel.com/docs/project-configuration/git-settings
+- Sanity webhooks docs: https://www.sanity.io/docs/content-lake/webhooks
