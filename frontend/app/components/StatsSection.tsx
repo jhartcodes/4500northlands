@@ -29,7 +29,7 @@ type StatsSectionProps = {
 }
 
 function StatCard({stat}: {stat: StatItem}) {
-  const imageUrl = stat.image ? urlForImage(stat.image)?.width(400).height(300).url() : null
+  const imageUrl = stat.image ? urlForImage(stat.image)?.width(400).height(300).quality(80).auto('format').fit('crop').url() : null
 
   return (
     <div className="flex flex-col items-center text-center p-6">

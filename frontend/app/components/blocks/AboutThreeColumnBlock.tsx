@@ -53,7 +53,7 @@ export default function AboutThreeColumnBlock({block}: AboutThreeColumnBlockProp
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {columns.map((column) => {
               const imageUrl = column.image
-                ? urlForImage(column.image)?.width(400).height(300).url()
+                ? urlForImage(column.image)?.width(400).height(300).quality(80).auto('format').fit('crop').url()
                 : null
 
               return (

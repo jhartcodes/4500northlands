@@ -59,7 +59,7 @@ export default function Hero({block}: HeroProps) {
   const {sectionId, layout, image, title, subtitle, textSize, textAlignLarge, textAlignSmall, buttons} = block
   const cleanLayout = stegaClean(layout) || 'fullWidthBackground'
   const cleanTextSize = stegaClean(textSize) || 'large'
-  const imageUrl = image ? urlForImage(image)?.width(1920).height(1080).url() : null
+  const imageUrl = image ? urlForImage(image)?.width(1920).height(1080).quality(80).auto('format').fit('crop').url() : null
 
   const positionClasses = getTextPositionClasses(textSize, textAlignLarge, textAlignSmall)
 

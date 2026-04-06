@@ -41,7 +41,7 @@ export default function SitePlanBlock({block}: SitePlanBlockProps) {
   const {sectionId, sitePlanImage, legendItems, plazaTitle, plazaImages, plazaCallouts} = block
 
   const sitePlanUrl = sitePlanImage
-    ? urlForImage(sitePlanImage)?.width(1200)?.height(800)?.url()
+    ? urlForImage(sitePlanImage)?.width(1200)?.height(800)?.quality(80).auto('format').fit('crop').url()
     : null
 
   return (
@@ -90,7 +90,7 @@ export default function SitePlanBlock({block}: SitePlanBlockProps) {
               {plazaImages && plazaImages.length > 0 && (
                 <div className="flex flex-col items-center space-y-4">
                   {plazaImages?.map((image) => {
-                    const imageUrl = urlForImage(image)?.url()
+                    const imageUrl = urlForImage(image)?.width(1000).quality(80).auto('format').fit('crop').url()
 
                     if (!imageUrl) {
                       return null

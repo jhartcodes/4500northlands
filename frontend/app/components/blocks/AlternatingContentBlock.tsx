@@ -79,7 +79,7 @@ export default function AlternatingContentBlock({block}: AlternatingContentBlock
               const textBg = stegaClean(row.textBackground) || 'white'
               const textBgClass = textBgClasses[textBg] || textBgClasses.white
               const imageUrl = row.image
-                ? urlForImage(row.image)?.width(800).height(600).url()
+                ? urlForImage(row.image)?.width(800).height(600).quality(80).auto('format').fit('crop').url()
                 : null
 
               return (

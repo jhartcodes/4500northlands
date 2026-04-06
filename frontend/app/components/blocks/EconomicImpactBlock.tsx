@@ -41,7 +41,7 @@ export default function EconomicImpactBlock({block}: EconomicImpactBlockProps) {
   const {sectionId, backgroundImage, sectionLabel, headline, stats, tableTitle, tableRows, footnote} =
     block
 
-  const imageUrl = backgroundImage ? urlForImage(backgroundImage)?.width(1920).height(800).url() : null
+  const imageUrl = backgroundImage ? urlForImage(backgroundImage)?.width(1920).height(800).quality(80).auto('format').fit('crop').url() : null
 
   return (
     <section id={sectionId || undefined} className="relative">

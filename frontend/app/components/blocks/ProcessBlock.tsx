@@ -37,7 +37,7 @@ export default function ProcessBlock({block}: ProcessBlockProps) {
 
   const isImageLeft = stegaClean(imagePosition) !== 'right'
   const isDark = isDarkBackground(background)
-  const imageUrl = image ? urlForImage(image)?.width(800).height(800).url() : null
+  const imageUrl = image ? urlForImage(image)?.width(800).height(800).quality(80).auto('format').fit('crop').url() : null
   const textColor = isDark ? 'text-white' : 'text-navy'
 
   return (

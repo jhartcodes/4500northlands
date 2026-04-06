@@ -21,7 +21,7 @@ export default function CustomPortableText({value, className = '', isDark = fals
       image: ({value: img}) => {
         if (!img?.asset?._ref) return null
 
-        const imageUrl = urlForImage(img)?.width(800).url()
+        const imageUrl = urlForImage(img)?.width(800).quality(80).auto('format').fit('crop').url()
         if (!imageUrl) return null
 
         return (

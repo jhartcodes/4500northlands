@@ -50,7 +50,7 @@ export default function ImageTextBlock({block}: ImageTextBlockProps) {
 
   const isImageLeft = stegaClean(imagePosition) !== 'right'
   const isDark = isDarkBackground(background)
-  const imageUrl = image ? urlForImage(image)?.width(800).height(600).url() : null
+  const imageUrl = image ? urlForImage(image)?.width(800).height(600).quality(80).auto('format').fit('crop').url() : null
   const textColor = isDark ? 'text-white' : 'text-navy'
 
   return (

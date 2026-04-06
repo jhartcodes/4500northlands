@@ -22,7 +22,7 @@ export default function ContactCTA({
 }: ContactCTAProps) {
   if (!contactEmail) return null
 
-  const imageUrl = backgroundImage ? urlForImage(backgroundImage)?.width(1920).height(600).url() : null
+  const imageUrl = backgroundImage ? urlForImage(backgroundImage)?.width(1920).height(600).quality(80).auto('format').fit('crop').url() : null
   const hasBackgroundImage = background === 'image' && imageUrl
 
   // Background color classes based on selection

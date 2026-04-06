@@ -12,6 +12,8 @@
  * ---------------------------------------------------------------------------------
  */
 
+export declare const internalGroqTypeReferenceTo: unique symbol
+
 // Source: ../sanity.schema.json
 export type SanityImageAssetReference = {
   _ref: string
@@ -103,6 +105,59 @@ export type ColumnImage = {
   hotspot?: SanityImageHotspot
   crop?: SanityImageCrop
   _type: 'image'
+}
+
+export type InteractiveSitePlanBlock = {
+  _type: 'interactiveSitePlanBlock'
+  sectionId?: string
+  background?: 'white' | 'cream' | 'mist'
+  title?: string
+  sitePlanImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: 'image'
+  }
+  hotspots?: Array<{
+    number: number
+    positionX: number
+    positionY: number
+    label: string
+    description?: string
+    _type: 'hotspot'
+    _key: string
+  }>
+}
+
+export type ContactCtaBlock = {
+  _type: 'contactCtaBlock'
+  sectionId?: string
+  heading?: string
+  subtext?: string
+  contactEmail: string
+  buttonLabel?: string
+  background?: 'navy' | 'forest' | 'image'
+  backgroundImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: 'image'
+  }
+}
+
+export type FullWidthImageBlock = {
+  _type: 'fullWidthImageBlock'
+  sectionId?: string
+  image: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
 }
 
 export type FaqBlock = {
@@ -1130,6 +1185,9 @@ export type Page = {
       } & SitePlanBlock)
     | ({
         _key: string
+      } & InteractiveSitePlanBlock)
+    | ({
+        _key: string
       } & RezoningBlock)
     | ({
         _key: string
@@ -1137,6 +1195,12 @@ export type Page = {
     | ({
         _key: string
       } & FaqBlock)
+    | ({
+        _key: string
+      } & FullWidthImageBlock)
+    | ({
+        _key: string
+      } & ContactCtaBlock)
   >
   seoTitle?: string
   seoDescription?: string
@@ -1187,8 +1251,7 @@ export type Settings = {
     alt?: string
     _type: 'image'
   }
-  contactEmail?: string
-  footerText?: string
+  privacyPolicyUrl?: string
 }
 
 export type SanityAssistInstructionTask = {
@@ -1370,6 +1433,7 @@ export type SanityImageMetadata = {
   palette?: SanityImagePalette
   lqip?: string
   blurHash?: string
+  thumbHash?: string
   hasAlpha?: boolean
   isOpaque?: boolean
 }
@@ -1385,14 +1449,14 @@ export type SanityFileAsset = {
   title?: string
   description?: string
   altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
+  sha1hash: string
+  extension: string
+  mimeType: string
+  size: number
+  assetId: string
   uploadId?: string
-  path?: string
-  url?: string
+  path: string
+  url: string
   source?: SanityAssetSourceData
 }
 
@@ -1414,14 +1478,14 @@ export type SanityImageAsset = {
   title?: string
   description?: string
   altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
+  sha1hash: string
+  extension: string
+  mimeType: string
+  size: number
+  assetId: string
   uploadId?: string
-  path?: string
-  url?: string
+  path: string
+  url: string
   metadata?: SanityImageMetadata
   source?: SanityAssetSourceData
 }
@@ -1438,6 +1502,9 @@ export type AllSanitySchemaTypes =
   | DidYouKnowCard
   | ContentRowImage
   | ColumnImage
+  | InteractiveSitePlanBlock
+  | ContactCtaBlock
+  | FullWidthImageBlock
   | FaqBlock
   | AboutThreeColumnBlock
   | RezoningBlock
@@ -1482,5 +1549,3 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint
-
-export declare const internalGroqTypeReferenceTo: unique symbol

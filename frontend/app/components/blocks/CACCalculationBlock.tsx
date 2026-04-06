@@ -57,7 +57,7 @@ export default function CACCalculationBlock({block}: CACCalculationBlockProps) {
   } = block
 
   const isImageRight = stegaClean(imagePosition) === 'right'
-  const imageUrl = introImage ? urlForImage(introImage)?.width(600).height(600).url() : null
+  const imageUrl = introImage ? urlForImage(introImage)?.width(600).height(600).quality(80).auto('format').fit('crop').url() : null
 
   return (
     <section id={sectionId || undefined} className="bg-white section-padding">

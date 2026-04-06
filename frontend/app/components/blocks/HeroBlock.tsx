@@ -37,7 +37,7 @@ function getOverlayClass(strength?: string): string {
 
 export default function HeroBlock({block}: HeroBlockProps) {
   const {sectionId, backgroundImage, eyebrow, title, body, buttons, overlayStrength} = block
-  const imageUrl = backgroundImage ? urlForImage(backgroundImage)?.width(1920).height(1080).url() : null
+  const imageUrl = backgroundImage ? urlForImage(backgroundImage)?.width(1920).height(1080).quality(80).auto('format').fit('crop').url() : null
   const overlayClass = getOverlayClass(overlayStrength)
 
   return (

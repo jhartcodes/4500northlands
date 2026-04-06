@@ -21,7 +21,7 @@ type FullWidthImageBlockProps = {
 export default function FullWidthImageBlock({block}: FullWidthImageBlockProps) {
   const {sectionId, image} = block
 
-  const imageUrl = image ? urlForImage(image)?.url() : null
+  const imageUrl = image ? urlForImage(image)?.width(1920).quality(80).auto('format').fit('crop').url() : null
 
   if (!imageUrl) return null
 
