@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Picker"
+  short_description: "Explore audience-aware design directions"
+  default_prompt: "Use $design-picker to inspect this codebase, infer likely audience needs, and propose a small set of design directions with clear look-and-feel guidance."
