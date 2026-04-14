@@ -30,6 +30,7 @@ Keep the output decision-oriented. The goal is not a long moodboard essay. The g
 - Use existing brand signals in the codebase first: logos, colors, typography, imagery, editorial tone, and interaction patterns.
 - If design-inspiration tooling is available, prefer grounded references or style guides over generic aesthetic invention.
 - Keep the directions meaningfully distinct. Do not generate three near-identical "clean modern" options.
+- Ask the user to provide links to websites or images that capture the feel they want if the repo is thin and audience and design signals are weak.
 
 ### 4. Build the picker
 
