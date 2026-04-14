@@ -153,6 +153,39 @@ export type ColumnImage = {
   _type: 'image'
 }
 
+export type DevelopmentTimelineBlock = {
+  _type: 'developmentTimelineBlock'
+  sectionId?: string
+  background?: 'navy' | 'forest' | 'cream'
+  eyebrow?: string
+  title?: string
+  subtitle?: string
+  phases?: Array<{
+    phaseNumber?: string
+    title: string
+    description?: string
+    _type: 'developmentPhase'
+    _key: string
+  }>
+}
+
+export type TimelineBlock = {
+  _type: 'timelineBlock'
+  sectionId?: string
+  background?: 'white' | 'cream' | 'mist'
+  legendLabel?: string
+  legendDescription?: string
+  phases?: Array<{
+    title: string
+    date: string
+    description?: string
+    status: 'completed' | 'active' | 'upcoming'
+    activeLabel?: string
+    _type: 'phase'
+    _key: string
+  }>
+}
+
 export type InteractiveSitePlanBlock = {
   _type: 'interactiveSitePlanBlock'
   sectionId?: string
@@ -1377,6 +1410,12 @@ export type Page = {
     | ({
         _key: string
       } & ContactCtaBlock)
+    | ({
+        _key: string
+      } & TimelineBlock)
+    | ({
+        _key: string
+      } & DevelopmentTimelineBlock)
   >
   seoTitle?: string
   seoDescription?: string
@@ -1679,6 +1718,8 @@ export type AllSanitySchemaTypes =
   | DidYouKnowCard
   | ContentRowImage
   | ColumnImage
+  | DevelopmentTimelineBlock
+  | TimelineBlock
   | InteractiveSitePlanBlock
   | ContactCtaBlock
   | FullWidthTextBlock

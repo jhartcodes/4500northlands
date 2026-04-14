@@ -153,6 +153,39 @@ export type ColumnImage = {
   _type: 'image'
 }
 
+export type DevelopmentTimelineBlock = {
+  _type: 'developmentTimelineBlock'
+  sectionId?: string
+  background?: 'navy' | 'forest' | 'cream'
+  eyebrow?: string
+  title?: string
+  subtitle?: string
+  phases?: Array<{
+    phaseNumber?: string
+    title: string
+    description?: string
+    _type: 'developmentPhase'
+    _key: string
+  }>
+}
+
+export type TimelineBlock = {
+  _type: 'timelineBlock'
+  sectionId?: string
+  background?: 'white' | 'cream' | 'mist'
+  legendLabel?: string
+  legendDescription?: string
+  phases?: Array<{
+    title: string
+    date: string
+    description?: string
+    status: 'completed' | 'active' | 'upcoming'
+    activeLabel?: string
+    _type: 'phase'
+    _key: string
+  }>
+}
+
 export type InteractiveSitePlanBlock = {
   _type: 'interactiveSitePlanBlock'
   sectionId?: string
@@ -1377,6 +1410,12 @@ export type Page = {
     | ({
         _key: string
       } & ContactCtaBlock)
+    | ({
+        _key: string
+      } & TimelineBlock)
+    | ({
+        _key: string
+      } & DevelopmentTimelineBlock)
   >
   seoTitle?: string
   seoDescription?: string
@@ -1679,6 +1718,8 @@ export type AllSanitySchemaTypes =
   | DidYouKnowCard
   | ContentRowImage
   | ColumnImage
+  | DevelopmentTimelineBlock
+  | TimelineBlock
   | InteractiveSitePlanBlock
   | ContactCtaBlock
   | FullWidthTextBlock
@@ -2281,6 +2322,21 @@ export type GetPageQueryResult = {
     | {
         _key: string
         _type: 'contactCtaBlock'
+      }
+    | {
+        _key: string
+        _type: 'developmentTimelineBlock'
+        sectionId: string | null
+        background: 'cream' | 'forest' | 'navy' | null
+        eyebrow: string | null
+        title: string | null
+        subtitle: string | null
+        phases: Array<{
+          _key: string
+          phaseNumber: string | null
+          title: string
+          description: string | null
+        }> | null
       }
     | {
         _key: string
@@ -3227,6 +3283,22 @@ export type GetPageQueryResult = {
           _key: string
           heading: string | null
           body: string | null
+        }> | null
+      }
+    | {
+        _key: string
+        _type: 'timelineBlock'
+        sectionId: string | null
+        background: 'cream' | 'mist' | 'white' | null
+        legendLabel: string | null
+        legendDescription: string | null
+        phases: Array<{
+          _key: string
+          title: string
+          date: string
+          description: string | null
+          status: 'active' | 'completed' | 'upcoming'
+          activeLabel: string | null
         }> | null
       }
     | {

@@ -1,6 +1,6 @@
 'use client'
 
-import SectionWrapper from '@/app/components/ui/SectionWrapper'
+import SectionWrapper, {isDarkBackground} from '@/app/components/ui/SectionWrapper'
 
 type DevelopmentPhase = {
   _key: string
@@ -28,16 +28,13 @@ type DevelopmentTimelineBlockProps = {
 export default function DevelopmentTimelineBlock({block}: DevelopmentTimelineBlockProps) {
   const {sectionId, background = 'navy', eyebrow, title, subtitle, phases} = block
 
-  const isDark = background === 'navy' || background === 'forest'
+  const isDark = isDarkBackground(background)
   const titleColor = isDark ? 'text-white' : 'text-navy'
-  const bodyColor = isDark ? 'text-white/78' : 'text-navy/70'
+  const bodyColor = isDark ? 'text-white/80' : 'text-navy/70'
   const eyebrowColor = isDark ? 'text-gold' : 'text-forest'
 
   return (
-    <SectionWrapper
-      background={background as 'navy' | 'forest' | 'cream'}
-      sectionId={sectionId || undefined}
-    >
+    <SectionWrapper background={background} sectionId={sectionId}>
       <div className="container">
         {/* Header */}
         <div className="mx-auto mb-14 max-w-3xl text-center">
