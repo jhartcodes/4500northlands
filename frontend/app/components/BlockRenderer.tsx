@@ -19,6 +19,8 @@ import {
   FullWidthImageBlock,
   FullWidthTextBlock,
   ContactCtaBlock,
+  TimelineBlock,
+  DevelopmentTimelineBlock,
 } from '@/app/components/blocks'
 import {dataAttr} from '@/sanity/lib/utils'
 
@@ -53,6 +55,8 @@ const Blocks: BlocksType = {
   fullWidthImageBlock: FullWidthImageBlock,
   fullWidthTextBlock: FullWidthTextBlock,
   contactCtaBlock: ContactCtaBlock,
+  timelineBlock: TimelineBlock,
+  developmentTimelineBlock: DevelopmentTimelineBlock,
 }
 
 /**

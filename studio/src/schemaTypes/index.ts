@@ -22,6 +22,8 @@ import {fullWidthImageBlock} from './objects/fullWidthImageBlock'
 import {fullWidthTextBlock} from './objects/fullWidthTextBlock'
 import {contactCtaBlock} from './objects/contactCtaBlock'
 import {interactiveSitePlanBlock} from './objects/interactiveSitePlanBlock'
+import {timelineBlock} from './objects/timelineBlock'
+import {developmentTimelineBlock} from './objects/developmentTimelineBlock'
 
 // Export an array of all the schema types.
 // This is used in the Sanity Studio configuration.
@@ -54,4 +56,6 @@ export const schemaTypes = [
   fullWidthTextBlock,
   contactCtaBlock,
   interactiveSitePlanBlock,
+  timelineBlock,
+  developmentTimelineBlock,
 ]

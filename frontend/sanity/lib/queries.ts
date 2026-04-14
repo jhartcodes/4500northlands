@@ -366,6 +366,37 @@ export const getPageQuery = defineQuery(`
         title,
         showDivider,
         body[] ${portableTextFields}
+      },
+
+      // Timeline Block
+      _type == "timelineBlock" => {
+        sectionId,
+        background,
+        legendLabel,
+        legendDescription,
+        phases[] {
+          _key,
+          title,
+          date,
+          description,
+          status,
+          activeLabel
+        }
+      },
+
+      // Development Timeline Block
+      _type == "developmentTimelineBlock" => {
+        sectionId,
+        background,
+        eyebrow,
+        title,
+        subtitle,
+        phases[] {
+          _key,
+          phaseNumber,
+          title,
+          description
+        }
       }
     }
   }

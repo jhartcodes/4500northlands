@@ -95,6 +95,8 @@ export const page = defineType({
         defineArrayMember({type: 'fullWidthImageBlock'}),
         defineArrayMember({type: 'fullWidthTextBlock'}),
         defineArrayMember({type: 'contactCtaBlock'}),
+        defineArrayMember({type: 'timelineBlock'}),
+        defineArrayMember({type: 'developmentTimelineBlock'}),
       ],
       options: {
         insertMenu: {
