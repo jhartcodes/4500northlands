@@ -1,10 +1,7 @@
 import {defineField, defineType, defineArrayMember} from 'sanity'
 import {PinIcon} from '@sanity/icons'
+import {portableTextEditor} from './portableText'
 
-/**
- * Interactive Site Plan Block
- * Site plan image with numbered hotspot markers that show tooltips on hover/tap
- */
 export const interactiveSitePlanBlock = defineType({
   name: 'interactiveSitePlanBlock',
   title: 'Interactive Site Plan',
@@ -15,7 +12,7 @@ export const interactiveSitePlanBlock = defineType({
       name: 'sectionId',
       title: 'Section ID',
       type: 'string',
-      description: 'Used for anchor navigation (e.g., "interactive-site-plan")',
+      description: 'Used for anchor navigation (e.g., "site-plan")',
     }),
     defineField({
       name: 'background',
@@ -35,71 +32,104 @@ export const interactiveSitePlanBlock = defineType({
       name: 'title',
       title: 'Section Title',
       type: 'string',
-      description: 'Optional title above the site plan',
+      description: 'Optional heading above the map(s)',
     }),
     defineField({
-      name: 'sitePlanImage',
-      title: 'Site Plan Image',
-      type: 'image',
-      options: {hotspot: true},
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'hotspots',
-      title: 'Hotspots',
+      name: 'body',
+      title: 'Intro Text',
       type: 'array',
-      description: 'Interactive markers on the site plan',
+      of: portableTextEditor,
+      description: 'Optional rich text shown below the title and above the maps',
+    }),
+    defineField({
+      name: 'maps',
+      title: 'Maps',
+      type: 'array',
+      description: 'Select which site plan maps to display and in what order',
+      validation: (Rule) => Rule.required().min(1),
       of: [
         defineArrayMember({
           type: 'object',
-          name: 'hotspot',
-          title: 'Hotspot',
+          name: 'mapEntry',
+          title: 'Map',
           fields: [
             defineField({
-              name: 'number',
-              title: 'Number',
-              type: 'number',
-              description: 'Number displayed in the marker (1-9)',
-              validation: (Rule) => Rule.required().min(1).max(9),
-            }),
-            defineField({
-              name: 'positionX',
-              title: 'Position X (%)',
-              type: 'number',
-              description: 'Horizontal position from left (0-100)',
-              validation: (Rule) => Rule.required().min(0).max(100),
-            }),
-            defineField({
-              name: 'positionY',
-              title: 'Position Y (%)',
-              type: 'number',
-              description: 'Vertical position from top (0-100)',
-              validation: (Rule) => Rule.required().min(0).max(100),
-            }),
-            defineField({
-              name: 'label',
-              title: 'Label',
+              name: 'mapTitle',
+              title: 'Map Title',
               type: 'string',
-              description: 'Short name for this area',
+              description: 'Eyebrow label shown above this map in gold uppercase text',
+            }),
+            defineField({
+              name: 'mapId',
+              title: 'Map',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'Full Site', value: 'fullsite'},
+                  {title: 'Lower Meadow', value: 'lowermeadow'},
+                  {title: 'Upper Meadow', value: 'uppermeadow'},
+                ],
+                layout: 'radio',
+              },
               validation: (Rule) => Rule.required(),
             }),
             defineField({
-              name: 'description',
-              title: 'Description',
-              type: 'text',
-              rows: 3,
-              description: 'Detailed text shown in the tooltip on hover/tap',
+              name: 'pdfUrl',
+              title: 'PDF Download Link',
+              type: 'url',
+              description: 'Optional link to download the full-resolution PDF of this map',
+            }),
+            defineField({
+              name: 'hotspots',
+              title: 'Hotspot Labels',
+              type: 'array',
+              description: 'Edit the number, title and description shown for each marker. Positions are set by the dev team.',
+              of: [
+                defineArrayMember({
+                  type: 'object',
+                  name: 'hotspot',
+                  title: 'Hotspot',
+                  fields: [
+                    defineField({
+                      name: 'number',
+                      title: 'Number',
+                      type: 'number',
+                      description: 'Must match the marker number on the map (1–9)',
+                      validation: (Rule) => Rule.required().min(1).max(9).integer(),
+                    }),
+                    defineField({
+                      name: 'label',
+                      title: 'Title',
+                      type: 'string',
+                      validation: (Rule) => Rule.required(),
+                    }),
+                    defineField({
+                      name: 'description',
+                      title: 'Description',
+                      type: 'text',
+                      rows: 3,
+                    }),
+                  ],
+                  preview: {
+                    select: {number: 'number', label: 'label'},
+                    prepare({number, label}) {
+                      return {title: `${number}. ${label}`}
+                    },
+                  },
+                }),
+              ],
             }),
           ],
           preview: {
-            select: {
-              number: 'number',
-              label: 'label',
-            },
-            prepare({number, label}) {
-              return {
-                title: `${number}. ${label}` || 'Hotspot',
+            select: {mapId: 'mapId', mapTitle: 'mapTitle'},
+            prepare({mapId, mapTitle}) {
+              const labels: Record<string, string> = {
+                fullsite: 'Full Site',
+                lowermeadow: 'Lower Meadow',
+                uppermeadow: 'Upper Meadow',
               }
+              const base = labels[mapId] ?? mapId
+              return {title: mapTitle ? `${mapTitle} — ${base}` : base}
             },
           },
         }),
@@ -107,15 +137,11 @@ export const interactiveSitePlanBlock = defineType({
     }),
   ],
   preview: {
-    select: {
-      title: 'title',
-      media: 'sitePlanImage',
-    },
-    prepare({title, media}) {
+    select: {title: 'title'},
+    prepare({title}) {
       return {
         title: title || 'Interactive Site Plan',
         subtitle: 'Interactive Site Plan Block',
-        media,
       }
     },
   },

@@ -191,20 +191,10 @@ export type InteractiveSitePlanBlock = {
   sectionId?: string
   background?: 'white' | 'cream' | 'mist'
   title?: string
-  sitePlanImage: {
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: 'image'
-  }
-  hotspots?: Array<{
-    number: number
-    positionX: number
-    positionY: number
-    label: string
-    description?: string
-    _type: 'hotspot'
+  maps: Array<{
+    mapId: 'fullsite' | 'lowermeadow' | 'uppermeadow'
+    pdfUrl?: string
+    _type: 'mapEntry'
     _key: string
   }>
 }

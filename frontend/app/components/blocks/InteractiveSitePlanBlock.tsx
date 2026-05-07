@@ -2,15 +2,94 @@
 
 import {useState, useCallback, useEffect, useRef} from 'react'
 import Image from 'next/image'
-import {urlForImage} from '@/sanity/lib/utils'
+import CustomPortableText from '@/app/components/PortableText'
 
-type Hotspot = {
+// ─────────────────────────────────────────────────────────────────────────────
+// MAP CONFIG — edit hotspot x/y positions here (percentage of image dimensions)
+// Label/description come from Sanity — only positions live here.
+// ─────────────────────────────────────────────────────────────────────────────
+type HotspotPosition = {
+  number: number
+  x: number // % from left of image
+  y: number // % from top of image
+}
+
+type Hotspot = HotspotPosition & {
+  key: string
+  label: string
+  description: string
+}
+
+type MapConfig = {
+  label: string
+  src: string
+  width: number
+  height: number
+  positions: HotspotPosition[]
+}
+
+const MAP_CONFIG: Record<string, MapConfig> = {
+  fullsite: {
+    label: 'Full Site',
+    src: '/images/FullSite.avif',
+    width: 1448,
+    height: 1086,
+    positions: [
+      {number: 1, x: 25, y: 45},
+      {number: 2, x: 40, y: 55},
+      {number: 3, x: 55, y: 60},
+      {number: 4, x: 35, y: 75},
+      {number: 5, x: 65, y: 75},
+    ],
+  },
+  lowermeadow: {
+    label: 'Lower Meadow',
+    src: '/images/lowermeadow.avif',
+    width: 1448,
+    height: 1086,
+    positions: [
+      {number: 1, x: 20, y: 35},
+      {number: 2, x: 35, y: 50},
+      {number: 3, x: 50, y: 40},
+      {number: 4, x: 60, y: 55},
+      {number: 5, x: 45, y: 65},
+      {number: 6, x: 70, y: 45},
+      {number: 7, x: 30, y: 70},
+      {number: 8, x: 55, y: 75},
+    ],
+  },
+  uppermeadow: {
+    label: 'Upper Meadow',
+    src: '/images/uppermeadow.avif',
+    width: 950,
+    height: 1655,
+    positions: [
+      {number: 1, x: 40, y: 25},
+      {number: 2, x: 55, y: 38},
+      {number: 3, x: 35, y: 50},
+      {number: 4, x: 60, y: 55},
+      {number: 5, x: 45, y: 65},
+      {number: 6, x: 55, y: 75},
+      {number: 7, x: 35, y: 82},
+    ],
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+type CmsHotspot = {
   _key: string
-  number?: number
-  positionX?: number
-  positionY?: number
-  label?: string
+  number: number
+  label: string
   description?: string
+}
+
+type MapEntry = {
+  _key: string
+  mapTitle?: string
+  mapId: string
+  pdfUrl?: string
+  hotspots?: CmsHotspot[]
 }
 
 type InteractiveSitePlanBlockProps = {
@@ -20,8 +99,8 @@ type InteractiveSitePlanBlockProps = {
     sectionId?: string
     background?: 'white' | 'cream' | 'mist'
     title?: string
-    sitePlanImage?: any
-    hotspots?: Hotspot[]
+    body?: any[]
+    maps?: MapEntry[]
   }
   index: number
   pageId: string
@@ -35,219 +114,311 @@ const bgClasses: Record<string, string> = {
 }
 
 export default function InteractiveSitePlanBlock({block}: InteractiveSitePlanBlockProps) {
-  const {sectionId, background = 'white', title, sitePlanImage, hotspots} = block
-  const [activeHotspot, setActiveHotspot] = useState<string | null>(null)
-  const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const sitePlanUrl = sitePlanImage
-    ? urlForImage(sitePlanImage)?.width(1400)?.height(900)?.url()
-    : null
-
-  // Close tooltip when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setActiveHotspot(null)
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
-
-  // Handle escape key
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setActiveHotspot(null)
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [])
-
-  const handleMarkerClick = useCallback((key: string) => {
-    setActiveHotspot((prev) => (prev === key ? null : key))
-  }, [])
-
-  const handleLegendClick = useCallback((key: string) => {
-    setActiveHotspot((prev) => (prev === key ? null : key))
-  }, [])
-
-  // Determine which hotspot to show tooltip for (active takes precedence over hover)
-  const visibleHotspot = activeHotspot || hoveredHotspot
+  const {sectionId, background = 'white', title, body, maps} = block
 
   return (
     <section id={sectionId || undefined} className={`${bgClasses[background]} section-padding`}>
       <div className="container">
-        {title && (
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-navy mb-8 text-center">
-            {title}
-          </h2>
-        )}
-
-        {/* Site Plan with Hotspots */}
-        {sitePlanUrl && (
-          <div ref={containerRef} className="relative">
-            {/* Image Container */}
-            <div className="relative aspect-[14/9] rounded-lg overflow-hidden">
-              <Image
-                src={sitePlanUrl}
-                alt={title || 'Site plan'}
-                fill
-                className="object-contain bg-mist/50"
-                sizes="100vw"
-              />
-
-              {/* Hotspot Markers */}
-              {hotspots?.map((hotspot) => {
-                const isActive = activeHotspot === hotspot._key
-                const isHovered = hoveredHotspot === hotspot._key
-                const isVisible = visibleHotspot === hotspot._key
-
-                return (
-                  <HotspotMarker
-                    key={hotspot._key}
-                    hotspot={hotspot}
-                    isActive={isActive}
-                    isHovered={isHovered}
-                    isVisible={isVisible}
-                    onClick={() => handleMarkerClick(hotspot._key)}
-                    onMouseEnter={() => setHoveredHotspot(hotspot._key)}
-                    onMouseLeave={() => setHoveredHotspot(null)}
-                  />
-                )
-              })}
-            </div>
-
-            {/* Legend */}
-            {hotspots && hotspots.length > 0 && (
-              <div className="flex flex-wrap gap-3 justify-center mt-6">
-                {hotspots.map((hotspot) => {
-                  const isActive = activeHotspot === hotspot._key
-
-                  return (
-                    <button
-                      key={hotspot._key}
-                      onClick={() => handleLegendClick(hotspot._key)}
-                      className={`
-                        flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200
-                        border focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2
-                        ${
-                          isActive
-                            ? 'bg-gold/10 border-gold shadow-md'
-                            : 'bg-white border-navy/10 hover:border-gold/50 hover:shadow-sm'
-                        }
-                      `}
-                      aria-pressed={isActive}
-                    >
-                      <span
-                        className={`
-                        w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-200
-                        ${isActive ? 'bg-gold text-navy' : 'bg-navy/10 text-navy'}
-                      `}
-                      >
-                        {hotspot.number}
-                      </span>
-                      <span className="text-sm text-navy/80">{hotspot.label}</span>
-                    </button>
-                  )
-                })}
+        {(title || body) && (
+          <div className="max-w-3xl mx-auto text-center mb-10">
+            {title && (
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-navy mb-4">
+                {title}
+              </h2>
+            )}
+            {body && body.length > 0 && (
+              <div className="text-navy/70">
+                <CustomPortableText value={body} />
               </div>
             )}
           </div>
         )}
+
+        <div className="space-y-16">
+          {maps?.map((entry) => {
+            const config = MAP_CONFIG[entry.mapId]
+            if (!config) return null
+            return (
+              <SitePlanMap
+                key={entry._key}
+                config={config}
+                mapTitle={entry.mapTitle}
+                pdfUrl={entry.pdfUrl}
+                cmsHotspots={entry.hotspots}
+              />
+            )
+          })}
+        </div>
       </div>
     </section>
   )
 }
 
-type HotspotMarkerProps = {
-  hotspot: Hotspot
-  isActive: boolean
-  isHovered: boolean
-  isVisible: boolean
-  onClick: () => void
-  onMouseEnter: () => void
-  onMouseLeave: () => void
+// ─────────────────────────────────────────────────────────────────────────────
+
+type SitePlanMapProps = {
+  config: MapConfig
+  mapTitle?: string
+  pdfUrl?: string
+  cmsHotspots?: CmsHotspot[]
 }
 
-function HotspotMarker({
-  hotspot,
-  isActive,
-  isVisible,
-  onClick,
-  onMouseEnter,
-  onMouseLeave,
-}: HotspotMarkerProps) {
-  const {number, positionX = 50, positionY = 50, label, description} = hotspot
+function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) {
+  const {label, src, width, height, positions} = config
 
-  // Determine tooltip position based on marker position
-  const tooltipOnRight = positionX < 50
-  const tooltipAbove = positionY > 60
+  // Merge hardcoded positions with CMS text, keyed by number
+  const hotspots: Hotspot[] = positions.map((pos) => {
+    const cms = cmsHotspots?.find((h) => h.number === pos.number)
+    return {
+      ...pos,
+      key: `${config.src}-${pos.number}`,
+      label: cms?.label ?? `Marker ${pos.number}`,
+      description: cms?.description ?? '',
+    }
+  })
+  const [activeKey, setActiveKey] = useState<string | null>(null)
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const chipListRef = useRef<HTMLDivElement>(null)
+
+  const visibleKey = activeKey || hoveredKey
+  const activeHotspot = hotspots.find((h) => h.key === visibleKey) ?? null
+
+  const handleMarkerClick = useCallback((key: string) => {
+    setActiveKey((prev) => (prev === key ? null : key))
+  }, [])
+
+  const handleChipClick = useCallback(
+    (key: string) => {
+      setActiveKey((prev) => (prev === key ? null : key))
+      // Scroll the active chip into view
+      const chip = chipListRef.current?.querySelector(`[data-key="${key}"]`)
+      chip?.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'})
+    },
+    [],
+  )
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setActiveKey(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveKey(null)
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   return (
-    <div
-      className="absolute"
-      style={{
-        left: `${positionX}%`,
-        top: `${positionY}%`,
-        transform: 'translate(-50%, -50%)',
-      }}
-    >
-      {/* Marker Button */}
-      <button
-        onClick={onClick}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        className={`
-          relative z-10
-          w-8 h-8 md:w-10 md:h-10 rounded-full
-          bg-gold text-navy font-bold text-sm md:text-base
-          flex items-center justify-center
-          transition-all duration-200 ease-out
-          focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gold
-          ${
-            isActive
-              ? 'scale-110 shadow-xl ring-2 ring-white'
-              : 'shadow-lg hover:scale-110 hover:shadow-xl'
-          }
-        `}
-        aria-label={`${label}: ${description || ''}`}
-        aria-expanded={isVisible}
-      >
-        {number}
-      </button>
-
-      {/* Tooltip */}
-      <div
-        className={`
-          absolute z-20 w-56 md:w-64
-          bg-cream border border-navy/10 rounded-lg shadow-lg
-          p-4 transition-all duration-200
-          ${isVisible ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}
-          ${tooltipAbove ? 'bottom-full mb-3' : 'top-full mt-3'}
-          ${tooltipOnRight ? 'left-0' : 'right-0'}
-        `}
-        role="tooltip"
-      >
-        {/* Arrow */}
-        <div
-          className={`
-            absolute w-3 h-3 bg-cream border-navy/10 rotate-45
-            ${tooltipAbove ? 'bottom-[-6px] border-r border-b' : 'top-[-6px] border-l border-t'}
-            ${tooltipOnRight ? 'left-4' : 'right-4'}
-          `}
-        />
-
-        {/* Content */}
-        <div className="relative">
-          <h4 className="font-display font-bold text-navy mb-1">{label}</h4>
-          {description && <p className="text-sm text-navy/70 leading-relaxed">{description}</p>}
+    <div ref={containerRef}>
+      {/* On tablet+ constrain everything to max-w-3xl centred */}
+      <div className="md:max-w-3xl md:mx-auto">
+      {/* Map heading row */}
+      {(mapTitle || pdfUrl) && (
+        <div className="flex items-center justify-between mb-4">
+          {mapTitle && (
+            <p className="text-sm uppercase tracking-widest text-navy font-semibold">
+              {mapTitle}
+            </p>
+          )}
+          {pdfUrl && (
+            <a
+              href={pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm font-medium text-gold hover:text-gold/80 transition-colors shrink-0 ml-auto"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+              </svg>
+              Download PDF
+            </a>
+          )}
         </div>
+      )}
+
+      {/* Mobile chip scrollbar — bleeds to screen edges */}
+      <div
+        ref={chipListRef}
+        className="md:hidden flex gap-2 overflow-x-auto pb-3 mb-3 -mx-[var(--container-padding)] px-[var(--container-padding)]"
+        style={{scrollbarWidth: 'none'}}
+      >
+        {hotspots.map((h) => {
+          const isActive = activeKey === h.key
+          return (
+            <button
+              key={h.key}
+              data-key={h.key}
+              onClick={() => handleChipClick(h.key)}
+              className={`
+                shrink-0 flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full
+                border text-sm font-medium transition-all duration-150
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-gold
+                ${isActive
+                  ? 'bg-gold border-gold text-navy shadow-md'
+                  : 'bg-white border-navy/15 text-navy/70'
+                }
+              `}
+            >
+              <span className={`
+                w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold shrink-0
+                ${isActive ? 'bg-navy text-gold' : 'bg-navy/10 text-navy'}
+              `}>
+                {h.number}
+              </span>
+              {h.label}
+            </button>
+          )
+        })}
       </div>
+
+      {/* Image + hotspot overlay — bleeds to screen edges on mobile, natural proportions on desktop */}
+      <div
+        className="relative -mx-[var(--container-padding)] md:mx-0"
+        style={{aspectRatio: `${width}/${height}`}}
+      >
+        {/* Image — rounded corners on md+ only since mobile bleeds */}
+        <div className="absolute inset-0 md:rounded-lg overflow-hidden">
+          <Image
+            src={src}
+            alt={label}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 90vw"
+            priority
+          />
+        </div>
+
+        {/* Hotspot markers — outside overflow-hidden so tooltips aren't clipped */}
+        {hotspots.map((h) => {
+          const isActive = activeKey === h.key
+          const isHovered = hoveredKey === h.key
+          const isVisible = visibleKey === h.key
+
+          const tooltipOnRight = h.x < 55
+          const tooltipAbove = h.y > 55
+
+          return (
+            <div
+              key={h.key}
+              className="absolute"
+              style={{
+                left: `${h.x}%`,
+                top: `${h.y}%`,
+                transform: 'translate(-50%, -50%)',
+                zIndex: isVisible ? 30 : 1,
+              }}
+            >
+              <button
+                onClick={() => handleMarkerClick(h.key)}
+                onMouseEnter={() => setHoveredKey(h.key)}
+                onMouseLeave={() => setHoveredKey(null)}
+                className={`
+                  relative w-7 h-7 md:w-11 md:h-11 rounded-full
+                  bg-gold text-navy font-bold text-xs md:text-base
+                  flex items-center justify-center
+                  transition-all duration-200 ease-out
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gold
+                  ${isActive
+                    ? 'scale-110 shadow-xl ring-2 ring-white'
+                    : 'shadow-md hover:scale-110 hover:shadow-xl'
+                  }
+                `}
+                aria-label={`${h.label}: ${h.description}`}
+                aria-expanded={isVisible}
+              >
+                {h.number}
+              </button>
+
+              {/* Desktop tooltip — hidden on mobile */}
+              <div
+                className={`
+                  hidden md:block absolute w-64
+                  bg-cream border border-navy/10 rounded-lg shadow-lg p-4
+                  transition-all duration-200
+                  ${isVisible ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}
+                  ${tooltipAbove ? 'bottom-full mb-3' : 'top-full mt-3'}
+                  ${tooltipOnRight ? 'left-0' : 'right-0'}
+                `}
+                role="tooltip"
+              >
+                <div
+                  className={`
+                    absolute w-3 h-3 bg-cream border-navy/10 rotate-45
+                    ${tooltipAbove ? 'bottom-[-6px] border-r border-b' : 'top-[-6px] border-l border-t'}
+                    ${tooltipOnRight ? 'left-4' : 'right-4'}
+                  `}
+                />
+                <div className="relative">
+                  <h4 className="font-display font-bold text-navy mb-1">{h.label}</h4>
+                  <p className="text-sm text-navy/70 leading-relaxed">{h.description}</p>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Mobile info card */}
+      <div className="md:hidden mt-3 min-h-[64px]">
+        {activeHotspot ? (
+          <div className="bg-cream border border-navy/10 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <span className="shrink-0 w-7 h-7 rounded-full bg-gold text-navy flex items-center justify-center text-sm font-bold">
+                {activeHotspot.number}
+              </span>
+              <div>
+                <h4 className="font-display font-bold text-navy leading-tight">
+                  {activeHotspot.label}
+                </h4>
+                <p className="text-sm text-navy/70 leading-relaxed mt-0.5">
+                  {activeHotspot.description}
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p className="text-sm text-navy/40 text-center pt-3">Tap a marker to learn more</p>
+        )}
+      </div>
+
+      {/* Desktop legend */}
+      <div className="hidden md:flex flex-wrap gap-3 justify-center mt-6 ">
+        {hotspots.map((h) => {
+          const isActive = activeKey === h.key
+          return (
+            <button
+              key={h.key}
+              onClick={() => handleMarkerClick(h.key)}
+              className={`
+                flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200
+                border focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2
+                ${isActive
+                  ? 'bg-gold/10 border-gold shadow-md'
+                  : 'bg-white border-navy/10 hover:border-gold/50 hover:shadow-sm'
+                }
+              `}
+              aria-pressed={isActive}
+            >
+              <span className={`
+                w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-200
+                ${isActive ? 'bg-gold text-navy' : 'bg-navy/10 text-navy'}
+              `}>
+                {h.number}
+              </span>
+              <span className="text-sm text-navy/80">{h.label}</span>
+            </button>
+          )
+        })}
+      </div>
+      </div>{/* end md:max-w-3xl wrapper */}
     </div>
   )
 }

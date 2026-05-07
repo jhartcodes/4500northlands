@@ -289,17 +289,27 @@ export const getPageQuery = defineQuery(`
         sectionId,
         background,
         title,
-        sitePlanImage {
+        body[] {
           ...,
-          asset->
+          markDefs[] {
+            ...,
+            _type == "link" => {
+              href,
+              openInNewTab
+            }
+          }
         },
-        hotspots[] {
+        maps[] {
           _key,
-          number,
-          positionX,
-          positionY,
-          label,
-          description
+          mapTitle,
+          mapId,
+          pdfUrl,
+          hotspots[] {
+            _key,
+            number,
+            label,
+            description
+          }
         }
       },
 
