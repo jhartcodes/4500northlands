@@ -375,7 +375,8 @@ export const getPageQuery = defineQuery(`
         sectionLabel,
         title,
         showDivider,
-        body[] ${portableTextFields}
+        body[] ${portableTextFields},
+        "buttons": buttons[] ${buttonFields}
       },
 
       // Timeline Block

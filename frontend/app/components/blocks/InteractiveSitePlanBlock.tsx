@@ -20,11 +20,14 @@ type Hotspot = HotspotPosition & {
   description: string
 }
 
+type Orientation = 'landscape' | 'portrait'
+
 type MapConfig = {
   label: string
   src: string
   width: number
   height: number
+  orientation: Orientation
   positions: HotspotPosition[]
 }
 
@@ -34,6 +37,7 @@ const MAP_CONFIG: Record<string, MapConfig> = {
     src: '/images/FullSite.avif',
     width: 1448,
     height: 1086,
+    orientation: 'landscape',
     positions: [
       {number: 1, x: 49, y: 85},
       {number: 2, x: 64, y: 85},
@@ -47,6 +51,7 @@ const MAP_CONFIG: Record<string, MapConfig> = {
     src: '/images/lowermeadow.avif',
     width: 1448,
     height: 1086,
+    orientation: 'landscape',
     positions: [
       {number: 1, x: 44, y: 70},
       {number: 2, x: 36, y: 60},
@@ -63,6 +68,7 @@ const MAP_CONFIG: Record<string, MapConfig> = {
     src: '/images/uppermeadow.avif',
     width: 950,
     height: 1655,
+    orientation: 'portrait',
     positions: [
       {number: 1, x: 40, y: 25},
       {number: 2, x: 55, y: 38},
@@ -73,6 +79,12 @@ const MAP_CONFIG: Record<string, MapConfig> = {
       {number: 7, x: 35, y: 82},
     ],
   },
+}
+
+// Per-orientation max-width on tablet+. Mobile is always full-bleed.
+const orientationWrapperClass: Record<Orientation, string> = {
+  landscape: 'md:max-w-[clamp(640px,80vw,1024px)] md:mx-auto',
+  portrait: 'md:max-w-[clamp(360px,45vw,480px)] md:mx-auto',
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -117,10 +129,13 @@ export default function InteractiveSitePlanBlock({block}: InteractiveSitePlanBlo
   const {sectionId, background = 'white', title, body, maps} = block
 
   return (
-    <section id={sectionId || undefined} className={`${bgClasses[background]} section-padding`}>
+    <section
+      id={sectionId || undefined}
+      className={`${bgClasses[background]} section-padding max-md:[--container-padding:12px]`}
+    >
       <div className="container">
         {(title || body) && (
-          <div className="max-w-3xl mx-auto text-center mb-10">
+          <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
             {title && (
               <h2 className="font-display text-3xl md:text-4xl font-bold text-navy mb-4">
                 {title}
@@ -134,7 +149,7 @@ export default function InteractiveSitePlanBlock({block}: InteractiveSitePlanBlo
           </div>
         )}
 
-        <div className="space-y-16">
+        <div className="space-y-16 md:space-y-24">
           {maps?.map((entry) => {
             const config = MAP_CONFIG[entry.mapId]
             if (!config) return null
@@ -164,7 +179,7 @@ type SitePlanMapProps = {
 }
 
 function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) {
-  const {label, src, width, height, positions} = config
+  const {label, src, width, height, orientation, positions} = config
 
   // Merge hardcoded positions with CMS text, keyed by number
   const hotspots: Hotspot[] = positions.map((pos) => {
@@ -190,7 +205,6 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
 
   const handleChipClick = useCallback((key: string) => {
     setActiveKey((prev) => (prev === key ? null : key))
-    // Scroll the active chip into view
     const chip = chipListRef.current?.querySelector(`[data-key="${key}"]`)
     chip?.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'})
   }, [])
@@ -215,11 +229,11 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
 
   return (
     <div ref={containerRef}>
-      {/* On tablet+ constrain everything to max-w-3xl centred */}
-      <div className="md:max-w-3xl md:mx-auto">
+      {/* On tablet+ each map is constrained per its orientation */}
+      <div className={orientationWrapperClass[orientation]}>
         {/* Map heading row */}
         {(mapTitle || pdfUrl) && (
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-3 md:mb-4">
             {mapTitle && (
               <p className="text-sm uppercase tracking-widest text-navy font-semibold">
                 {mapTitle}
@@ -254,7 +268,7 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
         {/* Mobile chip scrollbar — bleeds to screen edges */}
         <div
           ref={chipListRef}
-          className="md:hidden flex gap-2 overflow-x-auto pb-3 mb-3 -mx-[var(--container-padding)] px-[var(--container-padding)]"
+          className="md:hidden flex gap-2 overflow-x-auto pb-3 mb-3 mx-4"
           style={{scrollbarWidth: 'none'}}
         >
           {hotspots.map((h) => {
@@ -289,9 +303,10 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
           })}
         </div>
 
-        {/* Image + hotspot overlay — bleeds to screen edges on mobile, natural proportions on desktop */}
+        {/* Image + hotspot overlay — bleeds on mobile, natural ratio on desktop.
+            container-type:inline-size lets child markers scale relative to image width. */}
         <div
-          className="relative -mx-[var(--container-padding)] md:mx-0"
+          className="relative -mx-[var(--container-padding)] md:mx-0 [container-type:inline-size]"
           style={{aspectRatio: `${width}/${height}`}}
         >
           {/* Image — rounded corners on md+ only since mobile bleeds */}
@@ -301,7 +316,7 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
               alt={label}
               fill
               className="object-cover"
-              sizes="(max-width: 768px) 100vw, 90vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 1024px"
               priority
             />
           </div>
@@ -309,11 +324,25 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
           {/* Hotspot markers — outside overflow-hidden so tooltips aren't clipped */}
           {hotspots.map((h) => {
             const isActive = activeKey === h.key
-            const isHovered = hoveredKey === h.key
             const isVisible = visibleKey === h.key
 
-            const tooltipOnRight = h.x < 55
+            // Three-zone tooltip positioning — keeps tooltip inside the image
+            const tooltipZone = h.x < 30 ? 'left' : h.x > 70 ? 'right' : 'center'
             const tooltipAbove = h.y > 55
+
+            const tooltipPositionClass =
+              tooltipZone === 'left'
+                ? 'left-0'
+                : tooltipZone === 'right'
+                  ? 'right-0'
+                  : 'left-1/2 -translate-x-1/2'
+
+            const arrowPositionClass =
+              tooltipZone === 'left'
+                ? 'left-4'
+                : tooltipZone === 'right'
+                  ? 'right-4'
+                  : 'left-1/2 -translate-x-1/2'
 
             return (
               <div
@@ -330,16 +359,22 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
                   onClick={() => handleMarkerClick(h.key)}
                   onMouseEnter={() => setHoveredKey(h.key)}
                   onMouseLeave={() => setHoveredKey(null)}
+                  style={{
+                    width: 'clamp(28px, 4cqi, 44px)',
+                    height: 'clamp(28px, 4cqi, 44px)',
+                    fontSize: 'clamp(0.75rem, 1.6cqi, 1rem)',
+                  }}
                   className={`
-                  relative w-7 h-7 md:w-11 md:h-11 rounded-full
-                  bg-gold text-navy font-bold text-xs md:text-base
+                  relative rounded-full
+                  font-bold
                   flex items-center justify-center
+                  ring-2 ring-white/80
                   transition-all duration-200 ease-out
                   focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gold
                   ${
                     isActive
-                      ? 'scale-110 shadow-xl ring-2 ring-white'
-                      : 'shadow-md hover:scale-110 hover:shadow-xl'
+                      ? 'bg-navy text-gold scale-110 shadow-xl ring-white'
+                      : 'bg-gold text-navy shadow-md hover:scale-110 hover:shadow-xl'
                   }
                 `}
                   aria-label={`${h.label}: ${h.description}`}
@@ -351,12 +386,13 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
                 {/* Desktop tooltip — hidden on mobile */}
                 <div
                   className={`
-                  hidden md:block absolute w-64
+                  hidden md:block absolute
+                  w-[min(16rem,80cqi)]
                   bg-cream border border-navy/10 rounded-lg shadow-lg p-4
                   transition-all duration-200
                   ${isVisible ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}
-                  ${tooltipAbove ? 'bottom-full mb-3' : 'top-full mt-3'}
-                  ${tooltipOnRight ? 'left-0' : 'right-0'}
+                  ${tooltipAbove ? 'bottom-full mb-4' : 'top-full mt-4'}
+                  ${tooltipPositionClass}
                 `}
                   role="tooltip"
                 >
@@ -364,7 +400,7 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
                     className={`
                     absolute w-3 h-3 bg-cream border-navy/10 rotate-45
                     ${tooltipAbove ? 'bottom-[-6px] border-r border-b' : 'top-[-6px] border-l border-t'}
-                    ${tooltipOnRight ? 'left-4' : 'right-4'}
+                    ${arrowPositionClass}
                   `}
                   />
                   <div className="relative">
@@ -377,9 +413,9 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
           })}
         </div>
 
-        {/* Mobile info card */}
-        <div className="md:hidden mt-3 min-h-[64px]">
-          {activeHotspot ? (
+        {/* Mobile info card — only renders when a hotspot is active */}
+        {activeHotspot && (
+          <div className="md:hidden mt-4">
             <div className="bg-cream border border-navy/10 rounded-lg p-4">
               <div className="flex items-start gap-3">
                 <span className="shrink-0 w-7 h-7 rounded-full bg-gold text-navy flex items-center justify-center text-sm font-bold">
@@ -395,13 +431,11 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
                 </div>
               </div>
             </div>
-          ) : (
-            <p className="text-sm text-navy/40 text-center pt-3">Tap a marker to learn more</p>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Desktop legend */}
-        <div className="hidden md:flex flex-wrap gap-3 justify-center mt-6 ">
+        <div className="hidden md:flex flex-wrap gap-3 justify-center mt-6">
           {hotspots.map((h) => {
             const isActive = activeKey === h.key
             return (
@@ -433,7 +467,6 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
           })}
         </div>
       </div>
-      {/* end md:max-w-3xl wrapper */}
     </div>
   )
 }

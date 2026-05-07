@@ -74,8 +74,15 @@
   /* Container padding - responsive */
   --container-padding-min: 24px;
   --container-padding-max: 144px;
-  --container-padding: clamp(24px, 10vw, 144px);
+  --container-padding: clamp(18px, 10vw, 144px);
 
   /* Transitions */
   --default-transition-duration: 250ms;
+}
+
+/* Mobile (< md): cap container padding at 18px site-wide. Tablet+ uses the clamp above. */
+@media (max-width: 767px) {
+  :root {
+    --container-padding: 18px;
+  }
 }

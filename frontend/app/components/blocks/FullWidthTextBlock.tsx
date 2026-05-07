@@ -3,6 +3,7 @@
 import CustomPortableText from '@/app/components/PortableText'
 import SectionWrapper, {isDarkBackground} from '@/app/components/ui/SectionWrapper'
 import Divider from '@/app/components/ui/Divider'
+import {ButtonGroup} from '@/app/components/Button'
 
 type FullWidthTextBlockProps = {
   block: {
@@ -14,6 +15,7 @@ type FullWidthTextBlockProps = {
     title?: string
     showDivider?: boolean
     body?: any[]
+    buttons?: any[]
   }
   index: number
   pageId: string
@@ -21,7 +23,7 @@ type FullWidthTextBlockProps = {
 }
 
 export default function FullWidthTextBlock({block}: FullWidthTextBlockProps) {
-  const {sectionId, background, sectionLabel, title, showDivider, body} = block
+  const {sectionId, background, sectionLabel, title, showDivider, body, buttons} = block
 
   const isDark = isDarkBackground(background)
   const textColor = isDark ? 'text-white' : 'text-navy'
@@ -42,6 +44,11 @@ export default function FullWidthTextBlock({block}: FullWidthTextBlockProps) {
           )}
           {showDivider && <Divider className="mb-6" />}
           {body && body.length > 0 && <CustomPortableText value={body} isDark={isDark} />}
+          {buttons && buttons.length > 0 && (
+            <div className="mt-8">
+              <ButtonGroup buttons={buttons} />
+            </div>
+          )}
         </div>
       </div>
     </SectionWrapper>

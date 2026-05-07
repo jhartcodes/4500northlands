@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import {defineField, defineType, defineArrayMember} from 'sanity'
 import {TextIcon} from '@sanity/icons'
 import {portableTextEditor} from './portableText'
 
@@ -69,6 +69,15 @@ export const fullWidthTextBlock = defineType({
       type: 'array',
       of: portableTextEditor,
       description: 'Full rich text content',
+      group: 'content',
+    }),
+    defineField({
+      name: 'buttons',
+      title: 'Buttons',
+      type: 'array',
+      of: [defineArrayMember({type: 'button'})],
+      description: 'Up to 3 buttons shown below the body',
+      validation: (Rule) => Rule.max(3),
       group: 'content',
     }),
   ],
