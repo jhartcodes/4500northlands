@@ -191,9 +191,56 @@ export type InteractiveSitePlanBlock = {
   sectionId?: string
   background?: 'white' | 'cream' | 'mist'
   title?: string
+  body?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?:
+          | 'normal'
+          | 'h2'
+          | 'h3'
+          | 'h4'
+          | 'blockquote'
+          | 'largeStatement'
+          | 'calloutBox'
+          | 'sectionLabel'
+        listItem?: 'bullet' | 'number' | 'arrowList' | 'dashList'
+        markDefs?: Array<{
+          href?: string
+          openInNewTab?: boolean
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt: string
+        caption?: string
+        _type: 'image'
+        _key: string
+      }
+  >
   maps: Array<{
+    mapTitle?: string
     mapId: 'fullsite' | 'lowermeadow' | 'uppermeadow'
     pdfUrl?: string
+    hotspots?: Array<{
+      number: number
+      label: string
+      description?: string
+      _type: 'hotspot'
+      _key: string
+    }>
     _type: 'mapEntry'
     _key: string
   }>
@@ -261,6 +308,11 @@ export type FullWidthTextBlock = {
         _type: 'image'
         _key: string
       }
+  >
+  buttons?: Array<
+    {
+      _key: string
+    } & Button
   >
 }
 
