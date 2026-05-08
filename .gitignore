@@ -30,3 +30,7 @@ next-env.d.ts
 # VS Code
 .vscode
 .env*.local
+
+# local-only backups (not for git)
+/local-prod-backups
+
