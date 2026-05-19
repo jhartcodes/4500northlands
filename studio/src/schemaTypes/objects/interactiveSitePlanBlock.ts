@@ -67,7 +67,6 @@ export const interactiveSitePlanBlock = defineType({
                 list: [
                   {title: 'Full Site', value: 'fullsite'},
                   {title: 'Lower Meadow', value: 'lowermeadow'},
-                  {title: 'Upper Meadow', value: 'uppermeadow'},
                 ],
                 layout: 'radio',
               },
@@ -126,7 +125,6 @@ export const interactiveSitePlanBlock = defineType({
               const labels: Record<string, string> = {
                 fullsite: 'Full Site',
                 lowermeadow: 'Lower Meadow',
-                uppermeadow: 'Upper Meadow',
               }
               const base = labels[mapId] ?? mapId
               return {title: mapTitle ? `${mapTitle} — ${base}` : base}

@@ -232,7 +232,7 @@ export type InteractiveSitePlanBlock = {
   >
   maps: Array<{
     mapTitle?: string
-    mapId: 'fullsite' | 'lowermeadow' | 'uppermeadow'
+    mapId: 'fullsite' | 'lowermeadow'
     pdfUrl?: string
     hotspots?: Array<{
       number: number

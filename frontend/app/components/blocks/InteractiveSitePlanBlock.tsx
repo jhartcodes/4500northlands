@@ -34,9 +34,9 @@ type MapConfig = {
 const MAP_CONFIG: Record<string, MapConfig> = {
   fullsite: {
     label: 'Full Site',
-    src: '/images/FullSite.avif',
-    width: 1448,
-    height: 1086,
+    src: '/images/fullsite2.png',
+    width: 1600,
+    height: 1200,
     orientation: 'landscape',
     positions: [
       {number: 1, x: 49, y: 85},
@@ -48,9 +48,9 @@ const MAP_CONFIG: Record<string, MapConfig> = {
   },
   lowermeadow: {
     label: 'Lower Meadow',
-    src: '/images/lowermeadow.avif',
-    width: 1448,
-    height: 1086,
+    src: '/images/lowermeadow16:9.png',
+    width: 1600,
+    height: 1200,
     orientation: 'landscape',
     positions: [
       {number: 1, x: 44, y: 70},
@@ -63,28 +63,12 @@ const MAP_CONFIG: Record<string, MapConfig> = {
       {number: 8, x: 59, y: 27},
     ],
   },
-  uppermeadow: {
-    label: 'Upper Meadow',
-    src: '/images/uppermeadow.avif',
-    width: 950,
-    height: 1655,
-    orientation: 'portrait',
-    positions: [
-      {number: 1, x: 45, y: 48},
-      {number: 2, x: 52, y: 43},
-      {number: 3, x: 50, y: 36},
-      {number: 4, x: 35, y: 22},
-      {number: 5, x: 45, y: 65},
-      {number: 6, x: 38, y: 78},
-      {number: 7, x: 72, y: 48},
-    ],
-  },
 }
 
-// Per-orientation max-width on tablet+. Mobile is always full-bleed.
+// Each map fills the full width of its container.
 const orientationWrapperClass: Record<Orientation, string> = {
-  landscape: 'md:max-w-[clamp(640px,80vw,1024px)] md:mx-auto',
-  portrait: 'md:max-w-[clamp(360px,45vw,480px)] md:mx-auto',
+  landscape: 'w-full',
+  portrait: 'w-full',
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
