@@ -303,6 +303,10 @@ export const getPageQuery = defineQuery(`
           _key,
           mapTitle,
           mapId,
+          image {
+            ...,
+            asset->
+          },
           pdfUrl,
           hotspots[] {
             _key,

@@ -73,6 +73,14 @@ export const interactiveSitePlanBlock = defineType({
               validation: (Rule) => Rule.required(),
             }),
             defineField({
+              name: 'image',
+              title: 'Map Image',
+              type: 'image',
+              description:
+                'Upload the map image. Hotspot positions are hardcoded against the original image — replacement images must match the same framing/aspect ratio or markers will misalign.',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
               name: 'pdfUrl',
               title: 'PDF Download Link',
               type: 'url',

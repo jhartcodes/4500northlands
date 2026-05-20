@@ -153,6 +153,14 @@ export type ColumnImage = {
   _type: 'image'
 }
 
+export type MapEntryImage = {
+  asset?: SanityImageAssetReference
+  media?: unknown // Unable to locate the referenced type "mapEntry.image.media" in schema
+  hotspot?: SanityImageHotspot
+  crop?: SanityImageCrop
+  _type: 'image'
+}
+
 export type DevelopmentTimelineBlock = {
   _type: 'developmentTimelineBlock'
   sectionId?: string
@@ -233,6 +241,7 @@ export type InteractiveSitePlanBlock = {
   maps: Array<{
     mapTitle?: string
     mapId: 'fullsite' | 'lowermeadow'
+    image: MapEntryImage
     pdfUrl?: string
     hotspots?: Array<{
       number: number
@@ -1760,6 +1769,7 @@ export type AllSanitySchemaTypes =
   | DidYouKnowCard
   | ContentRowImage
   | ColumnImage
+  | MapEntryImage
   | DevelopmentTimelineBlock
   | TimelineBlock
   | InteractiveSitePlanBlock

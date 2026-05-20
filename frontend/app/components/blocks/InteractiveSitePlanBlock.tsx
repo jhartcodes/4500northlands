@@ -3,6 +3,8 @@
 import {useState, useCallback, useEffect, useRef} from 'react'
 import Image from 'next/image'
 import CustomPortableText from '@/app/components/PortableText'
+import {urlForImage} from '@/sanity/lib/utils'
+import type {SanityImageSource} from '@sanity/image-url/lib/types/types'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MAP CONFIG — edit hotspot x/y positions here (percentage of image dimensions)
@@ -24,7 +26,6 @@ type Orientation = 'landscape' | 'portrait'
 
 type MapConfig = {
   label: string
-  src: string
   width: number
   height: number
   orientation: Orientation
@@ -34,33 +35,34 @@ type MapConfig = {
 const MAP_CONFIG: Record<string, MapConfig> = {
   fullsite: {
     label: 'Full Site',
-    src: '/images/fullsite2.png',
     width: 1600,
     height: 1200,
     orientation: 'landscape',
     positions: [
-      {number: 1, x: 49, y: 85},
-      {number: 2, x: 64, y: 85},
-      {number: 3, x: 40, y: 55},
-      {number: 4, x: 25, y: 20},
-      {number: 5, x: 32, y: 70},
+      {number: 1, x: 49, y: 90},
+      {number: 2, x: 58, y: 85},
+      {number: 3, x: 46, y: 82},
+      {number: 4, x: 35, y: 74},
+      {number: 5, x: 40, y: 48},
+      {number: 6, x: 29, y: 22},
+      {number: 7, x: 18, y: 42},
+      {number: 8, x: 62, y: 43},
     ],
   },
   lowermeadow: {
     label: 'Lower Meadow',
-    src: '/images/lowermeadow16:9.png',
     width: 1600,
     height: 1200,
     orientation: 'landscape',
     positions: [
-      {number: 1, x: 44, y: 70},
-      {number: 2, x: 36, y: 60},
-      {number: 3, x: 50, y: 56},
-      {number: 4, x: 62, y: 55},
-      {number: 5, x: 84, y: 59},
-      {number: 6, x: 84, y: 82},
-      {number: 7, x: 24, y: 14},
-      {number: 8, x: 59, y: 27},
+      {number: 1, x: 25, y: 88},
+      {number: 2, x: 41, y: 80},
+      {number: 3, x: 27, y: 56},
+      {number: 4, x: 60, y: 86},
+      {number: 5, x: 72, y: 82},
+      {number: 6, x: 80, y: 86},
+      {number: 7, x: 3, y: 30},
+      {number: 8, x: 72, y: 95},
     ],
   },
 }
@@ -84,6 +86,7 @@ type MapEntry = {
   _key: string
   mapTitle?: string
   mapId: string
+  image: SanityImageSource
   pdfUrl?: string
   hotspots?: CmsHotspot[]
 }
@@ -136,11 +139,12 @@ export default function InteractiveSitePlanBlock({block}: InteractiveSitePlanBlo
         <div className="space-y-16 md:space-y-24">
           {maps?.map((entry) => {
             const config = MAP_CONFIG[entry.mapId]
-            if (!config) return null
+            if (!config || !entry.image) return null
             return (
               <SitePlanMap
                 key={entry._key}
                 config={config}
+                image={entry.image}
                 mapTitle={entry.mapTitle}
                 pdfUrl={entry.pdfUrl}
                 cmsHotspots={entry.hotspots}
@@ -157,20 +161,23 @@ export default function InteractiveSitePlanBlock({block}: InteractiveSitePlanBlo
 
 type SitePlanMapProps = {
   config: MapConfig
+  image: SanityImageSource
   mapTitle?: string
   pdfUrl?: string
   cmsHotspots?: CmsHotspot[]
 }
 
-function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) {
-  const {label, src, width, height, orientation, positions} = config
+function SitePlanMap({config, image, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) {
+  const {label, width, height, orientation, positions} = config
+  const src = urlForImage(image)?.width(1600).quality(85).auto('format').url()
+  if (!src) return null
 
   // Merge hardcoded positions with CMS text, keyed by number
   const hotspots: Hotspot[] = positions.map((pos) => {
     const cms = cmsHotspots?.find((h) => h.number === pos.number)
     return {
       ...pos,
-      key: `${config.src}-${pos.number}`,
+      key: `${config.label}-${pos.number}`,
       label: cms?.label ?? `Marker ${pos.number}`,
       description: cms?.description ?? '',
     }
@@ -287,68 +294,71 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
           })}
         </div>
 
-        {/* Image + hotspot overlay — bleeds on mobile, natural ratio on desktop.
+        {/* md+ row: map (77.5%) + side legend (22.5%). Mobile stays single-column. */}
+        <div className="md:flex md:items-start md:gap-6">
+          <div className="md:w-[77.5%]">
+            {/* Image + hotspot overlay — bleeds on mobile, natural ratio on desktop.
             container-type:inline-size lets child markers scale relative to image width. */}
-        <div
-          className="relative -mx-[var(--container-padding)] md:mx-0 [container-type:inline-size]"
-          style={{aspectRatio: `${width}/${height}`}}
-        >
-          {/* Image — rounded corners on md+ only since mobile bleeds */}
-          <div className="absolute inset-0 md:rounded-lg overflow-hidden">
-            <Image
-              src={src}
-              alt={label}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 1024px"
-              priority
-            />
-          </div>
+            <div
+              className="relative -mx-[var(--container-padding)] md:mx-0 [container-type:inline-size]"
+              style={{aspectRatio: `${width}/${height}`}}
+            >
+              {/* Image — rounded corners on md+ only since mobile bleeds */}
+              <div className="absolute inset-0 md:rounded-lg overflow-hidden">
+                <Image
+                  src={src}
+                  alt={label}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 62vw, 800px"
+                  priority
+                />
+              </div>
 
-          {/* Hotspot markers — outside overflow-hidden so tooltips aren't clipped */}
-          {hotspots.map((h) => {
-            const isActive = activeKey === h.key
-            const isVisible = visibleKey === h.key
+              {/* Hotspot markers — outside overflow-hidden so tooltips aren't clipped */}
+              {hotspots.map((h) => {
+                const isActive = activeKey === h.key
+                const isVisible = visibleKey === h.key
 
-            // Three-zone tooltip positioning — keeps tooltip inside the image
-            const tooltipZone = h.x < 30 ? 'left' : h.x > 70 ? 'right' : 'center'
-            const tooltipAbove = h.y > 55
+                // Three-zone tooltip positioning — keeps tooltip inside the image
+                const tooltipZone = h.x < 30 ? 'left' : h.x > 70 ? 'right' : 'center'
+                const tooltipAbove = h.y > 55
 
-            const tooltipPositionClass =
-              tooltipZone === 'left'
-                ? 'left-0'
-                : tooltipZone === 'right'
-                  ? 'right-0'
-                  : 'left-1/2 -translate-x-1/2'
+                const tooltipPositionClass =
+                  tooltipZone === 'left'
+                    ? 'left-0'
+                    : tooltipZone === 'right'
+                      ? 'right-0'
+                      : 'left-1/2 -translate-x-1/2'
 
-            const arrowPositionClass =
-              tooltipZone === 'left'
-                ? 'left-4'
-                : tooltipZone === 'right'
-                  ? 'right-4'
-                  : 'left-1/2 -translate-x-1/2'
+                const arrowPositionClass =
+                  tooltipZone === 'left'
+                    ? 'left-4'
+                    : tooltipZone === 'right'
+                      ? 'right-4'
+                      : 'left-1/2 -translate-x-1/2'
 
-            return (
-              <div
-                key={h.key}
-                className="absolute"
-                style={{
-                  left: `${h.x}%`,
-                  top: `${h.y}%`,
-                  transform: 'translate(-50%, -50%)',
-                  zIndex: isVisible ? 30 : 1,
-                }}
-              >
-                <button
-                  onClick={() => handleMarkerClick(h.key)}
-                  onMouseEnter={() => setHoveredKey(h.key)}
-                  onMouseLeave={() => setHoveredKey(null)}
-                  style={{
-                    width: 'clamp(28px, 4cqi, 44px)',
-                    height: 'clamp(28px, 4cqi, 44px)',
-                    fontSize: 'clamp(0.75rem, 1.6cqi, 1rem)',
-                  }}
-                  className={`
+                return (
+                  <div
+                    key={h.key}
+                    className="absolute"
+                    style={{
+                      left: `${h.x}%`,
+                      top: `${h.y}%`,
+                      transform: 'translate(-50%, -50%)',
+                      zIndex: isVisible ? 30 : 1,
+                    }}
+                  >
+                    <button
+                      onClick={() => handleMarkerClick(h.key)}
+                      onMouseEnter={() => setHoveredKey(h.key)}
+                      onMouseLeave={() => setHoveredKey(null)}
+                      style={{
+                        width: 'clamp(28px, 4cqi, 44px)',
+                        height: 'clamp(28px, 4cqi, 44px)',
+                        fontSize: 'clamp(0.75rem, 1.6cqi, 1rem)',
+                      }}
+                      className={`
                   relative rounded-full
                   font-bold
                   flex items-center justify-center
@@ -361,15 +371,15 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
                       : 'bg-gold text-navy shadow-md hover:scale-110 hover:shadow-xl'
                   }
                 `}
-                  aria-label={`${h.label}: ${h.description}`}
-                  aria-expanded={isVisible}
-                >
-                  {h.number}
-                </button>
+                      aria-label={`${h.label}: ${h.description}`}
+                      aria-expanded={isVisible}
+                    >
+                      {h.number}
+                    </button>
 
-                {/* Desktop tooltip — hidden on mobile */}
-                <div
-                  className={`
+                    {/* Desktop tooltip — hidden on mobile */}
+                    <div
+                      className={`
                   hidden md:block absolute
                   w-[min(16rem,80cqi)]
                   bg-cream border border-navy/10 rounded-lg shadow-lg p-4
@@ -378,56 +388,57 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
                   ${tooltipAbove ? 'bottom-full mb-4' : 'top-full mt-4'}
                   ${tooltipPositionClass}
                 `}
-                  role="tooltip"
-                >
-                  <div
-                    className={`
+                      role="tooltip"
+                    >
+                      <div
+                        className={`
                     absolute w-3 h-3 bg-cream border-navy/10 rotate-45
                     ${tooltipAbove ? 'bottom-[-6px] border-r border-b' : 'top-[-6px] border-l border-t'}
                     ${arrowPositionClass}
                   `}
-                  />
-                  <div className="relative">
-                    <h4 className="font-display font-bold text-navy mb-1">{h.label}</h4>
-                    <p className="text-sm text-navy/70 leading-relaxed">{h.description}</p>
+                      />
+                      <div className="relative">
+                        <h4 className="font-display font-bold text-navy mb-1">{h.label}</h4>
+                        <p className="text-sm text-navy/70 leading-relaxed">{h.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Mobile info card — only renders when a hotspot is active */}
+            {activeHotspot && (
+              <div className="md:hidden mt-4">
+                <div className="bg-cream border border-navy/10 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <span className="shrink-0 w-7 h-7 rounded-full bg-gold text-navy flex items-center justify-center text-sm font-bold">
+                      {activeHotspot.number}
+                    </span>
+                    <div>
+                      <h4 className="font-display font-bold text-navy leading-tight">
+                        {activeHotspot.label}
+                      </h4>
+                      <p className="text-sm text-navy/70 leading-relaxed mt-0.5">
+                        {activeHotspot.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            )
-          })}
-        </div>
-
-        {/* Mobile info card — only renders when a hotspot is active */}
-        {activeHotspot && (
-          <div className="md:hidden mt-4">
-            <div className="bg-cream border border-navy/10 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <span className="shrink-0 w-7 h-7 rounded-full bg-gold text-navy flex items-center justify-center text-sm font-bold">
-                  {activeHotspot.number}
-                </span>
-                <div>
-                  <h4 className="font-display font-bold text-navy leading-tight">
-                    {activeHotspot.label}
-                  </h4>
-                  <p className="text-sm text-navy/70 leading-relaxed mt-0.5">
-                    {activeHotspot.description}
-                  </p>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
-        )}
 
-        {/* Desktop legend */}
-        <div className="hidden md:flex flex-wrap gap-3 justify-center mt-6">
-          {hotspots.map((h) => {
-            const isActive = activeKey === h.key
-            return (
-              <button
-                key={h.key}
-                onClick={() => handleMarkerClick(h.key)}
-                className={`
-                flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200
+          {/* Desktop legend — right column, 22.5% wide, stacked vertically */}
+          <div className="hidden md:flex md:w-[22.5%] flex-col gap-2">
+            {hotspots.map((h) => {
+              const isActive = activeKey === h.key
+              return (
+                <button
+                  key={h.key}
+                  onClick={() => handleMarkerClick(h.key)}
+                  className={`
+                w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200
                 border focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2
                 ${
                   isActive
@@ -435,20 +446,21 @@ function SitePlanMap({config, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) 
                     : 'bg-white border-navy/10 hover:border-gold/50 hover:shadow-sm'
                 }
               `}
-                aria-pressed={isActive}
-              >
-                <span
-                  className={`
-                w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-200
+                  aria-pressed={isActive}
+                >
+                  <span
+                    className={`
+                shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-200
                 ${isActive ? 'bg-gold text-navy' : 'bg-navy/10 text-navy'}
               `}
-                >
-                  {h.number}
-                </span>
-                <span className="text-sm text-navy/80">{h.label}</span>
-              </button>
-            )
-          })}
+                  >
+                    {h.number}
+                  </span>
+                  <span className="text-sm text-navy/80 text-left">{h.label}</span>
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
     </div>
