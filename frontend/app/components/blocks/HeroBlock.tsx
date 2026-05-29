@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsButton, CmsImage, CmsPortableText} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {stegaClean} from 'next-sanity'
 import {urlForImage} from '@/sanity/lib/utils'
@@ -11,12 +12,12 @@ type HeroBlockProps = {
     _key: string
     _type: 'heroBlock'
     sectionId?: string
-    backgroundImage?: any
+    backgroundImage?: CmsImage
     eyebrow?: string
     title?: string
     body?: string // Legacy plain text
-    bodyContent?: any[] // New Portable Text
-    buttons?: any[]
+    bodyContent?: CmsPortableText // New Portable Text
+    buttons?: CmsButton[]
     overlayStrength?: 'light' | 'medium' | 'strong'
   }
   index: number

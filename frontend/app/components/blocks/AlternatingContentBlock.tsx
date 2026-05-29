@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsImage, CmsPortableText} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {stegaClean} from 'next-sanity'
 import {urlForImage} from '@/sanity/lib/utils'
@@ -11,11 +12,11 @@ type ContentRow = {
   _key: string
   imagePosition?: 'left' | 'right'
   textBackground?: 'white' | 'cream' | 'mist'
-  image?: any
+  image?: CmsImage
   rowLabel?: string
   rowTitle?: string
   showDivider?: boolean
-  body?: any[]
+  body?: CmsPortableText
   inlineNote?: string
 }
 
@@ -28,7 +29,7 @@ type AlternatingContentBlockProps = {
     sectionLabel?: string
     title?: string
     intro?: string // Legacy plain text
-    introContent?: any[] // New Portable Text
+    introContent?: CmsPortableText // New Portable Text
     rows?: ContentRow[]
   }
   index: number

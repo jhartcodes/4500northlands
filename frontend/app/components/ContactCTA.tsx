@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsImage} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {urlForImage} from '@/sanity/lib/utils'
 
@@ -9,7 +10,7 @@ type ContactCTAProps = {
   subtext?: string
   buttonLabel?: string
   background?: 'navy' | 'forest' | 'image'
-  backgroundImage?: any
+  backgroundImage?: CmsImage
 }
 
 export default function ContactCTA({

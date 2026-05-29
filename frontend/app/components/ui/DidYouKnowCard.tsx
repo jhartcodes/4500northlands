@@ -1,11 +1,12 @@
 import CustomPortableText from '@/app/components/PortableText'
 import Icon from '@/app/components/ui/Icons'
+import type {CmsPortableText} from '@/sanity/lib/types'
 
 type DidYouKnowCardProps = {
   icon?: string
   eyebrow?: string
   title?: string
-  body?: any[]
+  body?: CmsPortableText
   isDark?: boolean
   className?: string
 }

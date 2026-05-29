@@ -76,9 +76,11 @@ export default function Header({title, logo, navigation}: HeaderProps) {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2"
+            className="md:hidden min-h-11 min-w-11 p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
           >
             {isMenuOpen ? (
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,7 +96,7 @@ export default function Header({title, logo, navigation}: HeaderProps) {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <nav className="md:hidden py-4 border-t border-gray-100">
+          <nav id="mobile-navigation" className="md:hidden py-4 border-t border-gray-100">
             <ul className="flex flex-col gap-4">
               {navigation?.map((item) => (
                 <li key={item._key}>

@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsImage, CmsPortableText} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {stegaClean} from 'next-sanity'
 import {urlForImage} from '@/sanity/lib/utils'
@@ -9,7 +10,7 @@ import Divider from '@/app/components/ui/Divider'
 type Step = {
   _key: string
   stepLabel?: string
-  body?: any[]
+  body?: CmsPortableText
 }
 
 type CACCalculationBlockProps = {
@@ -21,8 +22,8 @@ type CACCalculationBlockProps = {
     sectionLabel?: string
     title?: string
     showDivider?: boolean
-    introBody?: any[]
-    introImage?: any
+    introBody?: CmsPortableText
+    introImage?: CmsImage
     imagePosition?: 'left' | 'right'
     stepsTitle?: string
     steps?: Step[]

@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsButton, CmsImage, CmsPortableText} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {stegaClean} from 'next-sanity'
 import {urlForImage} from '@/sanity/lib/utils'
@@ -16,24 +17,24 @@ type ImageTextBlockProps = {
     sectionId?: string
     imagePosition?: 'left' | 'right'
     background?: 'white' | 'cream' | 'mist' | 'navy' | 'forest'
-    image?: any
+    image?: CmsImage
     sectionLabel?: string
     title?: string
     showDivider?: boolean
-    body?: any[]
-    buttons?: any[]
+    body?: CmsPortableText
+    buttons?: CmsButton[]
     intro?: {
       sectionId?: string
       sectionLabel?: string
       title?: string
       showDivider?: boolean
-      body?: any[]
+      body?: CmsPortableText
     }
     didYouKnowCard?: {
       icon?: string
       eyebrow?: string
       title?: string
-      body?: any[]
+      body?: CmsPortableText
     }
   }
   index: number

@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsPortableText} from '@/sanity/lib/types'
 import {stegaClean} from 'next-sanity'
 import SectionWrapper, {isDarkBackground} from '@/app/components/ui/SectionWrapper'
 import DidYouKnowCard from '@/app/components/ui/DidYouKnowCard'
@@ -15,12 +16,12 @@ type DidYouKnowBlockProps = {
     icon?: string
     eyebrow?: string
     title?: string
-    body?: any[]
+    body?: CmsPortableText
     // Right card (two-column only)
     rightIcon?: string
     rightEyebrow?: string
     rightTitle?: string
-    rightBody?: any[]
+    rightBody?: CmsPortableText
   }
   index: number
   pageId: string

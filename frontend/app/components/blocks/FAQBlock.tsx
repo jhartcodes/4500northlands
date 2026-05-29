@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsPortableText} from '@/sanity/lib/types'
 import CustomPortableText from '@/app/components/PortableText'
 import SectionWrapper, {isDarkBackground} from '@/app/components/ui/SectionWrapper'
 import Accordion, {AccordionItem} from '@/app/components/ui/Accordion'
@@ -7,7 +8,7 @@ import Accordion, {AccordionItem} from '@/app/components/ui/Accordion'
 type FAQItem = {
   _key: string
   question?: string
-  answer?: any[]
+  answer?: CmsPortableText
 }
 
 type FAQBlockProps = {

@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsImage} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {urlForImage} from '@/sanity/lib/utils'
 
@@ -14,7 +15,7 @@ type BlockProps = {
     contactEmail?: string
     buttonLabel?: string
     background?: 'navy' | 'forest' | 'image'
-    backgroundImage?: any
+    backgroundImage?: CmsImage
   }
   pageId: string
   pageType: string

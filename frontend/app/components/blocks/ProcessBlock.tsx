@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsImage, CmsPortableText} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {stegaClean} from 'next-sanity'
 import {urlForImage} from '@/sanity/lib/utils'
@@ -10,7 +11,7 @@ import Accordion, {AccordionItem} from '@/app/components/ui/Accordion'
 type AccordionItemType = {
   _key: string
   heading?: string
-  body?: any[]
+  body?: CmsPortableText
 }
 
 type ProcessBlockProps = {
@@ -20,7 +21,7 @@ type ProcessBlockProps = {
     sectionId?: string
     background?: 'white' | 'cream' | 'mist' | 'navy' | 'forest'
     imagePosition?: 'left' | 'right'
-    image?: any
+    image?: CmsImage
     sectionLabel?: string
     title?: string
     intro?: string

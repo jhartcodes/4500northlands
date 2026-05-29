@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsButton, CmsPortableText} from '@/sanity/lib/types'
 import {PortableText, PortableTextComponents} from 'next-sanity'
 import {stegaClean} from 'next-sanity'
 import Button, {ButtonGroup} from './Button'
@@ -10,8 +11,8 @@ type RichTextSectionProps = {
     _type: 'richTextSection'
     sectionId?: string
     title?: string
-    body?: any[]
-    buttons?: any[]
+    body?: CmsPortableText
+    buttons?: CmsButton[]
   }
   index: number
   pageId: string

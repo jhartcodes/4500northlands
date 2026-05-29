@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsImage, CmsPortableText} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {urlForImage} from '@/sanity/lib/utils'
 import CustomPortableText from '@/app/components/PortableText'
@@ -24,9 +25,9 @@ type EconomicImpactBlockProps = {
     _key: string
     _type: 'economicImpactBlock'
     sectionId?: string
-    backgroundImage?: any
+    backgroundImage?: CmsImage
     sectionLabel?: string
-    headline?: any[]
+    headline?: CmsPortableText
     stats?: Stat[]
     tableTitle?: string
     tableRows?: TableRow[]

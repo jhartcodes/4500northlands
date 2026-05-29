@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsPortableText} from '@/sanity/lib/types'
 import CustomPortableText from '@/app/components/PortableText'
 import SectionWrapper, {isDarkBackground} from '@/app/components/ui/SectionWrapper'
 
@@ -11,9 +12,9 @@ type TwoColumnTextBlockProps = {
     background?: 'white' | 'cream' | 'mist' | 'navy' | 'forest'
     sectionLabel?: string
     title?: string
-    body?: any[]
+    body?: CmsPortableText
     cardTitle?: string
-    cardBody?: any[]
+    cardBody?: CmsPortableText
   }
   index: number
   pageId: string

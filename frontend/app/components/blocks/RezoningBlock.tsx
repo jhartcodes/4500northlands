@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsButton, CmsImage, CmsPortableText} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {stegaClean} from 'next-sanity'
 import {urlForImage} from '@/sanity/lib/utils'
@@ -15,12 +16,12 @@ type RezoningBlockProps = {
     sectionId?: string
     background?: 'white' | 'cream' | 'mist' | 'navy' | 'forest'
     imagePosition?: 'left' | 'right'
-    image?: any
+    image?: CmsImage
     sectionLabel?: string
     title?: string
     showDivider?: boolean
-    body?: any[]
-    buttons?: any[]
+    body?: CmsPortableText
+    buttons?: CmsButton[]
   }
   index: number
   pageId: string

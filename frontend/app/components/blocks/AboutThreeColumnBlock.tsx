@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsImage, CmsPortableText} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {urlForImage} from '@/sanity/lib/utils'
 import CustomPortableText from '@/app/components/PortableText'
@@ -7,9 +8,9 @@ import Divider from '@/app/components/ui/Divider'
 
 type Column = {
   _key: string
-  image?: any
+  image?: CmsImage
   heading?: string
-  body?: any[]
+  body?: CmsPortableText
 }
 
 type AboutThreeColumnBlockProps = {
@@ -20,7 +21,7 @@ type AboutThreeColumnBlockProps = {
     sectionLabel?: string
     title?: string
     showDivider?: boolean
-    introBody?: any[]
+    introBody?: CmsPortableText
     columns?: Column[]
   }
   index: number

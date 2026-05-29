@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsImage} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {urlForImage} from '@/sanity/lib/utils'
 
@@ -8,9 +9,8 @@ type FullWidthImageBlockProps = {
     _key: string
     _type: 'fullWidthImageBlock'
     sectionId?: string
-    image?: {
+    image?: CmsImage & {
       alt?: string
-      [key: string]: any
     }
   }
   index: number
@@ -34,7 +34,6 @@ export default function FullWidthImageBlock({block}: FullWidthImageBlockProps) {
           fill
           className="object-cover"
           sizes="100vw"
-          priority
         />
       </div>
     </section>

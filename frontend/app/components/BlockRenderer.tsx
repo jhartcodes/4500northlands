@@ -22,17 +22,18 @@ import {
   TimelineBlock,
   DevelopmentTimelineBlock,
 } from '@/app/components/blocks'
+import type {PageBuilderSection} from '@/sanity/lib/types'
 import {dataAttr} from '@/sanity/lib/utils'
 
 type BlockProps = {
   index: number
-  block: any
+  block: PageBuilderSection
   pageId: string
   pageType: string
 }
 
 type BlocksType = {
-  [key: string]: React.FC<BlockProps>
+  [key: string]: React.ElementType
 }
 
 const Blocks: BlocksType = {
@@ -63,8 +64,10 @@ const Blocks: BlocksType = {
  * Used by the <PageBuilder>, this component renders the component that matches the block type.
  */
 export default function BlockRenderer({block, index, pageId, pageType}: BlockProps) {
+  const Block = Blocks[block._type] as React.ComponentType<BlockProps> | undefined
+
   // Block does exist
-  if (typeof Blocks[block._type] !== 'undefined') {
+  if (Block) {
     return (
       <div
         key={block._key}
@@ -74,13 +77,7 @@ export default function BlockRenderer({block, index, pageId, pageType}: BlockPro
           path: `pageBuilder[_key=="${block._key}"]`,
         }).toString()}
       >
-        {React.createElement(Blocks[block._type], {
-          key: block._key,
-          block: block,
-          index: index,
-          pageId: pageId,
-          pageType: pageType,
-        })}
+        <Block key={block._key} block={block} index={index} pageId={pageId} pageType={pageType} />
       </div>
     )
   }

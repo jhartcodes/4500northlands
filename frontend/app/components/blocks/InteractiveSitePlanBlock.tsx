@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsPortableText} from '@/sanity/lib/types'
 import {useState, useCallback, useEffect, useRef} from 'react'
 import Image from 'next/image'
 import CustomPortableText from '@/app/components/PortableText'
@@ -98,7 +99,7 @@ type InteractiveSitePlanBlockProps = {
     sectionId?: string
     background?: 'white' | 'cream' | 'mist'
     title?: string
-    body?: any[]
+    body?: CmsPortableText
     maps?: MapEntry[]
   }
   index: number
@@ -170,7 +171,6 @@ type SitePlanMapProps = {
 function SitePlanMap({config, image, mapTitle, pdfUrl, cmsHotspots}: SitePlanMapProps) {
   const {label, width, height, orientation, positions} = config
   const src = urlForImage(image)?.width(1600).quality(85).auto('format').url()
-  if (!src) return null
 
   // Merge hardcoded positions with CMS text, keyed by number
   const hotspots: Hotspot[] = positions.map((pos) => {
@@ -217,6 +217,8 @@ function SitePlanMap({config, image, mapTitle, pdfUrl, cmsHotspots}: SitePlanMap
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [])
+
+  if (!src) return null
 
   return (
     <div ref={containerRef}>
@@ -311,7 +313,6 @@ function SitePlanMap({config, image, mapTitle, pdfUrl, cmsHotspots}: SitePlanMap
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1280px) 62vw, 800px"
-                  priority
                 />
               </div>
 

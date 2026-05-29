@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsButton, CmsPortableText} from '@/sanity/lib/types'
 import CustomPortableText from '@/app/components/PortableText'
 import SectionWrapper, {isDarkBackground} from '@/app/components/ui/SectionWrapper'
 import Divider from '@/app/components/ui/Divider'
@@ -14,8 +15,8 @@ type FullWidthTextBlockProps = {
     sectionLabel?: string
     title?: string
     showDivider?: boolean
-    body?: any[]
-    buttons?: any[]
+    body?: CmsPortableText
+    buttons?: CmsButton[]
   }
   index: number
   pageId: string

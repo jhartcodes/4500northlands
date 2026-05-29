@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsImage} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {urlForImage} from '@/sanity/lib/utils'
 
@@ -15,10 +16,9 @@ type PlazaCallout = {
   body?: string
 }
 
-type PlazaImage = {
+type PlazaImage = CmsImage & {
   _key: string
   alt?: string
-  [key: string]: any
 }
 
 type SitePlanBlockProps = {
@@ -26,7 +26,7 @@ type SitePlanBlockProps = {
     _key: string
     _type: 'sitePlanBlock'
     sectionId?: string
-    sitePlanImage?: any
+    sitePlanImage?: CmsImage
     legendItems?: LegendItem[]
     plazaTitle?: string
     plazaImages?: PlazaImage[]

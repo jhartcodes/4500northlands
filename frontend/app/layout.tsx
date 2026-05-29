@@ -10,6 +10,7 @@ import {Toaster} from 'sonner'
 import DraftModeToast from '@/app/components/DraftModeToast'
 import Footer from '@/app/components/Footer'
 import Header from '@/app/components/Header'
+import {refreshAction} from '@/app/refresh-action'
 import {sanityFetch, SanityLive} from '@/sanity/lib/live'
 import {settingsQuery, homeNavigationQuery} from '@/sanity/lib/queries'
 import {handleError} from '@/app/client-utils'
@@ -49,11 +50,16 @@ export default async function RootLayout({children}: {children: React.ReactNode}
           <>
             <DraftModeToast />
             <VisualEditing />
+            <Suspense fallback={null}>
+              <SanityLive
+                onError={handleError}
+                refreshOnFocus={false}
+                refreshOnReconnect={false}
+                revalidateSyncTags={refreshAction}
+              />
+            </Suspense>
           </>
         )}
-        <Suspense fallback={null}>
-          <SanityLive onError={handleError} refreshOnFocus={false} refreshOnReconnect={false} />
-        </Suspense>
         <Header title={settings?.title || homeNav?.name} logo={settings?.logo} navigation={homeNav?.navigation} />
         <main className="min-h-screen">{children}</main>
         <Footer privacyPolicyUrl={settings?.privacyPolicyUrl} />

@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsImage} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {stegaClean} from 'next-sanity'
 import {urlForImage} from '@/sanity/lib/utils'
@@ -7,7 +8,7 @@ import {urlForImage} from '@/sanity/lib/utils'
 type StatItem = {
   _key: string
   _type: 'statItem'
-  image?: any
+  image?: CmsImage
   value?: string
   title?: string
   subtitle?: string

@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsButton, CmsImage} from '@/sanity/lib/types'
 import Image from 'next/image'
 import {stegaClean} from 'next-sanity'
 import {urlForImage} from '@/sanity/lib/utils'
@@ -11,13 +12,13 @@ type HeroProps = {
     _type: 'hero'
     sectionId?: string
     layout?: 'fullWidthBackground' | 'photoWithText'
-    image?: any
+    image?: CmsImage
     title?: string
     subtitle?: string
     textSize?: 'large' | 'small'
     textAlignLarge?: 'left' | 'center' | 'right'
     textAlignSmall?: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight'
-    buttons?: any[]
+    buttons?: CmsButton[]
   }
   index: number
   pageId: string
@@ -57,7 +58,7 @@ function getTextPositionClasses(textSize: string | undefined, alignLarge: string
 
 export default function Hero({block}: HeroProps) {
   const {sectionId, layout, image, title, subtitle, textSize, textAlignLarge, textAlignSmall, buttons} = block
-  const cleanLayout = stegaClean(layout) || 'fullWidthBackground'
+  const cleanLayout = stegaClean(layout)
   const cleanTextSize = stegaClean(textSize) || 'large'
   const imageUrl = image ? urlForImage(image)?.width(1920).height(1080).quality(80).auto('format').fit('crop').url() : null
 
@@ -66,7 +67,9 @@ export default function Hero({block}: HeroProps) {
   return (
     <section
       id={stegaClean(sectionId) || undefined}
-      className="relative w-full min-h-[70vh] lg:min-h-[80vh] flex"
+      className={`relative w-full min-h-[70vh] lg:min-h-[80vh] flex ${
+        cleanLayout === 'photoWithText' ? 'bg-navy' : ''
+      }`}
     >
       {/* Background Image */}
       {imageUrl && (

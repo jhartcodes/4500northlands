@@ -37,7 +37,8 @@ export default function Button({label, href, variant, openInNewTab, className = 
 
   const cleanHref = stegaClean(href) || '#'
   const classes = `${getButtonClasses(variant)} ${className}`
-  const isExternal = cleanHref.startsWith('http') || cleanHref.startsWith('mailto:') || cleanHref.startsWith('tel:')
+  const isWebExternal = cleanHref.startsWith('http')
+  const isExternal = isWebExternal || cleanHref.startsWith('mailto:') || cleanHref.startsWith('tel:')
   const isAnchor = cleanHref.startsWith('#')
 
   // For anchor links, use smooth scrolling
@@ -65,8 +66,8 @@ export default function Button({label, href, variant, openInNewTab, className = 
       <a
         href={cleanHref}
         className={classes}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={isWebExternal || openInNewTab ? '_blank' : undefined}
+        rel={isWebExternal || openInNewTab ? 'noopener noreferrer' : undefined}
       >
         {label}
       </a>

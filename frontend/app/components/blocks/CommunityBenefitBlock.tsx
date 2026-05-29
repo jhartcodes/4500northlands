@@ -1,5 +1,6 @@
 'use client'
 
+import type {CmsPortableText} from '@/sanity/lib/types'
 import CustomPortableText from '@/app/components/PortableText'
 import Accordion, {AccordionItem} from '@/app/components/ui/Accordion'
 
@@ -7,7 +8,7 @@ type BenefitItem = {
   _key: string
   label?: string
   itemType?: 'cac' | 'addedBenefit'
-  body?: any[]
+  body?: CmsPortableText
 }
 
 type CommunityBenefitBlockProps = {
@@ -17,7 +18,7 @@ type CommunityBenefitBlockProps = {
     sectionId?: string
     sectionLabel?: string
     title?: string
-    introBody?: any[]
+    introBody?: CmsPortableText
     totalNumber?: string
     totalLabel?: string
     totalSub?: string
