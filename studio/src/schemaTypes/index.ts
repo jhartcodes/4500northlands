@@ -11,6 +11,7 @@ import {didYouKnowBlock} from './objects/didYouKnowBlock'
 import {processBlock} from './objects/processBlock'
 import {economicImpactBlock} from './objects/economicImpactBlock'
 import {cacCalculationBlock} from './objects/cacCalculationBlock'
+import {cacValueBlock} from './objects/cacValueBlock'
 import {communityBenefitBlock} from './objects/communityBenefitBlock'
 import {alternatingContentBlock} from './objects/alternatingContentBlock'
 import {devStatsBlock} from './objects/devStatsBlock'
@@ -45,6 +46,7 @@ export const schemaTypes = [
   processBlock,
   economicImpactBlock,
   cacCalculationBlock,
+  cacValueBlock,
   communityBenefitBlock,
   alternatingContentBlock,
   devStatsBlock,

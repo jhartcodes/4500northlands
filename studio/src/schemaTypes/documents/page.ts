@@ -84,6 +84,7 @@ export const page = defineType({
         defineArrayMember({type: 'processBlock'}),
         defineArrayMember({type: 'economicImpactBlock'}),
         defineArrayMember({type: 'cacCalculationBlock'}),
+        defineArrayMember({type: 'cacValueBlock'}),
         defineArrayMember({type: 'communityBenefitBlock'}),
         defineArrayMember({type: 'alternatingContentBlock'}),
         defineArrayMember({type: 'devStatsBlock'}),

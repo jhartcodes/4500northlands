@@ -8,7 +8,7 @@ import {portableTextEditor} from './portableText'
  */
 export const cacCalculationBlock = defineType({
   name: 'cacCalculationBlock',
-  title: 'CAC 101 — Calculation Steps',
+  title: 'CAC 101 — Calculation Steps (Deprecated)',
   type: 'object',
   icon: ActivityIcon,
   groups: [

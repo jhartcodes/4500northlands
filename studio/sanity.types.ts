@@ -37,6 +37,7 @@ export type Intro = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -106,6 +107,52 @@ export type DidYouKnowCard = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
+          | 'h2'
+          | 'h3'
+          | 'h4'
+          | 'blockquote'
+          | 'largeStatement'
+          | 'calloutBox'
+          | 'sectionLabel'
+        listItem?: 'bullet' | 'number' | 'arrowList' | 'dashList'
+        markDefs?: Array<{
+          href?: string
+          openInNewTab?: boolean
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown // Unable to locate the referenced type "image.media" in schema
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt: string
+        caption?: string
+        _type: 'image'
+        _key: string
+      }
+  >
+}
+
+export type Incentive = {
+  value?: string
+  label?: string
+  body?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?:
+          | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -209,6 +256,7 @@ export type InteractiveSitePlanBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -289,6 +337,7 @@ export type FullWidthTextBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -355,6 +404,7 @@ export type FaqBlock = {
           }>
           style?:
             | 'normal'
+            | 'h2Large'
             | 'h2'
             | 'h3'
             | 'h4'
@@ -405,6 +455,7 @@ export type AboutThreeColumnBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -447,6 +498,7 @@ export type AboutThreeColumnBlock = {
           }>
           style?:
             | 'normal'
+            | 'h2Large'
             | 'h2'
             | 'h3'
             | 'h4'
@@ -506,6 +558,7 @@ export type RezoningBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -606,6 +659,7 @@ export type AlternatingContentBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -652,6 +706,7 @@ export type AlternatingContentBlock = {
           }>
           style?:
             | 'normal'
+            | 'h2Large'
             | 'h2'
             | 'h3'
             | 'h4'
@@ -702,6 +757,7 @@ export type CommunityBenefitBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -749,6 +805,7 @@ export type CommunityBenefitBlock = {
           }>
           style?:
             | 'normal'
+            | 'h2Large'
             | 'h2'
             | 'h3'
             | 'h4'
@@ -783,6 +840,60 @@ export type CommunityBenefitBlock = {
   }>
 }
 
+export type CacValueBlock = {
+  _type: 'cacValueBlock'
+  sectionId?: string
+  totalValue: string
+  totalLabel?: string
+  totalSubtitle?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?:
+          | 'normal'
+          | 'h2Large'
+          | 'h2'
+          | 'h3'
+          | 'h4'
+          | 'blockquote'
+          | 'largeStatement'
+          | 'calloutBox'
+          | 'sectionLabel'
+        listItem?: 'bullet' | 'number' | 'arrowList' | 'dashList'
+        markDefs?: Array<{
+          href?: string
+          openInNewTab?: boolean
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt: string
+        caption?: string
+        _type: 'image'
+        _key: string
+      }
+  >
+  valueCards?: Array<{
+    value: string
+    label?: string
+    _type: 'valueCard'
+    _key: string
+  }>
+  incentive?: Incentive
+}
+
 export type CacCalculationBlock = {
   _type: 'cacCalculationBlock'
   sectionId?: string
@@ -800,6 +911,7 @@ export type CacCalculationBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -850,6 +962,7 @@ export type CacCalculationBlock = {
           }>
           style?:
             | 'normal'
+            | 'h2Large'
             | 'h2'
             | 'h3'
             | 'h4'
@@ -910,6 +1023,7 @@ export type EconomicImpactBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -985,6 +1099,7 @@ export type ProcessBlock = {
           }>
           style?:
             | 'normal'
+            | 'h2Large'
             | 'h2'
             | 'h3'
             | 'h4'
@@ -1061,6 +1176,7 @@ export type DidYouKnowBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -1127,6 +1243,7 @@ export type DidYouKnowBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -1174,6 +1291,7 @@ export type TwoColumnTextBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -1214,6 +1332,7 @@ export type TwoColumnTextBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -1271,6 +1390,7 @@ export type ImageTextBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -1331,6 +1451,7 @@ export type HeroBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -1428,6 +1549,9 @@ export type Page = {
     | ({
         _key: string
       } & CacCalculationBlock)
+    | ({
+        _key: string
+      } & CacValueBlock)
     | ({
         _key: string
       } & CommunityBenefitBlock)
@@ -1767,6 +1891,7 @@ export type AllSanitySchemaTypes =
   | SanityImageAssetReference
   | Intro
   | DidYouKnowCard
+  | Incentive
   | ContentRowImage
   | ColumnImage
   | MapEntryImage
@@ -1783,6 +1908,7 @@ export type AllSanitySchemaTypes =
   | DevStatsBlock
   | AlternatingContentBlock
   | CommunityBenefitBlock
+  | CacValueBlock
   | CacCalculationBlock
   | EconomicImpactBlock
   | ProcessBlock

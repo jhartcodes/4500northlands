@@ -1,4 +1,16 @@
 import {defineArrayMember} from 'sanity'
+import type {ReactNode} from 'react'
+
+/**
+ * Editor render for the "Heading 2 (Large)" style. Sanity only auto-sizes its
+ * known heading values (h2/h3/h4); a custom value renders as normal text without
+ * this. Sized to read clearly larger than the regular Heading 2 inside the editor.
+ */
+const H2LargePreview = ({children}: {children?: ReactNode}) => (
+  <span style={{fontSize: '2.2em', fontWeight: 700, lineHeight: 1.15, display: 'inline-block'}}>
+    {children}
+  </span>
+)
 
 /**
  * Shared Portable Text definition — import this into any block that needs
@@ -12,6 +24,9 @@ export const portableTextEditor = [
     // Paragraph styles
     styles: [
       {title: 'Normal', value: 'normal'},
+      // Large heading — renders as an <h2> element (SEO: keeps one <h1> per page) at the
+      // size of the current site's hero <h1>. Sits between the page h1 and the regular h2.
+      {title: 'Heading 2 (Large)', value: 'h2Large', component: H2LargePreview},
       {title: 'Heading 2', value: 'h2'},
       {title: 'Heading 3', value: 'h3'},
       {title: 'Heading 4', value: 'h4'},

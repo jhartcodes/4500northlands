@@ -205,6 +205,24 @@ export const getPageQuery = defineQuery(`
         formulaResultLabel
       },
 
+      // CAC Value Block
+      _type == "cacValueBlock" => {
+        sectionId,
+        totalValue,
+        totalLabel,
+        totalSubtitle[] ${portableTextFields},
+        valueCards[] {
+          _key,
+          value,
+          label
+        },
+        incentive {
+          value,
+          label,
+          body[] ${portableTextFields}
+        }
+      },
+
       // Community Benefit Block
       _type == "communityBenefitBlock" => {
         sectionId,

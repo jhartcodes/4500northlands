@@ -45,6 +45,13 @@ export default function CustomPortableText({value, className = '', isDark = fals
       normal: ({children}) => (
         <p className={`text-lg leading-relaxed mb-4 ${textColor}`}>{children}</p>
       ),
+      // Heading 2 (Large) — renders as <h2> (SEO-safe) at the old hero h1 size,
+      // sitting between the page <h1> and the regular h2.
+      h2Large: ({children}) => (
+        <h2 className={`font-display text-4xl md:text-5xl lg:text-6xl font-bold mt-8 mb-4 ${textColor}`}>
+          {children}
+        </h2>
+      ),
       h2: ({children}) => (
         <h2 className={`font-display text-3xl md:text-4xl font-bold mt-8 mb-4 ${textColor}`}>
           {children}

@@ -37,6 +37,7 @@ export type Intro = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -106,6 +107,52 @@ export type DidYouKnowCard = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
+          | 'h2'
+          | 'h3'
+          | 'h4'
+          | 'blockquote'
+          | 'largeStatement'
+          | 'calloutBox'
+          | 'sectionLabel'
+        listItem?: 'bullet' | 'number' | 'arrowList' | 'dashList'
+        markDefs?: Array<{
+          href?: string
+          openInNewTab?: boolean
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown // Unable to locate the referenced type "image.media" in schema
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt: string
+        caption?: string
+        _type: 'image'
+        _key: string
+      }
+  >
+}
+
+export type Incentive = {
+  value?: string
+  label?: string
+  body?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?:
+          | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -148,6 +195,14 @@ export type ContentRowImage = {
 export type ColumnImage = {
   asset?: SanityImageAssetReference
   media?: unknown // Unable to locate the referenced type "column.image.media" in schema
+  hotspot?: SanityImageHotspot
+  crop?: SanityImageCrop
+  _type: 'image'
+}
+
+export type MapEntryImage = {
+  asset?: SanityImageAssetReference
+  media?: unknown // Unable to locate the referenced type "mapEntry.image.media" in schema
   hotspot?: SanityImageHotspot
   crop?: SanityImageCrop
   _type: 'image'
@@ -201,6 +256,7 @@ export type InteractiveSitePlanBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -233,6 +289,7 @@ export type InteractiveSitePlanBlock = {
   maps: Array<{
     mapTitle?: string
     mapId: 'fullsite' | 'lowermeadow'
+    image: MapEntryImage
     pdfUrl?: string
     hotspots?: Array<{
       number: number
@@ -280,6 +337,7 @@ export type FullWidthTextBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -346,6 +404,7 @@ export type FaqBlock = {
           }>
           style?:
             | 'normal'
+            | 'h2Large'
             | 'h2'
             | 'h3'
             | 'h4'
@@ -396,6 +455,7 @@ export type AboutThreeColumnBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -438,6 +498,7 @@ export type AboutThreeColumnBlock = {
           }>
           style?:
             | 'normal'
+            | 'h2Large'
             | 'h2'
             | 'h3'
             | 'h4'
@@ -497,6 +558,7 @@ export type RezoningBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -597,6 +659,7 @@ export type AlternatingContentBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -643,6 +706,7 @@ export type AlternatingContentBlock = {
           }>
           style?:
             | 'normal'
+            | 'h2Large'
             | 'h2'
             | 'h3'
             | 'h4'
@@ -693,6 +757,7 @@ export type CommunityBenefitBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -740,6 +805,7 @@ export type CommunityBenefitBlock = {
           }>
           style?:
             | 'normal'
+            | 'h2Large'
             | 'h2'
             | 'h3'
             | 'h4'
@@ -774,6 +840,60 @@ export type CommunityBenefitBlock = {
   }>
 }
 
+export type CacValueBlock = {
+  _type: 'cacValueBlock'
+  sectionId?: string
+  totalValue: string
+  totalLabel?: string
+  totalSubtitle?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?:
+          | 'normal'
+          | 'h2Large'
+          | 'h2'
+          | 'h3'
+          | 'h4'
+          | 'blockquote'
+          | 'largeStatement'
+          | 'calloutBox'
+          | 'sectionLabel'
+        listItem?: 'bullet' | 'number' | 'arrowList' | 'dashList'
+        markDefs?: Array<{
+          href?: string
+          openInNewTab?: boolean
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt: string
+        caption?: string
+        _type: 'image'
+        _key: string
+      }
+  >
+  valueCards?: Array<{
+    value: string
+    label?: string
+    _type: 'valueCard'
+    _key: string
+  }>
+  incentive?: Incentive
+}
+
 export type CacCalculationBlock = {
   _type: 'cacCalculationBlock'
   sectionId?: string
@@ -791,6 +911,7 @@ export type CacCalculationBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -841,6 +962,7 @@ export type CacCalculationBlock = {
           }>
           style?:
             | 'normal'
+            | 'h2Large'
             | 'h2'
             | 'h3'
             | 'h4'
@@ -901,6 +1023,7 @@ export type EconomicImpactBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -976,6 +1099,7 @@ export type ProcessBlock = {
           }>
           style?:
             | 'normal'
+            | 'h2Large'
             | 'h2'
             | 'h3'
             | 'h4'
@@ -1052,6 +1176,7 @@ export type DidYouKnowBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -1118,6 +1243,7 @@ export type DidYouKnowBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -1165,6 +1291,7 @@ export type TwoColumnTextBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -1205,6 +1332,7 @@ export type TwoColumnTextBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -1262,6 +1390,7 @@ export type ImageTextBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -1322,6 +1451,7 @@ export type HeroBlock = {
         }>
         style?:
           | 'normal'
+          | 'h2Large'
           | 'h2'
           | 'h3'
           | 'h4'
@@ -1419,6 +1549,9 @@ export type Page = {
     | ({
         _key: string
       } & CacCalculationBlock)
+    | ({
+        _key: string
+      } & CacValueBlock)
     | ({
         _key: string
       } & CommunityBenefitBlock)
@@ -1758,8 +1891,10 @@ export type AllSanitySchemaTypes =
   | SanityImageAssetReference
   | Intro
   | DidYouKnowCard
+  | Incentive
   | ContentRowImage
   | ColumnImage
+  | MapEntryImage
   | DevelopmentTimelineBlock
   | TimelineBlock
   | InteractiveSitePlanBlock
@@ -1773,6 +1908,7 @@ export type AllSanitySchemaTypes =
   | DevStatsBlock
   | AlternatingContentBlock
   | CommunityBenefitBlock
+  | CacValueBlock
   | CacCalculationBlock
   | EconomicImpactBlock
   | ProcessBlock
@@ -1876,7 +2012,7 @@ export type HomeNavigationQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: getPageQuery
-// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    navigation[] {      _key,      label,      sectionId    },    seoTitle,    seoDescription,    "pageBuilder": pageBuilder[]{      _key,      _type,      // Hero Block      _type == "heroBlock" => {        sectionId,        backgroundImage {          ...,          asset->        },        eyebrow,        title,        body,        bodyContent[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        "buttons": buttons[]   {    _key,    label,    href,    variant,    openInNewTab  },        overlayStrength      },      // Image + Text Block      _type == "imageTextBlock" => {        sectionId,        imagePosition,        background,        image {          ...,          asset->        },        sectionLabel,        title,        showDivider,        body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        "buttons": buttons[]   {    _key,    label,    href,    variant,    openInNewTab  },        intro {          sectionId,          sectionLabel,          title,          showDivider,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        },        didYouKnowCard {          icon,          eyebrow,          title,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        }      },      // Two-Column Text Block      _type == "twoColumnTextBlock" => {        sectionId,        background,        sectionLabel,        title,        body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        cardTitle,        cardBody[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }      },      // Did You Know Block      _type == "didYouKnowBlock" => {        sectionId,        layout,        background,        icon,        eyebrow,        title,        body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        rightIcon,        rightEyebrow,        rightTitle,        rightBody[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }      },      // Process Block      _type == "processBlock" => {        sectionId,        background,        imagePosition,        image {          ...,          asset->        },        sectionLabel,        title,        intro,        accordionItems[] {          _key,          heading,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        }      },      // Economic Impact Block      _type == "economicImpactBlock" => {        sectionId,        backgroundImage {          ...,          asset->        },        sectionLabel,        headline[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        stats[] {          _key,          number,          label,          description        },        tableTitle,        tableRows[] {          _key,          label,          value,          jobs,          isTotalRow        },        footnote      },      // CAC Calculation Block      _type == "cacCalculationBlock" => {        sectionId,        badgeText,        sectionLabel,        title,        showDivider,        introBody[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        introImage {          ...,          asset->        },        imagePosition,        stepsTitle,        steps[] {          _key,          stepLabel,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        },        formulaResidentialLabel,        formulaResidentialSub,        formulaHotelLabel,        formulaHotelSub,        formulaResultLabel      },      // Community Benefit Block      _type == "communityBenefitBlock" => {        sectionId,        sectionLabel,        title,        introBody[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        totalNumber,        totalLabel,        totalSub,        cacSummaryItems,        addedBenefitItems,        accordionItems[] {          _key,          label,          itemType,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        }      },      // Alternating Content Block      _type == "alternatingContentBlock" => {        sectionId,        background,        sectionLabel,        title,        intro,        introContent[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        rows[] {          _key,          imagePosition,          textBackground,          image {            ...,            asset->          },          rowLabel,          rowTitle,          showDivider,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },          inlineNote        }      },      // Dev Stats Block      _type == "devStatsBlock" => {        sectionId,        background,        title,        stats[] {          _key,          number,          label        }      },      // Site Plan Block      _type == "sitePlanBlock" => {        sectionId,        sitePlanImage {          ...,          asset->        },        legendItems[] {          _key,          number,          label        },        plazaTitle,        plazaImages[] {          ...,          asset->        },        plazaCallouts[] {          _key,          heading,          body        }      },      // Interactive Site Plan Block      _type == "interactiveSitePlanBlock" => {        sectionId,        background,        title,        body[] {          ...,          markDefs[] {            ...,            _type == "link" => {              href,              openInNewTab            }          }        },        maps[] {          _key,          mapTitle,          mapId,          pdfUrl,          hotspots[] {            _key,            number,            label,            description          }        }      },      // Rezoning Block      _type == "rezoningBlock" => {        sectionId,        background,        imagePosition,        image {          ...,          asset->        },        sectionLabel,        title,        showDivider,        body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        "buttons": buttons[]   {    _key,    label,    href,    variant,    openInNewTab  }      },      // About Three Column Block      _type == "aboutThreeColumnBlock" => {        sectionId,        sectionLabel,        title,        showDivider,        introBody[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        columns[] {          _key,          image {            ...,            asset->          },          heading,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        }      },      // FAQ Block      _type == "faqBlock" => {        sectionId,        background,        title,        items[] {          _key,          question,          answer[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        }      },      // Full Width Image Block      _type == "fullWidthImageBlock" => {        sectionId,        image {          ...,          asset->        }      },      // Full Width Text Block      _type == "fullWidthTextBlock" => {        sectionId,        background,        sectionLabel,        title,        showDivider,        body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        "buttons": buttons[]   {    _key,    label,    href,    variant,    openInNewTab  }      },      // Timeline Block      _type == "timelineBlock" => {        sectionId,        background,        legendLabel,        legendDescription,        phases[] {          _key,          title,          date,          description,          status,          activeLabel        }      },      // Development Timeline Block      _type == "developmentTimelineBlock" => {        sectionId,        background,        eyebrow,        title,        subtitle,        phases[] {          _key,          phaseNumber,          title,          description        }      }    }  }
+// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    navigation[] {      _key,      label,      sectionId    },    seoTitle,    seoDescription,    "pageBuilder": pageBuilder[]{      _key,      _type,      // Hero Block      _type == "heroBlock" => {        sectionId,        backgroundImage {          ...,          asset->        },        eyebrow,        title,        body,        bodyContent[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        "buttons": buttons[]   {    _key,    label,    href,    variant,    openInNewTab  },        overlayStrength      },      // Image + Text Block      _type == "imageTextBlock" => {        sectionId,        imagePosition,        background,        image {          ...,          asset->        },        sectionLabel,        title,        showDivider,        body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        "buttons": buttons[]   {    _key,    label,    href,    variant,    openInNewTab  },        intro {          sectionId,          sectionLabel,          title,          showDivider,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        },        didYouKnowCard {          icon,          eyebrow,          title,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        }      },      // Two-Column Text Block      _type == "twoColumnTextBlock" => {        sectionId,        background,        sectionLabel,        title,        body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        cardTitle,        cardBody[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }      },      // Did You Know Block      _type == "didYouKnowBlock" => {        sectionId,        layout,        background,        icon,        eyebrow,        title,        body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        rightIcon,        rightEyebrow,        rightTitle,        rightBody[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }      },      // Process Block      _type == "processBlock" => {        sectionId,        background,        imagePosition,        image {          ...,          asset->        },        sectionLabel,        title,        intro,        accordionItems[] {          _key,          heading,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        }      },      // Economic Impact Block      _type == "economicImpactBlock" => {        sectionId,        backgroundImage {          ...,          asset->        },        sectionLabel,        headline[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        stats[] {          _key,          number,          label,          description        },        tableTitle,        tableRows[] {          _key,          label,          value,          jobs,          isTotalRow        },        footnote      },      // CAC Calculation Block      _type == "cacCalculationBlock" => {        sectionId,        badgeText,        sectionLabel,        title,        showDivider,        introBody[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        introImage {          ...,          asset->        },        imagePosition,        stepsTitle,        steps[] {          _key,          stepLabel,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        },        formulaResidentialLabel,        formulaResidentialSub,        formulaHotelLabel,        formulaHotelSub,        formulaResultLabel      },      // CAC Value Block      _type == "cacValueBlock" => {        sectionId,        totalValue,        totalLabel,        totalSubtitle[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        valueCards[] {          _key,          value,          label        },        incentive {          value,          label,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        }      },      // Community Benefit Block      _type == "communityBenefitBlock" => {        sectionId,        sectionLabel,        title,        introBody[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        totalNumber,        totalLabel,        totalSub,        cacSummaryItems,        addedBenefitItems,        accordionItems[] {          _key,          label,          itemType,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        }      },      // Alternating Content Block      _type == "alternatingContentBlock" => {        sectionId,        background,        sectionLabel,        title,        intro,        introContent[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        rows[] {          _key,          imagePosition,          textBackground,          image {            ...,            asset->          },          rowLabel,          rowTitle,          showDivider,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },          inlineNote        }      },      // Dev Stats Block      _type == "devStatsBlock" => {        sectionId,        background,        title,        stats[] {          _key,          number,          label        }      },      // Site Plan Block      _type == "sitePlanBlock" => {        sectionId,        sitePlanImage {          ...,          asset->        },        legendItems[] {          _key,          number,          label        },        plazaTitle,        plazaImages[] {          ...,          asset->        },        plazaCallouts[] {          _key,          heading,          body        }      },      // Interactive Site Plan Block      _type == "interactiveSitePlanBlock" => {        sectionId,        background,        title,        body[] {          ...,          markDefs[] {            ...,            _type == "link" => {              href,              openInNewTab            }          }        },        maps[] {          _key,          mapTitle,          mapId,          image {            ...,            asset->          },          pdfUrl,          hotspots[] {            _key,            number,            label,            description          }        }      },      // Rezoning Block      _type == "rezoningBlock" => {        sectionId,        background,        imagePosition,        image {          ...,          asset->        },        sectionLabel,        title,        showDivider,        body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        "buttons": buttons[]   {    _key,    label,    href,    variant,    openInNewTab  }      },      // About Three Column Block      _type == "aboutThreeColumnBlock" => {        sectionId,        sectionLabel,        title,        showDivider,        introBody[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        columns[] {          _key,          image {            ...,            asset->          },          heading,          body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        }      },      // FAQ Block      _type == "faqBlock" => {        sectionId,        background,        title,        items[] {          _key,          question,          answer[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  }        }      },      // Full Width Image Block      _type == "fullWidthImageBlock" => {        sectionId,        image {          ...,          asset->        }      },      // Full Width Text Block      _type == "fullWidthTextBlock" => {        sectionId,        background,        sectionLabel,        title,        showDivider,        body[]   {    ...,    markDefs[] {      ...,      _type == "link" => {        href,        openInNewTab      }    }  },        "buttons": buttons[]   {    _key,    label,    href,    variant,    openInNewTab  }      },      // Timeline Block      _type == "timelineBlock" => {        sectionId,        background,        legendLabel,        legendDescription,        phases[] {          _key,          title,          date,          description,          status,          activeLabel        }      },      // Development Timeline Block      _type == "developmentTimelineBlock" => {        sectionId,        background,        eyebrow,        title,        subtitle,        phases[] {          _key,          phaseNumber,          title,          description        }      }    }  }
 export type GetPageQueryResult = {
   _id: string
   _type: 'page'
@@ -1909,6 +2045,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -1980,6 +2117,7 @@ export type GetPageQueryResult = {
                   | 'blockquote'
                   | 'calloutBox'
                   | 'h2'
+                  | 'h2Large'
                   | 'h3'
                   | 'h4'
                   | 'largeStatement'
@@ -2030,6 +2168,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -2105,6 +2244,7 @@ export type GetPageQueryResult = {
                   | 'blockquote'
                   | 'calloutBox'
                   | 'h2'
+                  | 'h2Large'
                   | 'h3'
                   | 'h4'
                   | 'largeStatement'
@@ -2156,6 +2296,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -2229,6 +2370,7 @@ export type GetPageQueryResult = {
                   | 'blockquote'
                   | 'calloutBox'
                   | 'h2'
+                  | 'h2Large'
                   | 'h3'
                   | 'h4'
                   | 'largeStatement'
@@ -2266,6 +2408,104 @@ export type GetPageQueryResult = {
       }
     | {
         _key: string
+        _type: 'cacValueBlock'
+        sectionId: string | null
+        totalValue: string
+        totalLabel: string | null
+        totalSubtitle: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>
+                text?: string
+                _type: 'span'
+                _key: string
+              }>
+              style?:
+                | 'blockquote'
+                | 'calloutBox'
+                | 'h2'
+                | 'h2Large'
+                | 'h3'
+                | 'h4'
+                | 'largeStatement'
+                | 'normal'
+                | 'sectionLabel'
+              listItem?: 'arrowList' | 'bullet' | 'dashList' | 'number'
+              markDefs: Array<{
+                href: string | null
+                openInNewTab: boolean | null
+                _type: 'link'
+                _key: string
+              }> | null
+              level?: number
+              _type: 'block'
+              _key: string
+            }
+          | {
+              asset?: SanityImageAssetReference
+              media?: unknown
+              hotspot?: SanityImageHotspot
+              crop?: SanityImageCrop
+              alt: string
+              caption?: string
+              _type: 'image'
+              _key: string
+              markDefs: null
+            }
+        > | null
+        valueCards: Array<{
+          _key: string
+          value: string
+          label: string | null
+        }> | null
+        incentive: {
+          value: string | null
+          label: string | null
+          body: Array<
+            | {
+                children?: Array<{
+                  marks?: Array<string>
+                  text?: string
+                  _type: 'span'
+                  _key: string
+                }>
+                style?:
+                  | 'blockquote'
+                  | 'calloutBox'
+                  | 'h2'
+                  | 'h2Large'
+                  | 'h3'
+                  | 'h4'
+                  | 'largeStatement'
+                  | 'normal'
+                  | 'sectionLabel'
+                listItem?: 'arrowList' | 'bullet' | 'dashList' | 'number'
+                markDefs: Array<{
+                  href: string | null
+                  openInNewTab: boolean | null
+                  _type: 'link'
+                  _key: string
+                }> | null
+                level?: number
+                _type: 'block'
+                _key: string
+              }
+            | {
+                asset?: SanityImageAssetReference
+                media?: unknown // Unable to locate the referenced type "image.media" in schema
+                hotspot?: SanityImageHotspot
+                crop?: SanityImageCrop
+                alt: string
+                caption?: string
+                _type: 'image'
+                _key: string
+                markDefs: null
+              }
+          > | null
+        } | null
+      }
+    | {
+        _key: string
         _type: 'communityBenefitBlock'
         sectionId: string | null
         sectionLabel: string | null
@@ -2282,6 +2522,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -2331,6 +2572,7 @@ export type GetPageQueryResult = {
                   | 'blockquote'
                   | 'calloutBox'
                   | 'h2'
+                  | 'h2Large'
                   | 'h3'
                   | 'h4'
                   | 'largeStatement'
@@ -2438,6 +2680,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -2506,6 +2749,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -2580,6 +2824,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -2645,6 +2890,7 @@ export type GetPageQueryResult = {
                   | 'blockquote'
                   | 'calloutBox'
                   | 'h2'
+                  | 'h2Large'
                   | 'h3'
                   | 'h4'
                   | 'largeStatement'
@@ -2729,6 +2975,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -2812,6 +3059,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -2898,6 +3146,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -2950,6 +3199,7 @@ export type GetPageQueryResult = {
                   | 'blockquote'
                   | 'calloutBox'
                   | 'h2'
+                  | 'h2Large'
                   | 'h3'
                   | 'h4'
                   | 'largeStatement'
@@ -3020,6 +3270,7 @@ export type GetPageQueryResult = {
                   | 'blockquote'
                   | 'calloutBox'
                   | 'h2'
+                  | 'h2Large'
                   | 'h3'
                   | 'h4'
                   | 'largeStatement'
@@ -3068,6 +3319,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -3100,6 +3352,34 @@ export type GetPageQueryResult = {
           _key: string
           mapTitle: string | null
           mapId: 'fullsite' | 'lowermeadow'
+          image: {
+            asset: {
+              _id: string
+              _type: 'sanity.imageAsset'
+              _createdAt: string
+              _updatedAt: string
+              _rev: string
+              originalFilename?: string
+              label?: string
+              title?: string
+              description?: string
+              altText?: string
+              sha1hash: string
+              extension: string
+              mimeType: string
+              size: number
+              assetId: string
+              uploadId?: string
+              path: string
+              url: string
+              metadata?: SanityImageMetadata
+              source?: SanityAssetSourceData
+            } | null
+            media?: unknown // Unable to locate the referenced type "mapEntry.image.media" in schema
+            hotspot?: SanityImageHotspot
+            crop?: SanityImageCrop
+            _type: 'image'
+          }
           pdfUrl: string | null
           hotspots: Array<{
             _key: string
@@ -3161,6 +3441,7 @@ export type GetPageQueryResult = {
                   | 'blockquote'
                   | 'calloutBox'
                   | 'h2'
+                  | 'h2Large'
                   | 'h3'
                   | 'h4'
                   | 'largeStatement'
@@ -3240,6 +3521,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -3385,6 +3667,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -3426,6 +3709,7 @@ export type GetPageQueryResult = {
                 | 'blockquote'
                 | 'calloutBox'
                 | 'h2'
+                | 'h2Large'
                 | 'h3'
                 | 'h4'
                 | 'largeStatement'
@@ -3480,7 +3764,7 @@ declare module '@sanity/client' {
   interface SanityQueries {
     '*[_type == "settings"][0]{\n  ...,\n  logo {\n    ...,\n    asset->\n  },\n  ctaBackgroundImage {\n    ...,\n    asset->\n  }\n}': SettingsQueryResult
     "\n  *[_type == 'page' && slug.current == 'home'][0]{\n    name,\n    navigation[] {\n      _key,\n      label,\n      sectionId\n    }\n  }\n": HomeNavigationQueryResult
-    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    navigation[] {\n      _key,\n      label,\n      sectionId\n    },\n    seoTitle,\n    seoDescription,\n    "pageBuilder": pageBuilder[]{\n      _key,\n      _type,\n\n      // Hero Block\n      _type == "heroBlock" => {\n        sectionId,\n        backgroundImage {\n          ...,\n          asset->\n        },\n        eyebrow,\n        title,\n        body,\n        bodyContent[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        "buttons": buttons[] \n  {\n    _key,\n    label,\n    href,\n    variant,\n    openInNewTab\n  }\n,\n        overlayStrength\n      },\n\n      // Image + Text Block\n      _type == "imageTextBlock" => {\n        sectionId,\n        imagePosition,\n        background,\n        image {\n          ...,\n          asset->\n        },\n        sectionLabel,\n        title,\n        showDivider,\n        body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        "buttons": buttons[] \n  {\n    _key,\n    label,\n    href,\n    variant,\n    openInNewTab\n  }\n,\n        intro {\n          sectionId,\n          sectionLabel,\n          title,\n          showDivider,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        },\n        didYouKnowCard {\n          icon,\n          eyebrow,\n          title,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        }\n      },\n\n      // Two-Column Text Block\n      _type == "twoColumnTextBlock" => {\n        sectionId,\n        background,\n        sectionLabel,\n        title,\n        body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        cardTitle,\n        cardBody[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n      },\n\n      // Did You Know Block\n      _type == "didYouKnowBlock" => {\n        sectionId,\n        layout,\n        background,\n        icon,\n        eyebrow,\n        title,\n        body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        rightIcon,\n        rightEyebrow,\n        rightTitle,\n        rightBody[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n      },\n\n      // Process Block\n      _type == "processBlock" => {\n        sectionId,\n        background,\n        imagePosition,\n        image {\n          ...,\n          asset->\n        },\n        sectionLabel,\n        title,\n        intro,\n        accordionItems[] {\n          _key,\n          heading,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        }\n      },\n\n      // Economic Impact Block\n      _type == "economicImpactBlock" => {\n        sectionId,\n        backgroundImage {\n          ...,\n          asset->\n        },\n        sectionLabel,\n        headline[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        stats[] {\n          _key,\n          number,\n          label,\n          description\n        },\n        tableTitle,\n        tableRows[] {\n          _key,\n          label,\n          value,\n          jobs,\n          isTotalRow\n        },\n        footnote\n      },\n\n      // CAC Calculation Block\n      _type == "cacCalculationBlock" => {\n        sectionId,\n        badgeText,\n        sectionLabel,\n        title,\n        showDivider,\n        introBody[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        introImage {\n          ...,\n          asset->\n        },\n        imagePosition,\n        stepsTitle,\n        steps[] {\n          _key,\n          stepLabel,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        },\n        formulaResidentialLabel,\n        formulaResidentialSub,\n        formulaHotelLabel,\n        formulaHotelSub,\n        formulaResultLabel\n      },\n\n      // Community Benefit Block\n      _type == "communityBenefitBlock" => {\n        sectionId,\n        sectionLabel,\n        title,\n        introBody[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        totalNumber,\n        totalLabel,\n        totalSub,\n        cacSummaryItems,\n        addedBenefitItems,\n        accordionItems[] {\n          _key,\n          label,\n          itemType,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        }\n      },\n\n      // Alternating Content Block\n      _type == "alternatingContentBlock" => {\n        sectionId,\n        background,\n        sectionLabel,\n        title,\n        intro,\n        introContent[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        rows[] {\n          _key,\n          imagePosition,\n          textBackground,\n          image {\n            ...,\n            asset->\n          },\n          rowLabel,\n          rowTitle,\n          showDivider,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n          inlineNote\n        }\n      },\n\n      // Dev Stats Block\n      _type == "devStatsBlock" => {\n        sectionId,\n        background,\n        title,\n        stats[] {\n          _key,\n          number,\n          label\n        }\n      },\n\n      // Site Plan Block\n      _type == "sitePlanBlock" => {\n        sectionId,\n        sitePlanImage {\n          ...,\n          asset->\n        },\n        legendItems[] {\n          _key,\n          number,\n          label\n        },\n        plazaTitle,\n        plazaImages[] {\n          ...,\n          asset->\n        },\n        plazaCallouts[] {\n          _key,\n          heading,\n          body\n        }\n      },\n\n      // Interactive Site Plan Block\n      _type == "interactiveSitePlanBlock" => {\n        sectionId,\n        background,\n        title,\n        body[] {\n          ...,\n          markDefs[] {\n            ...,\n            _type == "link" => {\n              href,\n              openInNewTab\n            }\n          }\n        },\n        maps[] {\n          _key,\n          mapTitle,\n          mapId,\n          pdfUrl,\n          hotspots[] {\n            _key,\n            number,\n            label,\n            description\n          }\n        }\n      },\n\n      // Rezoning Block\n      _type == "rezoningBlock" => {\n        sectionId,\n        background,\n        imagePosition,\n        image {\n          ...,\n          asset->\n        },\n        sectionLabel,\n        title,\n        showDivider,\n        body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        "buttons": buttons[] \n  {\n    _key,\n    label,\n    href,\n    variant,\n    openInNewTab\n  }\n\n      },\n\n      // About Three Column Block\n      _type == "aboutThreeColumnBlock" => {\n        sectionId,\n        sectionLabel,\n        title,\n        showDivider,\n        introBody[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        columns[] {\n          _key,\n          image {\n            ...,\n            asset->\n          },\n          heading,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        }\n      },\n\n      // FAQ Block\n      _type == "faqBlock" => {\n        sectionId,\n        background,\n        title,\n        items[] {\n          _key,\n          question,\n          answer[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        }\n      },\n\n      // Full Width Image Block\n      _type == "fullWidthImageBlock" => {\n        sectionId,\n        image {\n          ...,\n          asset->\n        }\n      },\n\n      // Full Width Text Block\n      _type == "fullWidthTextBlock" => {\n        sectionId,\n        background,\n        sectionLabel,\n        title,\n        showDivider,\n        body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        "buttons": buttons[] \n  {\n    _key,\n    label,\n    href,\n    variant,\n    openInNewTab\n  }\n\n      },\n\n      // Timeline Block\n      _type == "timelineBlock" => {\n        sectionId,\n        background,\n        legendLabel,\n        legendDescription,\n        phases[] {\n          _key,\n          title,\n          date,\n          description,\n          status,\n          activeLabel\n        }\n      },\n\n      // Development Timeline Block\n      _type == "developmentTimelineBlock" => {\n        sectionId,\n        background,\n        eyebrow,\n        title,\n        subtitle,\n        phases[] {\n          _key,\n          phaseNumber,\n          title,\n          description\n        }\n      }\n    }\n  }\n': GetPageQueryResult
+    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    navigation[] {\n      _key,\n      label,\n      sectionId\n    },\n    seoTitle,\n    seoDescription,\n    "pageBuilder": pageBuilder[]{\n      _key,\n      _type,\n\n      // Hero Block\n      _type == "heroBlock" => {\n        sectionId,\n        backgroundImage {\n          ...,\n          asset->\n        },\n        eyebrow,\n        title,\n        body,\n        bodyContent[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        "buttons": buttons[] \n  {\n    _key,\n    label,\n    href,\n    variant,\n    openInNewTab\n  }\n,\n        overlayStrength\n      },\n\n      // Image + Text Block\n      _type == "imageTextBlock" => {\n        sectionId,\n        imagePosition,\n        background,\n        image {\n          ...,\n          asset->\n        },\n        sectionLabel,\n        title,\n        showDivider,\n        body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        "buttons": buttons[] \n  {\n    _key,\n    label,\n    href,\n    variant,\n    openInNewTab\n  }\n,\n        intro {\n          sectionId,\n          sectionLabel,\n          title,\n          showDivider,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        },\n        didYouKnowCard {\n          icon,\n          eyebrow,\n          title,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        }\n      },\n\n      // Two-Column Text Block\n      _type == "twoColumnTextBlock" => {\n        sectionId,\n        background,\n        sectionLabel,\n        title,\n        body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        cardTitle,\n        cardBody[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n      },\n\n      // Did You Know Block\n      _type == "didYouKnowBlock" => {\n        sectionId,\n        layout,\n        background,\n        icon,\n        eyebrow,\n        title,\n        body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        rightIcon,\n        rightEyebrow,\n        rightTitle,\n        rightBody[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n      },\n\n      // Process Block\n      _type == "processBlock" => {\n        sectionId,\n        background,\n        imagePosition,\n        image {\n          ...,\n          asset->\n        },\n        sectionLabel,\n        title,\n        intro,\n        accordionItems[] {\n          _key,\n          heading,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        }\n      },\n\n      // Economic Impact Block\n      _type == "economicImpactBlock" => {\n        sectionId,\n        backgroundImage {\n          ...,\n          asset->\n        },\n        sectionLabel,\n        headline[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        stats[] {\n          _key,\n          number,\n          label,\n          description\n        },\n        tableTitle,\n        tableRows[] {\n          _key,\n          label,\n          value,\n          jobs,\n          isTotalRow\n        },\n        footnote\n      },\n\n      // CAC Calculation Block\n      _type == "cacCalculationBlock" => {\n        sectionId,\n        badgeText,\n        sectionLabel,\n        title,\n        showDivider,\n        introBody[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        introImage {\n          ...,\n          asset->\n        },\n        imagePosition,\n        stepsTitle,\n        steps[] {\n          _key,\n          stepLabel,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        },\n        formulaResidentialLabel,\n        formulaResidentialSub,\n        formulaHotelLabel,\n        formulaHotelSub,\n        formulaResultLabel\n      },\n\n      // CAC Value Block\n      _type == "cacValueBlock" => {\n        sectionId,\n        totalValue,\n        totalLabel,\n        totalSubtitle[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        valueCards[] {\n          _key,\n          value,\n          label\n        },\n        incentive {\n          value,\n          label,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        }\n      },\n\n      // Community Benefit Block\n      _type == "communityBenefitBlock" => {\n        sectionId,\n        sectionLabel,\n        title,\n        introBody[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        totalNumber,\n        totalLabel,\n        totalSub,\n        cacSummaryItems,\n        addedBenefitItems,\n        accordionItems[] {\n          _key,\n          label,\n          itemType,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        }\n      },\n\n      // Alternating Content Block\n      _type == "alternatingContentBlock" => {\n        sectionId,\n        background,\n        sectionLabel,\n        title,\n        intro,\n        introContent[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        rows[] {\n          _key,\n          imagePosition,\n          textBackground,\n          image {\n            ...,\n            asset->\n          },\n          rowLabel,\n          rowTitle,\n          showDivider,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n          inlineNote\n        }\n      },\n\n      // Dev Stats Block\n      _type == "devStatsBlock" => {\n        sectionId,\n        background,\n        title,\n        stats[] {\n          _key,\n          number,\n          label\n        }\n      },\n\n      // Site Plan Block\n      _type == "sitePlanBlock" => {\n        sectionId,\n        sitePlanImage {\n          ...,\n          asset->\n        },\n        legendItems[] {\n          _key,\n          number,\n          label\n        },\n        plazaTitle,\n        plazaImages[] {\n          ...,\n          asset->\n        },\n        plazaCallouts[] {\n          _key,\n          heading,\n          body\n        }\n      },\n\n      // Interactive Site Plan Block\n      _type == "interactiveSitePlanBlock" => {\n        sectionId,\n        background,\n        title,\n        body[] {\n          ...,\n          markDefs[] {\n            ...,\n            _type == "link" => {\n              href,\n              openInNewTab\n            }\n          }\n        },\n        maps[] {\n          _key,\n          mapTitle,\n          mapId,\n          image {\n            ...,\n            asset->\n          },\n          pdfUrl,\n          hotspots[] {\n            _key,\n            number,\n            label,\n            description\n          }\n        }\n      },\n\n      // Rezoning Block\n      _type == "rezoningBlock" => {\n        sectionId,\n        background,\n        imagePosition,\n        image {\n          ...,\n          asset->\n        },\n        sectionLabel,\n        title,\n        showDivider,\n        body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        "buttons": buttons[] \n  {\n    _key,\n    label,\n    href,\n    variant,\n    openInNewTab\n  }\n\n      },\n\n      // About Three Column Block\n      _type == "aboutThreeColumnBlock" => {\n        sectionId,\n        sectionLabel,\n        title,\n        showDivider,\n        introBody[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        columns[] {\n          _key,\n          image {\n            ...,\n            asset->\n          },\n          heading,\n          body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        }\n      },\n\n      // FAQ Block\n      _type == "faqBlock" => {\n        sectionId,\n        background,\n        title,\n        items[] {\n          _key,\n          question,\n          answer[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n\n        }\n      },\n\n      // Full Width Image Block\n      _type == "fullWidthImageBlock" => {\n        sectionId,\n        image {\n          ...,\n          asset->\n        }\n      },\n\n      // Full Width Text Block\n      _type == "fullWidthTextBlock" => {\n        sectionId,\n        background,\n        sectionLabel,\n        title,\n        showDivider,\n        body[] \n  {\n    ...,\n    markDefs[] {\n      ...,\n      _type == "link" => {\n        href,\n        openInNewTab\n      }\n    }\n  }\n,\n        "buttons": buttons[] \n  {\n    _key,\n    label,\n    href,\n    variant,\n    openInNewTab\n  }\n\n      },\n\n      // Timeline Block\n      _type == "timelineBlock" => {\n        sectionId,\n        background,\n        legendLabel,\n        legendDescription,\n        phases[] {\n          _key,\n          title,\n          date,\n          description,\n          status,\n          activeLabel\n        }\n      },\n\n      // Development Timeline Block\n      _type == "developmentTimelineBlock" => {\n        sectionId,\n        background,\n        eyebrow,\n        title,\n        subtitle,\n        phases[] {\n          _key,\n          phaseNumber,\n          title,\n          description\n        }\n      }\n    }\n  }\n': GetPageQueryResult
     '\n  *[_type == "page" && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult
     '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult
   }

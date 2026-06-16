@@ -72,7 +72,7 @@ export default function HeroBlock({block}: HeroBlockProps) {
             </p>
           )}
           {title && (
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
               {title}
             </h1>
           )}
