@@ -19,6 +19,125 @@ This template includes a [Next.js](https://nextjs.org/) app with a [Sanity Studi
 
 https://template-nextjs-clean.sanity.dev
 
+---
+
+## 🔒 Working on production safely (local prod mirror)
+
+**Project-specific runbook for Whistler Northlands** — Sanity project `tivw2iwp`.
+
+This site is **linked to production**. Never test schema or content changes directly against the `production` dataset. Instead: back up production → mirror it into the `dev` dataset → test locally → deploy → migrate prod.
+
+| Dataset | Purpose |
+| --- | --- |
+| `production` | Live data used by the deployed site and Studio. Don't experiment here. |
+| `dev` | Disposable mirror of production for local testing. Safe to break/refresh. |
+
+> All `.env*` files are **gitignored and local-only**. The deployed Studio and Vercel read their own environment, so pointing local env at `dev` can never affect production.
+
+### 1. Back up production (always do this first)
+
+```shell
+cd studio
+npx sanity dataset export production ../local-prod-backups/production-backup-$(date +%F).tar.gz
+```
+
+Backups land in `local-prod-backups/` (gitignored). Export is **read-only** — it never modifies production.
+
+### 2. Refresh the `dev` mirror from production
+
+`sanity dataset copy` needs a paid plan, so use **export → import**:
+
+```shell
+cd studio
+npx sanity dataset delete dev --force                 # drop the stale mirror
+npx sanity dataset create dev --visibility public      # recreate it (match production ACL)
+npx sanity dataset import ../local-prod-backups/production-backup-<DATE>.tar.gz dev
+```
+
+Verify the copy matches:
+
+```shell
+npx sanity documents query 'count(*[!(_id in path("_.**")) ])' --dataset dev
+npx sanity documents query 'count(*[!(_id in path("_.**")) ])' --dataset production
+```
+
+(Assets are shared at the project level, so images resolve in `dev` without re-uploading.)
+
+### 3. Point local env at `dev`
+
+Edit the three gitignored env files:
+
+- `studio/.env`: `SANITY_STUDIO_DATASET="dev"` and `SANITY_STUDIO_PREVIEW_URL="http://localhost:3000"`
+- `frontend/.env`: `NEXT_PUBLIC_SANITY_DATASET="dev"`
+- `.env.local`: `NEXT_PUBLIC_SANITY_DATASET="dev"`
+
+### 4. Run locally
+
+```shell
+npm run dev      # frontend → http://localhost:3000 · studio → http://localhost:3333
+```
+
+If port `3333` is taken by another Sanity project, run the studio elsewhere: `cd studio && npx sanity dev --port 3334`.
+
+### 5. Make and test changes
+
+- **Adding a new page-builder block?** Register it in all five places:
+  1. `studio/src/schemaTypes/index.ts` (import + `schemaTypes` array)
+  2. `studio/src/schemaTypes/documents/page.ts` (`pageBuilder.of`)
+  3. `frontend/sanity/lib/queries.ts` (GROQ projection)
+  4. `frontend/app/components/blocks/index.ts` (export)
+  5. `frontend/app/components/BlockRenderer.tsx` (import + `Blocks` map)
+- Regenerate types after any schema change: `cd frontend && npm run sanity:typegen`
+- Type-check both workspaces: `npm run type-check`
+
+### 6. Content migrations (changing existing documents)
+
+Put scripts in `studio/migrations/` and run them with the logged-in user's token. **Always dry-run on `dev` first** (target dataset = `SANITY_STUDIO_DATASET` in `studio/.env`):
+
+```shell
+cd studio
+npx sanity exec migrations/<script>.ts --with-user-token -- --dry-run   # preview
+npx sanity exec migrations/<script>.ts --with-user-token                # apply
+```
+
+> ⚠️ **Migrations must patch both the published doc _and_ any draft.** If you only patch the published version, later publishing a stale draft will silently revert your change. See `studio/migrations/replaceCacBlock.ts` for the pattern (it iterates every version of the page).
+
+### 7. Deploy to production
+
+1. **Restore env to production** (critical — the Studio is built from `studio/.env`):
+   - `studio/.env`: `SANITY_STUDIO_DATASET="production"`, `SANITY_STUDIO_PREVIEW_URL="https://whistlernorthlands.vercel.app"`
+   - `frontend/.env` and `.env.local`: `NEXT_PUBLIC_SANITY_DATASET="production"`
+2. **Commit and push** to `main`.
+3. **Deploy the frontend** — run from the **repo root** (the Vercel project's root directory is already `frontend`):
+   ```shell
+   npm run vercel:deploy:prod      # → npx vercel --prod
+   ```
+4. **Deploy the Studio**:
+   ```shell
+   cd studio && npx sanity deploy
+   ```
+5. **Run the migration against production** (env now points at production — dry-run first):
+   ```shell
+   cd studio
+   npx sanity exec migrations/<script>.ts --with-user-token -- --dry-run
+   npx sanity exec migrations/<script>.ts --with-user-token
+   ```
+6. **Smoke-test** https://whistlernorthlands.vercel.app and https://whistler-northlands.sanity.studio.
+
+> Deploy the **frontend before running the migration** so new block types render, instead of showing a "block hasn't been created" placeholder.
+
+### Gotchas
+
+- **Never run `npm audit fix --force`.** It force-upgrades `@sanity/cli` to an incompatible major and breaks the Studio (`Error: Cannot find module .../renderDocument.worker.js`). Recover with:
+  ```shell
+  git checkout HEAD -- package-lock.json studio/package.json
+  npm ci
+  ```
+- **Deploy from the repo root**, not from `frontend/` — Vercel's root directory is set to `frontend`, so running `vercel` inside `frontend/` looks for `frontend/frontend` and errors.
+- Keep the latest backup tarball until you've confirmed production looks correct.
+
+---
+
 ## Getting Started
 
 ### Installing the template
