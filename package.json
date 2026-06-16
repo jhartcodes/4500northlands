@@ -27,8 +27,8 @@
     "type-check": "npm run type-check --workspaces",
     "vercel:link": "cd frontend && npx vercel link",
     "vercel:env:pull": "cd frontend && npx vercel env pull .env.local",
-    "vercel:deploy:preview": "cd frontend && npx vercel",
-    "vercel:deploy:prod": "cd frontend && npx vercel --prod"
+    "vercel:deploy:preview": "npx vercel",
+    "vercel:deploy:prod": "npx vercel --prod"
   },
   "prettier": "@sanity/prettier-config",
   "devDependencies": {
