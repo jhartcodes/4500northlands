@@ -1,11 +1,7 @@
 'use client'
 
-import type {CmsImage, CmsPortableText} from '@/sanity/lib/types'
-import Image from 'next/image'
-import {stegaClean} from 'next-sanity'
-import {urlForImage} from '@/sanity/lib/utils'
+import type {CmsPortableText} from '@/sanity/lib/types'
 import CustomPortableText from '@/app/components/PortableText'
-import Divider from '@/app/components/ui/Divider'
 
 type Step = {
   _key: string
@@ -18,13 +14,6 @@ type CACCalculationBlockProps = {
     _key: string
     _type: 'cacCalculationBlock'
     sectionId?: string
-    badgeText?: string
-    sectionLabel?: string
-    title?: string
-    showDivider?: boolean
-    introBody?: CmsPortableText
-    introImage?: CmsImage
-    imagePosition?: 'left' | 'right'
     stepsTitle?: string
     steps?: Step[]
     formulaResidentialLabel?: string
@@ -41,13 +30,6 @@ type CACCalculationBlockProps = {
 export default function CACCalculationBlock({block}: CACCalculationBlockProps) {
   const {
     sectionId,
-    badgeText,
-    sectionLabel,
-    title,
-    showDivider,
-    introBody,
-    introImage,
-    imagePosition,
     stepsTitle,
     steps,
     formulaResidentialLabel,
@@ -57,51 +39,9 @@ export default function CACCalculationBlock({block}: CACCalculationBlockProps) {
     formulaResultLabel,
   } = block
 
-  const isImageRight = stegaClean(imagePosition) === 'right'
-  const imageUrl = introImage ? urlForImage(introImage)?.width(600).height(600).quality(80).auto('format').fit('crop').url() : null
-
   return (
     <section id={sectionId || undefined} className="bg-white section-padding">
       <div className="container">
-        {/* Intro Section */}
-        <div
-          className={`grid lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-16 ${
-            isImageRight ? '' : 'lg:[&>*:first-child]:order-2'
-          }`}
-        >
-          {/* Image */}
-          <div className="relative aspect-square rounded-lg overflow-hidden">
-            {imageUrl && (
-              <Image
-                src={imageUrl}
-                alt={title || 'CAC calculation'}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            )}
-          </div>
-
-          {/* Text */}
-          <div>
-            {badgeText && (
-              <span className="inline-block bg-gold/20 text-gold px-3 py-1 rounded text-sm font-semibold mb-4">
-                {badgeText}
-              </span>
-            )}
-            {sectionLabel && (
-              <p className="text-sm uppercase tracking-widest text-gold font-semibold mb-3">
-                {sectionLabel}
-              </p>
-            )}
-            {title && (
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-navy mb-4">{title}</h2>
-            )}
-            {showDivider && <Divider className="mb-6" />}
-            {introBody && introBody.length > 0 && <CustomPortableText value={introBody} />}
-          </div>
-        </div>
-
         {/* Steps Section */}
         {steps && steps.length > 0 && (
           <div className="bg-cream rounded-lg p-8 lg:p-12">

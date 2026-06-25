@@ -3,19 +3,14 @@ import {ActivityIcon} from '@sanity/icons'
 import {portableTextEditor} from './portableText'
 
 /**
- * CAC 101 — Calculation Steps Block
+ * CAC Steps Block
  * Section id="cac"
  */
 export const cacCalculationBlock = defineType({
   name: 'cacCalculationBlock',
-  title: 'CAC 101 — Calculation Steps (Deprecated)',
+  title: 'CAC Steps',
   type: 'object',
   icon: ActivityIcon,
-  groups: [
-    {name: 'intro', title: 'Intro'},
-    {name: 'steps', title: 'Steps'},
-    {name: 'formula', title: 'Formula Visual'},
-  ],
   fields: [
     defineField({
       name: 'sectionId',
@@ -23,79 +18,16 @@ export const cacCalculationBlock = defineType({
       type: 'string',
       description: 'Used for anchor navigation (e.g., "cac")',
       initialValue: 'cac',
-      group: 'intro',
     }),
-    defineField({
-      name: 'badgeText',
-      title: 'Badge Text',
-      type: 'string',
-      description: 'Gold badge, e.g. "CAC 101"',
-      initialValue: 'CAC 101',
-      group: 'intro',
-    }),
-    defineField({
-      name: 'sectionLabel',
-      title: 'Section Label',
-      type: 'string',
-      group: 'intro',
-    }),
-    defineField({
-      name: 'title',
-      title: 'Title',
-      type: 'string',
-      group: 'intro',
-    }),
-    defineField({
-      name: 'showDivider',
-      title: 'Show Divider',
-      type: 'boolean',
-      initialValue: true,
-      group: 'intro',
-    }),
-    defineField({
-      name: 'introBody',
-      title: 'Intro Body',
-      type: 'array',
-      of: portableTextEditor,
-      description: 'Left/text side intro content',
-      group: 'intro',
-    }),
-    defineField({
-      name: 'introImage',
-      title: 'Intro Image',
-      type: 'image',
-      description: 'Right side intro image',
-      options: {hotspot: true},
-      group: 'intro',
-    }),
-    defineField({
-      name: 'imagePosition',
-      title: 'Image Position',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Left — image left, text right', value: 'left'},
-          {title: 'Right — text left, image right', value: 'right'},
-        ],
-        layout: 'radio',
-      },
-      initialValue: 'right',
-      group: 'intro',
-    }),
-
-    // 4-step calculation
     defineField({
       name: 'stepsTitle',
-      title: 'Steps Title',
+      title: 'Title',
       type: 'string',
-      description: 'Heading above the steps grid',
-      group: 'steps',
     }),
     defineField({
       name: 'steps',
       title: 'Steps',
       type: 'array',
-      group: 'steps',
       of: [
         defineArrayMember({
           type: 'object',
@@ -131,44 +63,36 @@ export const cacCalculationBlock = defineType({
       name: 'formulaResidentialLabel',
       title: 'Formula Residential Label',
       type: 'string',
-      group: 'formula',
     }),
     defineField({
       name: 'formulaResidentialSub',
       title: 'Formula Residential Subtitle',
       type: 'string',
-      group: 'formula',
     }),
     defineField({
       name: 'formulaHotelLabel',
       title: 'Formula Hotel Label',
       type: 'string',
-      group: 'formula',
     }),
     defineField({
       name: 'formulaHotelSub',
       title: 'Formula Hotel Subtitle',
       type: 'string',
-      group: 'formula',
     }),
     defineField({
       name: 'formulaResultLabel',
       title: 'Formula Result Label',
       type: 'string',
-      group: 'formula',
     }),
   ],
   preview: {
     select: {
-      title: 'title',
-      badge: 'badgeText',
-      media: 'introImage',
+      title: 'stepsTitle',
     },
-    prepare({title, badge, media}) {
+    prepare({title}) {
       return {
-        title: title || 'CAC Calculation Block',
-        subtitle: badge || 'CAC 101',
-        media,
+        title: title || 'CAC Steps',
+        subtitle: 'CAC Steps',
       }
     },
   },

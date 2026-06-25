@@ -179,19 +179,9 @@ export const getPageQuery = defineQuery(`
         footnote
       },
 
-      // CAC Calculation Block
+      // CAC Steps Block
       _type == "cacCalculationBlock" => {
         sectionId,
-        badgeText,
-        sectionLabel,
-        title,
-        showDivider,
-        introBody[] ${portableTextFields},
-        introImage {
-          ...,
-          asset->
-        },
-        imagePosition,
         stepsTitle,
         steps[] {
           _key,
