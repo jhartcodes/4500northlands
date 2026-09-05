@@ -419,6 +419,34 @@ export const getPageQuery = defineQuery(`
           title,
           description
         }
+      },
+
+      // Mosaic Grid
+      _type == "mosaicGridBlock" => {
+        sectionId,
+        background,
+        sectionLabel,
+        title,
+        rows[] {
+          _key,
+          tiles[] {
+            _key,
+            _type,
+            _type == "textTile" => {
+              background,
+              title,
+              titleSize,
+              body,
+              bodySize
+            },
+            _type == "imageTile" => {
+              image {
+                ...,
+                asset->
+              }
+            }
+          }
+        }
       }
     }
   }

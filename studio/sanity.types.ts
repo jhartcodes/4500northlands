@@ -208,6 +208,43 @@ export type MapEntryImage = {
   _type: 'image'
 }
 
+export type ImageTileImage = {
+  asset?: SanityImageAssetReference
+  media?: unknown // Unable to locate the referenced type "imageTile.image.media" in schema
+  hotspot?: SanityImageHotspot
+  crop?: SanityImageCrop
+  alt?: string
+  _type: 'image'
+}
+
+export type MosaicGridBlock = {
+  _type: 'mosaicGridBlock'
+  sectionId?: string
+  background?: 'white' | 'cream' | 'mist' | 'navy' | 'forest'
+  sectionLabel?: string
+  title?: string
+  rows?: Array<{
+    tiles: Array<
+      | {
+          background?: 'white' | 'cream' | 'mist'
+          title?: string
+          titleSize?: 'small' | 'medium' | 'large' | 'extraLarge'
+          body: string
+          bodySize?: 'small' | 'medium' | 'large' | 'extraLarge'
+          _type: 'textTile'
+          _key: string
+        }
+      | {
+          image: ImageTileImage
+          _type: 'imageTile'
+          _key: string
+        }
+    >
+    _type: 'mosaicRow'
+    _key: string
+  }>
+}
+
 export type DevelopmentTimelineBlock = {
   _type: 'developmentTimelineBlock'
   sectionId?: string
@@ -1556,6 +1593,9 @@ export type Page = {
     | ({
         _key: string
       } & DevelopmentTimelineBlock)
+    | ({
+        _key: string
+      } & MosaicGridBlock)
   >
   seoTitle?: string
   seoDescription?: string
@@ -1860,6 +1900,8 @@ export type AllSanitySchemaTypes =
   | ContentRowImage
   | ColumnImage
   | MapEntryImage
+  | ImageTileImage
+  | MosaicGridBlock
   | DevelopmentTimelineBlock
   | TimelineBlock
   | InteractiveSitePlanBlock

@@ -22,6 +22,7 @@ import {
   ContactCtaBlock,
   TimelineBlock,
   DevelopmentTimelineBlock,
+  MosaicGridBlock,
 } from '@/app/components/blocks'
 import type {PageBuilderSection} from '@/sanity/lib/types'
 import {dataAttr} from '@/sanity/lib/utils'
@@ -60,6 +61,7 @@ const Blocks: BlocksType = {
   contactCtaBlock: ContactCtaBlock,
   timelineBlock: TimelineBlock,
   developmentTimelineBlock: DevelopmentTimelineBlock,
+  mosaicGridBlock: MosaicGridBlock,
 }
 
 /**

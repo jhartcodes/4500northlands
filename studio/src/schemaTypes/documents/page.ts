@@ -98,6 +98,7 @@ export const page = defineType({
         defineArrayMember({type: 'contactCtaBlock'}),
         defineArrayMember({type: 'timelineBlock'}),
         defineArrayMember({type: 'developmentTimelineBlock'}),
+        defineArrayMember({type: 'mosaicGridBlock'}),
       ],
       options: {
         insertMenu: {

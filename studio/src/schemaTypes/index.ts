@@ -25,6 +25,7 @@ import {contactCtaBlock} from './objects/contactCtaBlock'
 import {interactiveSitePlanBlock} from './objects/interactiveSitePlanBlock'
 import {timelineBlock} from './objects/timelineBlock'
 import {developmentTimelineBlock} from './objects/developmentTimelineBlock'
+import {mosaicGridBlock} from './objects/mosaicGridBlock'
 
 // Export an array of all the schema types.
 // This is used in the Sanity Studio configuration.
@@ -60,4 +61,5 @@ export const schemaTypes = [
   interactiveSitePlanBlock,
   timelineBlock,
   developmentTimelineBlock,
+  mosaicGridBlock,
 ]
