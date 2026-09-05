@@ -399,7 +399,6 @@ export const getPageQuery = defineQuery(`
         legendDescription,
         phases[] {
           _key,
-          title,
           date,
           description,
           status,

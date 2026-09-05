@@ -5,6 +5,51 @@ import {CalendarIcon} from '@sanity/icons'
  * Timeline Block — Stacked Cards with progress bar
  * Milestone timeline showing project phases
  */
+
+/**
+ * Deliberately narrower than the shared `portableTextEditor`. Phase descriptions render
+ * inside a five-column card roughly 220px wide, so headings, inline images and callout
+ * boxes would break the grid. Paragraphs, bold/italic, links and lists only.
+ */
+const phaseDescriptionEditor = [
+  defineArrayMember({
+    type: 'block',
+    styles: [{title: 'Normal', value: 'normal'}],
+    marks: {
+      decorators: [
+        {title: 'Bold', value: 'strong'},
+        {title: 'Italic', value: 'em'},
+      ],
+      annotations: [
+        {
+          name: 'link',
+          type: 'object',
+          title: 'Link',
+          fields: [
+            {
+              name: 'href',
+              type: 'url',
+              title: 'URL',
+              validation: (Rule) =>
+                Rule.uri({allowRelative: true, scheme: ['https', 'http', 'mailto', 'tel']}),
+            },
+            {
+              name: 'openInNewTab',
+              type: 'boolean',
+              title: 'Open in new tab',
+              initialValue: false,
+            },
+          ],
+        },
+      ],
+    },
+    lists: [
+      {title: 'Bullet list', value: 'bullet'},
+      {title: 'Numbered list', value: 'number'},
+    ],
+  }),
+]
+
 export const timelineBlock = defineType({
   name: 'timelineBlock',
   title: 'Timeline Block',
@@ -56,24 +101,21 @@ export const timelineBlock = defineType({
           title: 'Phase',
           fields: [
             defineField({
-              name: 'title',
-              title: 'Title',
-              type: 'string',
-              validation: (Rule) => Rule.required(),
-            }),
-            defineField({
               name: 'date',
-              title: 'Date',
+              title: 'Title (Year or Date)',
               type: 'string',
-              description: 'e.g. "2021", "Winter 2025-2026", "September 2025"',
+              description:
+                'The heading shown in the ribbon at the top of the card. Free text — e.g. "2017", "2023 - 2024", "2027 Onwards", "Winter 2025-2026".',
               validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'description',
               title: 'Description',
-              type: 'text',
-              rows: 3,
-              description: 'Brief explanation of this milestone',
+              type: 'array',
+              of: phaseDescriptionEditor,
+              description:
+                'Card body. Supports paragraphs, bold, italic, links and lists.',
+              validation: (Rule) => Rule.required().min(1),
             }),
             defineField({
               name: 'status',
@@ -100,15 +142,15 @@ export const timelineBlock = defineType({
           ],
           preview: {
             select: {
-              title: 'title',
               date: 'date',
               status: 'status',
             },
-            prepare({title, date, status}) {
-              const statusLabel = status === 'active' ? ' (Current)' : status === 'completed' ? ' (Done)' : ''
+            prepare({date, status}) {
+              const statusLabel =
+                status === 'active' ? 'Current' : status === 'completed' ? 'Completed' : 'Upcoming'
               return {
-                title: title,
-                subtitle: `${date}${statusLabel}`,
+                title: date,
+                subtitle: statusLabel,
               }
             },
           },
@@ -126,7 +168,7 @@ export const timelineBlock = defineType({
       return {
         title: 'Timeline Block',
         subtitle: activePhase
-          ? `${count} phases — Current: ${activePhase.title}`
+          ? `${count} phases — Current: ${activePhase.date}`
           : `${count} phase${count !== 1 ? 's' : ''}`,
       }
     },

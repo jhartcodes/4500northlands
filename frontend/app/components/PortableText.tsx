@@ -119,7 +119,7 @@ export default function CustomPortableText({value, className = '', isDark = fals
 
     list: {
       bullet: ({children}) => (
-        <ul className={`list-disc list-inside text-lg mb-4 space-y-2 ${textColor}`}>{children}</ul>
+        <ul className={`text-lg mb-4 space-y-2 ${textColor}`}>{children}</ul>
       ),
       number: ({children}) => (
         <ol className={`list-decimal list-inside text-lg mb-4 space-y-2 ${textColor}`}>
@@ -137,7 +137,14 @@ export default function CustomPortableText({value, className = '', isDark = fals
     },
 
     listItem: {
-      bullet: ({children}) => <li>{children}</li>,
+      bullet: ({children}) => (
+        <li className="flex items-start gap-2 pl-1">
+          <span aria-hidden="true" className="shrink-0">
+            &bull;
+          </span>
+          <span>{children}</span>
+        </li>
+      ),
       number: ({children}) => <li>{children}</li>,
       arrowList: ({children}) => (
         <li className="flex items-start gap-3">

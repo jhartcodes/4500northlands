@@ -231,9 +231,26 @@ export type TimelineBlock = {
   legendLabel?: string
   legendDescription?: string
   phases?: Array<{
-    title: string
     date: string
-    description?: string
+    description: Array<{
+      children?: Array<{
+        marks?: Array<string>
+        text?: string
+        _type: 'span'
+        _key: string
+      }>
+      style?: 'normal'
+      listItem?: 'bullet' | 'number'
+      markDefs?: Array<{
+        href?: string
+        openInNewTab?: boolean
+        _type: 'link'
+        _key: string
+      }>
+      level?: number
+      _type: 'block'
+      _key: string
+    }>
     status: 'completed' | 'active' | 'upcoming'
     activeLabel?: string
     _type: 'phase'
