@@ -27,21 +27,47 @@ https://template-nextjs-clean.sanity.dev
 
 This site is **linked to production**. Never test schema or content changes directly against the `production` dataset. Instead: back up production → mirror it into the `dev` dataset → test locally → deploy → migrate prod.
 
-| Dataset | Purpose |
-| --- | --- |
-| `production` | Live data used by the deployed site and Studio. Don't experiment here. |
-| `dev` | Disposable mirror of production for local testing. Safe to break/refresh. |
+| Dataset      | Purpose                                                                   |
+| ------------ | ------------------------------------------------------------------------- |
+| `production` | Live data used by the deployed site and Studio. Don't experiment here.    |
+| `dev`        | Disposable mirror of production for local testing. Safe to break/refresh. |
 
 > All `.env*` files are **gitignored and local-only**. The deployed Studio and Vercel read their own environment, so pointing local env at `dev` can never affect production.
+
+### Commands
+
+| Command                      | What it does                                                                            |
+| ---------------------------- | --------------------------------------------------------------------------------------- |
+| `npm run db:status`          | Which dataset is local env on? Fails if the env files disagree.                         |
+| `npm run db:backup`          | `sanity dataset export production` → dated tarball in `local-prod-backups/`. Read-only. |
+| `npm run db:dev`             | Point local frontend + Studio at the `dev` mirror.                                      |
+| `npm run db:prod`            | Point them back at `production`.                                                        |
+| `npm run dev`                | Frontend :3000 + Studio :3333. Prints the dataset banner first.                         |
+| `npm run deploy:studio`      | Deploy the hosted Studio. Blocked unless env is on `production`.                        |
+| `npm run vercel:deploy:prod` | Deploy the frontend to Vercel.                                                          |
+
+**Back up before anything that writes to production** — that means before a migration, and
+as step 1 of any deploy. `npm run db:backup` is the Sanity CLI export; it never modifies
+production and takes about 30 seconds.
+
+### Which dataset am I on?
+
+```shell
+npm run db:status
+```
+
+This also runs automatically before `npm run dev`, so every dev session opens with a
+banner telling you whether you're on live data. It **fails** if the three env files
+disagree — a mismatch means the frontend and Studio would target different datasets.
 
 ### 1. Back up production (always do this first)
 
 ```shell
-cd studio
-npx sanity dataset export production ../local-prod-backups/production-backup-$(date +%F).tar.gz
+npm run db:backup
 ```
 
-Backups land in `local-prod-backups/` (gitignored). Export is **read-only** — it never modifies production.
+Backups land in `local-prod-backups/` (gitignored) as `production-backup-<DATE>.tar.gz`.
+Export is **read-only** — it never modifies production.
 
 ### 2. Refresh the `dev` mirror from production
 
@@ -51,25 +77,28 @@ Backups land in `local-prod-backups/` (gitignored). Export is **read-only** — 
 cd studio
 npx sanity dataset delete dev --force                 # drop the stale mirror
 npx sanity dataset create dev --visibility public      # recreate it (match production ACL)
-npx sanity dataset import ../local-prod-backups/production-backup-<DATE>.tar.gz dev
+npx sanity dataset import ../local-prod-backups/production-backup-<DATE>.tar.gz --dataset dev
 ```
 
 Verify the copy matches:
 
 ```shell
-npx sanity documents query 'count(*[!(_id in path("_.**")) ])' --dataset dev
-npx sanity documents query 'count(*[!(_id in path("_.**")) ])' --dataset production
+npx sanity documents query 'count(*[!(_id in path("_.**"))])' --dataset dev --api-version 2025-08-15
+npx sanity documents query 'count(*[!(_id in path("_.**"))])' --dataset production --api-version 2025-08-15
 ```
-
-(Assets are shared at the project level, so images resolve in `dev` without re-uploading.)
 
 ### 3. Point local env at `dev`
 
-Edit the three gitignored env files:
+```shell
+npm run db:dev      # ...and `npm run db:prod` to switch back
+```
 
-- `studio/.env`: `SANITY_STUDIO_DATASET="dev"` and `SANITY_STUDIO_PREVIEW_URL="http://localhost:3000"`
-- `frontend/.env`: `NEXT_PUBLIC_SANITY_DATASET="dev"`
-- `.env.local`: `NEXT_PUBLIC_SANITY_DATASET="dev"`
+This rewrites the dataset in all three gitignored env files at once — `frontend/.env`,
+`studio/.env` (including `SANITY_STUDIO_PREVIEW_URL`) and the root `.env.local`.
+
+> **Don't hand-edit these.** The dataset lives in three files and the root `.env.local`
+> is **inert** for `npm run dev` — Next.js reads env from `frontend/`. Editing only that
+> file looks like a switch but leaves you writing to production.
 
 ### 4. Run locally
 
@@ -78,6 +107,11 @@ npm run dev      # frontend → http://localhost:3000 · studio → http://local
 ```
 
 If port `3333` is taken by another Sanity project, run the studio elsewhere: `cd studio && npx sanity dev --port 3334`.
+
+> ⚠️ **Assets are project-scoped, not dataset-scoped.** Images are shared between
+> `production` and `dev` — that's why they resolve in the mirror without re-uploading.
+> It also means deleting an asset in `dev` deletes it in production. Keep experiments
+> to document changes only.
 
 ### 5. Make and test changes
 
@@ -104,27 +138,132 @@ npx sanity exec migrations/<script>.ts --with-user-token                # apply
 
 ### 7. Deploy to production
 
-1. **Restore env to production** (critical — the Studio is built from `studio/.env`):
-   - `studio/.env`: `SANITY_STUDIO_DATASET="production"`, `SANITY_STUDIO_PREVIEW_URL="https://whistlernorthlands.vercel.app"`
-   - `frontend/.env` and `.env.local`: `NEXT_PUBLIC_SANITY_DATASET="production"`
-2. **Commit and push** to `main`.
-3. **Deploy the frontend** — run from the **repo root** (the Vercel project's root directory is already `frontend`):
+**Nothing here mutates production content except step 6.** Steps 2–5 ship _code_; the
+migration is the only step that rewrites live documents — which is why the backup in
+step 1 is mandatory and the dry-run in step 6 is not optional.
+
+1. **Take a fresh production backup.** Do this every time, even when you don't think
+   you'll run a migration:
+
    ```shell
-   npm run vercel:deploy:prod      # → npx vercel --prod
+   npm run db:backup
    ```
-4. **Deploy the Studio**:
+
+   Wraps `sanity dataset export production` into a dated tarball in
+   `local-prod-backups/` (gitignored). Read-only, ~30s, and the only thing standing
+   between you and a bad migration. The backup you took before starting work
+   (runbook step 1) is likely hours or days stale by now — editors may have
+   published in the meantime.
+
+2. **Restore env to production** — critical, the hosted Studio is built from `studio/.env`:
+
    ```shell
-   cd studio && npx sanity deploy
+   npm run db:prod && npm run db:status
    ```
-5. **Run the migration against production** (env now points at production — dry-run first):
+
+3. **Deploy the frontend by pushing to `main`.**
+
    ```shell
+   git push origin main
+   ```
+
+   The repo is connected to Vercel, so a push to `main` **is** the production deploy.
+   Watch it land with `npx vercel ls --scope pottinger-bird` or in the dashboard.
+
+   The frontend reads its dataset from Vercel's own environment variables, so this is
+   unaffected by whatever your local env files say.
+
+4. **Manual CLI deploy — only when you deliberately want one** (hotfix without a commit,
+   or redeploying an unchanged tree):
+
+   ```shell
+   npm run vercel:deploy:prod      # → npx vercel --prod, run from the repo root
+   ```
+
+   > ⚠️ Don't do both for the same change — pushing _and_ running the CLI deploys twice.
+   > Prefer the push: a git-triggered deployment records the commit SHA, so you can always
+   > tell what code is live. A CLI deploy uploads your working tree, committed or not —
+   > which is how the June 2026 production build came to contain changes that weren't
+   > committed until the next day.
+
+5. **Deploy the Studio** — use the npm script, not `npx sanity deploy` directly:
+
+   ```shell
+   npm run deploy:studio
+   ```
+
+   A `predeploy` guard (`studio/scripts/assert-production.mjs`) aborts the deploy if
+   `studio/.env` isn't on `production`, because `sanity deploy` bakes the dataset in at
+   build time. Deploying while pointed at `dev` would silently repoint
+   whistler-northlands.sanity.studio at the mirror — editors would keep publishing and
+   nothing would reach the live site.
+
+6. **Run the migration against production** — only if you have one. Dry-run first and
+   read the output; it is the last checkpoint before live documents change:
+
+   ```shell
+   npm run db:status                                                     # confirm: production
    cd studio
-   npx sanity exec migrations/<script>.ts --with-user-token -- --dry-run
-   npx sanity exec migrations/<script>.ts --with-user-token
+   npx sanity exec migrations/<script>.ts --with-user-token -- --dry-run  # preview
+   npx sanity exec migrations/<script>.ts --with-user-token               # apply
    ```
-6. **Smoke-test** https://whistlernorthlands.vercel.app and https://whistler-northlands.sanity.studio.
+
+7. **Smoke-test** https://whistlernorthlands.vercel.app and https://whistler-northlands.sanity.studio.
 
 > Deploy the **frontend before running the migration** so new block types render, instead of showing a "block hasn't been created" placeholder.
+
+### Preview deployments (verify before production)
+
+Push any branch other than `main` and Vercel builds a **Preview** deployment with its own
+URL — the safest way to confirm a change renders as expected before production moves.
+
+```shell
+git checkout -b feat/<name>
+git push -u origin feat/<name>      # → preview URL
+npx vercel ls --scope pottinger-bird
+```
+
+Preview has its own environment variables, set to read the **`dev` mirror**:
+
+| Variable                        | Preview                 | Production      |
+| ------------------------------- | ----------------------- | --------------- |
+| `NEXT_PUBLIC_SANITY_DATASET`    | `dev`                   | `production`    |
+| `NEXT_PUBLIC_SANITY_STUDIO_URL` | `http://localhost:3333` | deployed Studio |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | `tivw2iwp`              | `tivw2iwp`      |
+| `SANITY_API_READ_TOKEN`         | same                    | same            |
+| `SANITY_REVALIDATE_SECRET`      | same                    | same            |
+
+**Why `dev` and not `production`:** you author new blocks' content in the mirror, so a
+preview reading `production` would render your new blocks empty. Pointing Preview at `dev`
+shows the new schema _with_ the content you actually created.
+
+**Why the Studio URL is localhost:** it drives Presentation-mode edit-intent links. The
+deployed Studio runs on `production`, and because `dev` is a mirror the document IDs are
+identical — so an edit link from a `dev`-backed preview would open the _production_
+document and let you edit live content by accident. Pointing at `localhost:3333` means
+edit links only resolve for someone running the Studio locally against `dev`.
+
+> These vars are Preview-scoped. Production's own five are untouched, so nothing here can
+> change what the live site reads.
+
+### If a migration goes wrong
+
+The backup from step 1 is a full dataset export. To restore, import it back over production
+with `--replace`, which overwrites documents by `_id`:
+
+```shell
+cd studio
+npx sanity dataset import ../local-prod-backups/production-backup-<DATE>.tar.gz --dataset production --replace
+```
+
+> ⚠️ `--replace` overwrites documents present in the tarball. It does **not** delete
+> documents created after the backup was taken — those survive. If you need a true
+> point-in-time reset, delete and recreate the dataset first (the same delete/create/import
+> sequence used for the `dev` mirror in step 2), and accept that you lose everything
+> published since the backup.
+
+Sanity also keeps its own document-level revision history, so a small mistake is often
+faster to fix by reverting the affected documents in the Studio than by reimporting.
 
 ### Gotchas
 
@@ -133,6 +272,11 @@ npx sanity exec migrations/<script>.ts --with-user-token                # apply
   git checkout HEAD -- package-lock.json studio/package.json
   npm ci
   ```
+- **Use `npm run deploy:studio`, not `npx sanity deploy`.** Calling the Sanity CLI
+  directly bypasses the `predeploy` production guard. If you must, run
+  `npm run db:status` first.
+- **Assets are project-scoped.** Images live at the project level and are shared between
+  `production` and `dev`. Deleting an asset in the mirror deletes it in production too.
 - **Deploy from the repo root**, not from `frontend/` — Vercel's root directory is set to `frontend`, so running `vercel` inside `frontend/` looks for `frontend/frontend` and errors.
 - Keep the latest backup tarball until you've confirmed production looks correct.
 

@@ -9,6 +9,7 @@
   "main": "package.json",
   "scripts": {
     "build": "sanity build",
+    "predeploy": "node scripts/assert-production.mjs",
     "deploy": "sanity deploy",
     "predev": "npm run sanity:typegen",
     "dev": "sanity dev",

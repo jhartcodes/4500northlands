@@ -897,58 +897,6 @@ export type CacValueBlock = {
 export type CacCalculationBlock = {
   _type: 'cacCalculationBlock'
   sectionId?: string
-  badgeText?: string
-  sectionLabel?: string
-  title?: string
-  showDivider?: boolean
-  introBody?: Array<
-    | {
-        children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: 'span'
-          _key: string
-        }>
-        style?:
-          | 'normal'
-          | 'h2Large'
-          | 'h2'
-          | 'h3'
-          | 'h4'
-          | 'blockquote'
-          | 'largeStatement'
-          | 'calloutBox'
-          | 'sectionLabel'
-        listItem?: 'bullet' | 'number' | 'arrowList' | 'dashList'
-        markDefs?: Array<{
-          href?: string
-          openInNewTab?: boolean
-          _type: 'link'
-          _key: string
-        }>
-        level?: number
-        _type: 'block'
-        _key: string
-      }
-    | {
-        asset?: SanityImageAssetReference
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        alt: string
-        caption?: string
-        _type: 'image'
-        _key: string
-      }
-  >
-  introImage?: {
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: 'image'
-  }
-  imagePosition?: 'left' | 'right'
   stepsTitle?: string
   steps?: Array<{
     stepLabel: string

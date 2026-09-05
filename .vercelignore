@@ -1,0 +1,24 @@
+# Vercel uses this file INSTEAD of .gitignore when it exists, so the important
+# .gitignore exclusions have to be repeated here. Without it, a CLI deploy
+# (`vercel` / `vercel --prod`) uploads the whole working tree — including the
+# 250MB+ production content backups, which the build never needs.
+#
+# Git-triggered deploys only ever see committed files, so this mainly protects
+# manual CLI deploys.
+
+node_modules
+.next
+.git
+
+# local-only production content dumps — hundreds of MB, never needed by a build
+local-prod-backups
+
+# env files come from Vercel's own environment; never upload local ones
+.env
+.env.*
+!.env.example
+
+.vercel
+.DS_Store
+*.pem
+*.tsbuildinfo
