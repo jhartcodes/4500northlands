@@ -93,6 +93,8 @@ export const page = defineType({
         defineArrayMember({type: 'rezoningBlock'}),
         defineArrayMember({type: 'aboutThreeColumnBlock'}),
         defineArrayMember({type: 'faqBlock'}),
+        defineArrayMember({type: 'imageBlock'}),
+        // deprecated — kept so migrated-from documents still open. Remove after migration.
         defineArrayMember({type: 'fullWidthImageBlock'}),
         defineArrayMember({type: 'fullWidthTextBlock'}),
         defineArrayMember({type: 'contactCtaBlock'}),

@@ -17,7 +17,7 @@ import {
   RezoningBlock,
   AboutThreeColumnBlock,
   FAQBlock,
-  FullWidthImageBlock,
+  ImageBlock,
   FullWidthTextBlock,
   ContactCtaBlock,
   TimelineBlock,
@@ -56,7 +56,12 @@ const Blocks: BlocksType = {
   rezoningBlock: RezoningBlock,
   aboutThreeColumnBlock: AboutThreeColumnBlock,
   faqBlock: FAQBlock,
-  fullWidthImageBlock: FullWidthImageBlock,
+  imageBlock: ImageBlock,
+  // Pre-rename alias. Documents still carrying the old _type render through the
+  // same component, so the frontend can ship before the migration runs and
+  // neither ordering produces a "block hasn't been created" placeholder.
+  // Remove once renameFullWidthImageToImageBlock.ts has been applied to production.
+  fullWidthImageBlock: ImageBlock,
   fullWidthTextBlock: FullWidthTextBlock,
   contactCtaBlock: ContactCtaBlock,
   timelineBlock: TimelineBlock,
@@ -68,6 +73,7 @@ const Blocks: BlocksType = {
  * Used by the <PageBuilder>, this component renders the component that matches the block type.
  */
 export default function BlockRenderer({block, index, pageId, pageType}: BlockProps) {
+  console.log(Blocks, 'blcok on each item')
   const Block = Blocks[block._type] as React.ComponentType<BlockProps> | undefined
 
   // Block does exist

@@ -2,11 +2,17 @@ import {defineField, defineType} from 'sanity'
 import {ImageIcon} from '@sanity/icons'
 
 /**
- * Full Width Image Block — edge-to-edge image with no padding
+ * @deprecated Replaced by `imageBlock`. Kept registered ONLY so that documents
+ * still carrying `_type: "fullWidthImageBlock"` keep rendering while the rename
+ * migration runs. Hidden from the "add block" menu — nothing new should use it.
+ *
+ * Remove this file, its registration in index.ts, and its entry in
+ * documents/page.ts once `renameFullWidthImageToImageBlock.ts` has been applied
+ * to production. See "Renaming or removing a block type" in the README.
  */
 export const fullWidthImageBlock = defineType({
   name: 'fullWidthImageBlock',
-  title: 'Full Width Image',
+  title: 'Full Width Image (deprecated — use Image)',
   type: 'object',
   icon: ImageIcon,
   fields: [
