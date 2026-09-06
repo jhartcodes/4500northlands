@@ -113,11 +113,11 @@ export const imageBlock = defineType({
       title: 'Caption style',
       type: 'string',
       description:
-        'On image places the caption over the bottom of the photo with a dark gradient behind it — it adds no height, but it only works on images with a dark lower edge. Do not use it on diagrams or anything on a white background; the gradient dims the artwork and the text becomes unreadable.',
+        'On image caption will add dark overlay, choose below image for images that need clear display.',
       options: {
         list: [
-          {title: 'Below image — safe on any image', value: 'below'},
-          {title: 'On image — needs a dark-bottomed photo', value: 'onImage'},
+          {title: 'Below image', value: 'below'},
+          {title: 'On image', value: 'onImage'},
         ],
         layout: 'radio',
       },
