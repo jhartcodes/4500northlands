@@ -199,6 +199,7 @@ async function ensureDraft(publishedId: string) {
     _rev?: string
     _createdAt?: string
     _updatedAt?: string
+    _type: string
   }
   console.log(`  created draft ${draftId}`)
   return (await client.create({...rest, _id: draftId})) as unknown as PageDoc
@@ -209,7 +210,7 @@ async function run() {
     throw new Error('Refusing to touch production. Re-run with ALLOW_PROD_MIGRATION=1.')
   }
 
-  const photos = PHOTOS[dataset]
+  const photos = dataset ? PHOTOS[dataset] : undefined
   if (!photos) {
     throw new Error(
       `No photo ids configured for dataset "${dataset}". Known: ${Object.keys(PHOTOS).join(', ')}.`,
