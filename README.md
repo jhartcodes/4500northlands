@@ -124,6 +124,43 @@ If port `3333` is taken by another Sanity project, run the studio elsewhere: `cd
 - Regenerate types after any schema change: `cd frontend && npm run sanity:typegen`
 - Type-check both workspaces: `npm run type-check`
 
+#### Renaming or removing a block type
+
+Renaming a block's `_type` is the one schema change that **cannot be shipped in a
+single step**, because neither ordering is safe on its own:
+
+| Order | What happens |
+| ----- | ------------ |
+| Migration first | Documents say `newName`; the deployed frontend only knows `oldName` → every affected block renders the "block hasn't been created" placeholder. |
+| Deploy first | Frontend only knows `newName`; documents still say `oldName` → the same placeholder. |
+
+The fix is **dual registration**: ship code that answers to *both* names, migrate,
+then drop the alias in a follow-up commit. Three safe steps instead of one unsafe
+one, each independently revertible.
+
+1. **Add the new type alongside the old one.**
+   - New schema file; register it in `index.ts` and `documents/page.ts`.
+   - Keep the old type registered, marked `@deprecated`, and retitle it in the
+     Studio so no editor reaches for it. It must stay registered or the Studio
+     shows "Unknown block type" for documents that haven't been migrated yet.
+   - In `BlockRenderer.tsx`, map **both** names to the new component.
+   - In `queries.ts`, project both: `_type in ["newName", "oldName"] => { ... }`.
+   - Make every new field fall back to the old block's behaviour when absent, so
+     migrated documents render unchanged without a second data migration.
+2. **Deploy, then migrate.** Frontend → Studio → migration (dry-run first). With
+   the alias in place the deploy is a no-op visually, so there is no window where
+   the live site is wrong.
+3. **Follow-up commit removes the alias**: delete the old schema file, its two
+   registrations, the `BlockRenderer` entry, and the extra name in the GROQ
+   projection.
+
+`studio/migrations/renameFullWidthImageToImageBlock.ts` is the worked example
+(`fullWidthImageBlock` → `imageBlock`, September 2026).
+
+> The same three-step shape applies to **deleting** a block type — ship the
+> migration that removes or replaces its usages first, and only drop the schema
+> once no document references it.
+
 ### 6. Content migrations (changing existing documents)
 
 Put scripts in `studio/migrations/` and run them with the logged-in user's token. **Always dry-run on `dev` first** (target dataset = `SANITY_STUDIO_DATASET` in `studio/.env`):
