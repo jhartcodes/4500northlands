@@ -2,12 +2,12 @@ import {defineArrayMember, defineField, defineType} from 'sanity'
 import {ImageIcon} from '@sanity/icons'
 
 /**
- * Image Block — replaces `fullWidthImageBlock`.
+ * Image Block — one full-bleed image, or a row of two or three.
  *
- * `layout` and `height` both fall back to the old block's exact behaviour when
- * absent, so documents migrated from `fullWidthImageBlock` render unchanged
- * without touching any other field. See
- * studio/migrations/renameFullWidthImageToImageBlock.ts
+ * Renamed from `fullWidthImageBlock` in September 2026; that type is gone and no
+ * document references it any more. `layout` and `height` still fall back to
+ * full-width/short when absent, which is what the migrated documents rely on.
+ * See studio/migrations/renameFullWidthImageToImageBlock.ts
  */
 
 const captionField = defineField({

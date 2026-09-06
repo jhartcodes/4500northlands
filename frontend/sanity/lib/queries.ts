@@ -371,9 +371,8 @@ export const getPageQuery = defineQuery(`
         }
       },
 
-      // Image Block, plus its pre-rename alias fullWidthImageBlock. Both share
-      // this projection so either renders while the migration is pending.
-      _type in ["imageBlock", "fullWidthImageBlock"] => {
+      // Image Block
+      _type == "imageBlock" => {
         sectionId,
         layout,
         height,

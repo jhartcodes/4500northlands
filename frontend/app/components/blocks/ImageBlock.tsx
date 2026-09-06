@@ -18,8 +18,7 @@ type GridImage = CmsImage & {
 type ImageBlockProps = {
   block: {
     _key: string
-    /** `fullWidthImageBlock` is the pre-rename type name; see BlockRenderer. */
-    _type: 'imageBlock' | 'fullWidthImageBlock'
+    _type: 'imageBlock'
     sectionId?: string
     layout?: Layout
     height?: Height
@@ -35,8 +34,8 @@ type ImageBlockProps = {
 }
 
 /**
- * `short` reproduces the old fullWidthImageBlock ratios exactly, so documents
- * with no `height` set render byte-identically after the rename migration.
+ * `short` is the ratio pair this block has always rendered at; documents with no
+ * `height` set fall through to it.
  */
 const fullHeights: Record<Exclude<Height, 'natural'>, string> = {
   short: 'aspect-[21/9] md:aspect-[3/1]',

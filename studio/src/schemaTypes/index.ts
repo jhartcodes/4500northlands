@@ -19,7 +19,6 @@ import {sitePlanBlock} from './objects/sitePlanBlock'
 import {rezoningBlock} from './objects/rezoningBlock'
 import {aboutThreeColumnBlock} from './objects/aboutThreeColumnBlock'
 import {faqBlock} from './objects/faqBlock'
-import {fullWidthImageBlock} from './objects/fullWidthImageBlock'
 import {imageBlock} from './objects/imageBlock'
 import {fullWidthTextBlock} from './objects/fullWidthTextBlock'
 import {contactCtaBlock} from './objects/contactCtaBlock'
@@ -56,7 +55,6 @@ export const schemaTypes = [
   rezoningBlock,
   aboutThreeColumnBlock,
   faqBlock,
-  fullWidthImageBlock, // deprecated — remove after the rename migration
   imageBlock,
   fullWidthTextBlock,
   contactCtaBlock,

@@ -57,11 +57,6 @@ const Blocks: BlocksType = {
   aboutThreeColumnBlock: AboutThreeColumnBlock,
   faqBlock: FAQBlock,
   imageBlock: ImageBlock,
-  // Pre-rename alias. Documents still carrying the old _type render through the
-  // same component, so the frontend can ship before the migration runs and
-  // neither ordering produces a "block hasn't been created" placeholder.
-  // Remove once renameFullWidthImageToImageBlock.ts has been applied to production.
-  fullWidthImageBlock: ImageBlock,
   fullWidthTextBlock: FullWidthTextBlock,
   contactCtaBlock: ContactCtaBlock,
   timelineBlock: TimelineBlock,
