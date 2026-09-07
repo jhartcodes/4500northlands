@@ -5,7 +5,9 @@ import {portableTextEditor} from './portableText'
 /**
  * CAC Value Block
  * Replaces the old "CAC 101 — Calculation Steps" grid.
- * Layout: full-width total card → row of value stat cards → gold incentive bar.
+ * Layout: full-width total card → row of value stat cards → optional incentive bar.
+ * The `theme` field colours the total card and the value cards so the figures carry
+ * against the white section; see CACValueBlock.tsx for the token map.
  */
 export const cacValueBlock = defineType({
   name: 'cacValueBlock',
@@ -23,6 +25,23 @@ export const cacValueBlock = defineType({
       title: 'Section ID',
       type: 'string',
       description: 'Used for anchor navigation (e.g., "cac")',
+      group: 'total',
+    }),
+    defineField({
+      name: 'theme',
+      title: 'Colour theme',
+      type: 'string',
+      description:
+        'Colours the total card and the value-card rules. Navy and Forest give a dark total card with a gold figure; Gold gives a gold total card with a navy figure.',
+      options: {
+        list: [
+          {title: 'Navy (#1B3A52)', value: 'navy'},
+          {title: 'Gold (#C8A96E)', value: 'gold'},
+          {title: 'Forest (#3A5A40)', value: 'forest'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'navy',
       group: 'total',
     }),
 

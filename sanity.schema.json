@@ -6193,6 +6193,27 @@
           },
           "optional": true
         },
+        "theme": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "navy"
+              },
+              {
+                "type": "string",
+                "value": "gold"
+              },
+              {
+                "type": "string",
+                "value": "forest"
+              }
+            ]
+          },
+          "optional": true
+        },
         "totalValue": {
           "type": "objectAttribute",
           "value": {

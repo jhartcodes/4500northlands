@@ -428,10 +428,12 @@ export type FullWidthTextBlock = {
   >
 }
 
-export type FullWidthImageBlock = {
-  _type: 'fullWidthImageBlock'
+export type ImageBlock = {
+  _type: 'imageBlock'
   sectionId?: string
-  image: {
+  layout?: 'full' | 'grid'
+  height?: 'short' | 'tall' | 'natural'
+  image?: {
     asset?: SanityImageAssetReference
     media?: unknown
     hotspot?: SanityImageHotspot
@@ -439,6 +441,19 @@ export type FullWidthImageBlock = {
     alt?: string
     _type: 'image'
   }
+  images?: Array<{
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    caption?: string
+    _type: 'image'
+    _key: string
+  }>
+  captionStyle?: 'below' | 'onImage'
+  kicker?: string
+  caption?: string
 }
 
 export type FaqBlock = {
@@ -897,6 +912,7 @@ export type CommunityBenefitBlock = {
 export type CacValueBlock = {
   _type: 'cacValueBlock'
   sectionId?: string
+  theme?: 'navy' | 'gold' | 'forest'
   totalValue: string
   totalLabel?: string
   totalSubtitle?: Array<
@@ -1580,7 +1596,7 @@ export type Page = {
       } & FaqBlock)
     | ({
         _key: string
-      } & FullWidthImageBlock)
+      } & ImageBlock)
     | ({
         _key: string
       } & FullWidthTextBlock)
@@ -1907,7 +1923,7 @@ export type AllSanitySchemaTypes =
   | InteractiveSitePlanBlock
   | ContactCtaBlock
   | FullWidthTextBlock
-  | FullWidthImageBlock
+  | ImageBlock
   | FaqBlock
   | AboutThreeColumnBlock
   | RezoningBlock

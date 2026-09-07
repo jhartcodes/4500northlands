@@ -198,6 +198,7 @@ export const getPageQuery = defineQuery(`
       // CAC Value Block
       _type == "cacValueBlock" => {
         sectionId,
+        theme,
         totalValue,
         totalLabel,
         totalSubtitle[] ${portableTextFields},
