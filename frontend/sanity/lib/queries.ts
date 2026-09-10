@@ -223,8 +223,6 @@ export const getPageQuery = defineQuery(`
         totalNumber,
         totalLabel,
         totalSub,
-        cacSummaryItems,
-        addedBenefitItems,
         accordionItems[] {
           _key,
           label,

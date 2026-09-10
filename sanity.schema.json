@@ -5825,26 +5825,6 @@
           },
           "optional": true
         },
-        "cacSummaryItems": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "array",
-            "of": {
-              "type": "string"
-            }
-          },
-          "optional": true
-        },
-        "addedBenefitItems": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "array",
-            "of": {
-              "type": "string"
-            }
-          },
-          "optional": true
-        },
         "accordionItems": {
           "type": "objectAttribute",
           "value": {

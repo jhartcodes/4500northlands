@@ -148,8 +148,19 @@ export default function MosaicGridBlock({block}: MosaicGridBlockProps) {
   const isDark = isDarkBackground(background)
   const hasHeader = Boolean(sectionLabel || title)
 
+  /**
+   * A bare mosaic leads with its tiles, so it runs flush against whatever sits above it
+   * rather than floating in dead space. The bottom gap stays either way — without it the
+   * mosaic collides with the next section. A header restores the top padding too, or the
+   * label would sit hard against the section's top edge.
+   */
   return (
-    <SectionWrapper background={background} sectionId={sectionId}>
+    <SectionWrapper
+      background={background}
+      sectionId={sectionId}
+      fullPadding={hasHeader}
+      className={hasHeader ? '' : 'pb-section'}
+    >
       {hasHeader && (
         <div className="container mb-10 md:mb-14">
           {sectionLabel && (
@@ -167,8 +178,8 @@ export default function MosaicGridBlock({block}: MosaicGridBlockProps) {
         </div>
       )}
 
-      {/* Full bleed: deliberately outside `.container`, so the mosaic runs edge to edge. */}
-      <div>
+      {/* Inset to the site gutter so the mosaic aligns with every other section. */}
+      <div className="container">
         {rows.map((row) => {
           const tiles = row.tiles || []
           if (tiles.length === 0) return null

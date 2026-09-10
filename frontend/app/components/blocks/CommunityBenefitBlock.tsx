@@ -22,8 +22,6 @@ type CommunityBenefitBlockProps = {
     totalNumber?: string
     totalLabel?: string
     totalSub?: string
-    cacSummaryItems?: string[]
-    addedBenefitItems?: string[]
     accordionItems?: BenefitItem[]
   }
   index: number
@@ -40,8 +38,6 @@ export default function CommunityBenefitBlock({block}: CommunityBenefitBlockProp
     totalNumber,
     totalLabel,
     totalSub,
-    cacSummaryItems,
-    addedBenefitItems,
     accordionItems,
   } = block
 
@@ -75,41 +71,6 @@ export default function CommunityBenefitBlock({block}: CommunityBenefitBlockProp
             </div>
           )}
         </div>
-
-        {/* Summary Lists */}
-        {(cacSummaryItems?.length || addedBenefitItems?.length) && (
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* CAC Items */}
-            {cacSummaryItems && cacSummaryItems.length > 0 && (
-              <div className="bg-mist p-6 rounded-lg">
-                <h4 className="font-display text-lg font-bold text-navy mb-4">CAC Contributions</h4>
-                <ul className="space-y-2">
-                  {cacSummaryItems.map((item, index) => (
-                    <li key={index} className="flex items-start gap-3 text-navy/80">
-                      <span className="text-gold shrink-0">→</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Added Benefit Items */}
-            {addedBenefitItems && addedBenefitItems.length > 0 && (
-              <div className="bg-mist p-6 rounded-lg">
-                <h4 className="font-display text-lg font-bold text-navy mb-4">Added Benefits</h4>
-                <ul className="space-y-2">
-                  {addedBenefitItems.map((item, index) => (
-                    <li key={index} className="flex items-start gap-3 text-navy/80">
-                      <span className="text-forest shrink-0">→</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* Accordion */}
         {accordionItems && accordionItems.length > 0 && (
