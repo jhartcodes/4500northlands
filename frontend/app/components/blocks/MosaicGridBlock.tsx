@@ -167,8 +167,8 @@ export default function MosaicGridBlock({block}: MosaicGridBlockProps) {
         </div>
       )}
 
-      {/* Full bleed: deliberately outside `.container`, so the mosaic runs edge to edge. */}
-      <div>
+      {/* Inset to the site gutter so the mosaic aligns with every other section. */}
+      <div className="container">
         {rows.map((row) => {
           const tiles = row.tiles || []
           if (tiles.length === 0) return null

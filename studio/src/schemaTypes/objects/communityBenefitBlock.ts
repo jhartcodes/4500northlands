@@ -3,7 +3,7 @@ import {UsersIcon} from '@sanity/icons'
 import {portableTextEditor} from './portableText'
 
 /**
- * Community Benefit Block — lists + accordion
+ * Community Benefit Block — intro, total card + accordion
  * Section id="community"
  */
 export const communityBenefitBlock = defineType({
@@ -13,7 +13,6 @@ export const communityBenefitBlock = defineType({
   icon: UsersIcon,
   groups: [
     {name: 'intro', title: 'Intro + Total Card'},
-    {name: 'summaryLists', title: 'Summary Lists'},
     {name: 'accordion', title: 'Full Accordion'},
   ],
   fields: [
@@ -64,24 +63,6 @@ export const communityBenefitBlock = defineType({
       title: 'Total Subtitle',
       type: 'string',
       group: 'intro',
-    }),
-
-    // Summary lists
-    defineField({
-      name: 'cacSummaryItems',
-      title: 'CAC Summary Items',
-      type: 'array',
-      description: 'Left column summary bullets',
-      of: [defineArrayMember({type: 'string'})],
-      group: 'summaryLists',
-    }),
-    defineField({
-      name: 'addedBenefitItems',
-      title: 'Added Benefit Items',
-      type: 'array',
-      description: 'Right column summary bullets',
-      of: [defineArrayMember({type: 'string'})],
-      group: 'summaryLists',
     }),
 
     // Full accordion

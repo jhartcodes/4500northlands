@@ -859,8 +859,6 @@ export type CommunityBenefitBlock = {
   totalNumber?: string
   totalLabel?: string
   totalSub?: string
-  cacSummaryItems?: Array<string>
-  addedBenefitItems?: Array<string>
   accordionItems?: Array<{
     label: string
     itemType?: 'cac' | 'addedBenefit'
