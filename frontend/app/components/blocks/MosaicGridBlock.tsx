@@ -149,12 +149,18 @@ export default function MosaicGridBlock({block}: MosaicGridBlockProps) {
   const hasHeader = Boolean(sectionLabel || title)
 
   /**
-   * A bare mosaic runs flush against its neighbours — the tiles are the section, and
-   * block padding would only float them in dead space. A header needs the padding back,
-   * or the label sits hard against the top edge.
+   * A bare mosaic leads with its tiles, so it runs flush against whatever sits above it
+   * rather than floating in dead space. The bottom gap stays either way — without it the
+   * mosaic collides with the next section. A header restores the top padding too, or the
+   * label would sit hard against the section's top edge.
    */
   return (
-    <SectionWrapper background={background} sectionId={sectionId} fullPadding={hasHeader}>
+    <SectionWrapper
+      background={background}
+      sectionId={sectionId}
+      fullPadding={hasHeader}
+      className={hasHeader ? '' : 'pb-section'}
+    >
       {hasHeader && (
         <div className="container mb-10 md:mb-14">
           {sectionLabel && (
