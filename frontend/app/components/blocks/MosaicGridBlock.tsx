@@ -148,8 +148,13 @@ export default function MosaicGridBlock({block}: MosaicGridBlockProps) {
   const isDark = isDarkBackground(background)
   const hasHeader = Boolean(sectionLabel || title)
 
+  /**
+   * A bare mosaic runs flush against its neighbours — the tiles are the section, and
+   * block padding would only float them in dead space. A header needs the padding back,
+   * or the label sits hard against the top edge.
+   */
   return (
-    <SectionWrapper background={background} sectionId={sectionId}>
+    <SectionWrapper background={background} sectionId={sectionId} fullPadding={hasHeader}>
       {hasHeader && (
         <div className="container mb-10 md:mb-14">
           {sectionLabel && (
